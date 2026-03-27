@@ -80,6 +80,64 @@ const features = [
 export default function LandingPage() {
   return (
     <main className="min-h-screen">
+      {/* Nav bar */}
+      <nav
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "14px 28px",
+          background: "rgba(250, 248, 245, 0.85)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Image src="/kavora-logo.png" alt="" width={22} height={19} />
+          <span
+            style={{
+              fontSize: "0.8rem",
+              fontWeight: 600,
+              color: "#1e2a3a",
+              letterSpacing: "0.03em",
+            }}
+          >
+            Kavora
+          </span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <a
+            href="/pricing"
+            style={{
+              fontSize: "0.75rem",
+              color: "#6b6560",
+              textDecoration: "none",
+            }}
+          >
+            Pricing
+          </a>
+          <a
+            href="/login"
+            style={{
+              fontSize: "0.75rem",
+              fontWeight: 500,
+              color: "#b08d57",
+              textDecoration: "none",
+              padding: "6px 14px",
+              border: "1px solid #b08d57",
+              borderRadius: 2,
+            }}
+          >
+            Sign In
+          </a>
+        </div>
+      </nav>
+
       {/* Hero */}
       <section className="relative flex min-h-screen flex-col items-center justify-center px-6 py-24">
         {/* Subtle top decorative border */}

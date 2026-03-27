@@ -1,14 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { type NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  if (!isSupabaseConfigured) {
-    return NextResponse.json({ views: 0 });
-  }
-
   try {
+    const supabase = await createClient();
     const { slug } = await req.json();
     if (!slug) {
       return NextResponse.json({ error: "Missing slug" }, { status: 400 });
@@ -42,16 +39,13 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  if (!isSupabaseConfigured) {
-    return NextResponse.json({ views: 0 });
-  }
-
   const slug = new URL(req.url).searchParams.get("slug");
   if (!slug) {
     return NextResponse.json({ views: 0 });
   }
 
   try {
+    const supabase = await createClient();
     const { data: resume } = await supabase
       .from("resumes")
       .select("data")

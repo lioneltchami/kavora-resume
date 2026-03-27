@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   // In production, verify webhook signature with STRIPE_WEBHOOK_SECRET
@@ -12,7 +12,9 @@ export async function POST(req: NextRequest) {
       const session = body.data.object;
       const slug = session.metadata?.slug;
 
-      if (slug && isSupabaseConfigured) {
+      if (slug) {
+        const supabase = await createClient();
+
         // Mark the resume as pro/paid
         const { data: resume } = await supabase
           .from("resumes")

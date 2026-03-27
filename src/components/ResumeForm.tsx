@@ -790,6 +790,117 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
         </div>
       </div>
 
+      {/* ============ Visibility ============ */}
+      <div style={{ marginBottom: 24 }}>
+        <h3
+          style={{
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            color: "#1e2a3a",
+            marginBottom: 12,
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+          }}
+        >
+          Visibility
+        </h3>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            type="button"
+            onClick={() => onChange({ ...data, isPublic: true })}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "8px 16px",
+              border:
+                data.isPublic !== false
+                  ? "2px solid #1e2a3a"
+                  : "2px solid #e8e2da",
+              borderRadius: 4,
+              background: data.isPublic !== false ? "#1e2a3a08" : "white",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <div style={{ textAlign: "left" }}>
+              <div
+                style={{
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                  color: "#1b1b1b",
+                }}
+              >
+                Public
+              </div>
+              <div style={{ fontSize: "0.65rem", color: "#6b6560" }}>
+                Anyone with the link can view
+              </div>
+            </div>
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange({ ...data, isPublic: false })}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "8px 16px",
+              border:
+                data.isPublic === false
+                  ? "2px solid #1e2a3a"
+                  : "2px solid #e8e2da",
+              borderRadius: 4,
+              background: data.isPublic === false ? "#1e2a3a08" : "white",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <div style={{ textAlign: "left" }}>
+              <div
+                style={{
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                  color: "#1b1b1b",
+                }}
+              >
+                Private
+              </div>
+              <div style={{ fontSize: "0.65rem", color: "#6b6560" }}>
+                Only you can view
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+
       {/* ============ Personal Information ============ */}
       <Section
         title="Personal Information"

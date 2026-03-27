@@ -114,6 +114,8 @@ export interface ResumeData {
   layoutId?: string;
   isPro?: boolean;
   paidAt?: string;
+  userId?: string;
+  isPublic?: boolean; // true = anyone can view, false = only owner can view
 }
 
 export const emptyResume: ResumeData = {

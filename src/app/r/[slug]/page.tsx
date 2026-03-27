@@ -1,8 +1,8 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { supabase } from "@/lib/supabase";
-import type { ResumeData } from "@/lib/types";
 import ResumeWeb from "@/components/ResumeWeb";
+import { createClient } from "@/lib/supabase/server";
+import type { ResumeData } from "@/lib/types";
 
 /* ------------------------------------------------------------------ */
 /*  Hardcoded example resume so /r/reena works without Supabase       */
@@ -132,19 +132,29 @@ async function getResumeData(slug: string): Promise<ResumeData | null> {
 
   // Dynamic lookup via Supabase
   try {
+    const supabase = await createClient();
     const { data, error } = await supabase
       .from("resumes")
       .select("data")
       .eq("slug", slug)
       .single();
 
-    if (error || !data) {
-      return null;
+    if (error || !data) return null;
+
+    const resumeData = data.data as ResumeData;
+
+    // Check privacy — if private, only the owner can view
+    if (resumeData.isPublic === false) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user || user.id !== resumeData.userId) {
+        return null; // Treat as not found
+      }
     }
 
-    return data.data as ResumeData;
+    return resumeData;
   } catch {
-    // Supabase client may not be configured yet
     return null;
   }
 }
@@ -169,7 +179,8 @@ export async function generateMetadata({
 
   const title = `${resumeData.name} — Resume`;
   const description = resumeData.summary
-    ? resumeData.summary.slice(0, 160) + (resumeData.summary.length > 160 ? "..." : "")
+    ? resumeData.summary.slice(0, 160) +
+      (resumeData.summary.length > 160 ? "..." : "")
     : `View ${resumeData.name}'s professional resume`;
 
   return {
@@ -201,5 +212,19 @@ export default async function ResumePage({ params }: PageProps) {
     notFound();
   }
 
-  return <ResumeWeb data={resumeData} slug={slug} />;
+  // Determine if the current user owns this resume
+  let isOwner = false;
+  if (resumeData.userId) {
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      isOwner = user?.id === resumeData.userId;
+    } catch {
+      // Auth check failed — treat as non-owner
+    }
+  }
+
+  return <ResumeWeb data={resumeData} slug={slug} isOwner={isOwner} />;
 }

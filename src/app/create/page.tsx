@@ -10,6 +10,7 @@ import LinkedInImport from "@/components/LinkedInImport";
 import PDFDownload from "@/components/PDFDownload";
 import ResumeForm from "@/components/ResumeForm";
 import ResumePreview from "@/components/ResumePreview";
+import UserMenu from "@/components/UserMenu";
 import { sampleResume } from "@/lib/sample-data";
 import { slugify } from "@/lib/slugify";
 import type { ResumeData } from "@/lib/types";
@@ -375,6 +376,7 @@ function CreatePageInner() {
               </>
             )}
           </button>
+          <UserMenu />
         </div>
       </header>
 
