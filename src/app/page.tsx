@@ -252,6 +252,28 @@ export default function LandingPage() {
           <p className="text-xs tracking-[0.15em] text-text-muted/60">
             &copy; 2026 Kavora Systems
           </p>
+          <div style={{ display: "flex", gap: 16, marginTop: 8 }}>
+            <a
+              href="/privacy"
+              style={{
+                fontSize: "0.7rem",
+                color: "rgba(107,101,96,0.5)",
+                textDecoration: "none",
+              }}
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="/terms"
+              style={{
+                fontSize: "0.7rem",
+                color: "rgba(107,101,96,0.5)",
+                textDecoration: "none",
+              }}
+            >
+              Terms of Service
+            </a>
+          </div>
         </div>
       </footer>
     </main>
