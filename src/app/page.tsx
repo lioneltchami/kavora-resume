@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import AuthNav from "@/components/AuthNav";
 
 function IconPreview() {
   return (
@@ -110,32 +111,7 @@ export default function LandingPage() {
             Kavora
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <a
-            href="/pricing"
-            style={{
-              fontSize: "0.75rem",
-              color: "#6b6560",
-              textDecoration: "none",
-            }}
-          >
-            Pricing
-          </a>
-          <a
-            href="/login"
-            style={{
-              fontSize: "0.75rem",
-              fontWeight: 500,
-              color: "#b08d57",
-              textDecoration: "none",
-              padding: "6px 14px",
-              border: "1px solid #b08d57",
-              borderRadius: 2,
-            }}
-          >
-            Sign In
-          </a>
-        </div>
+        <AuthNav />
       </nav>
 
       {/* Hero */}
