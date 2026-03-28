@@ -1,4 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { checkUserPro } from "@/lib/check-pro";
+import { createClient } from "@/lib/supabase/server";
 
 // Simple in-memory rate limiter (per IP, 10 requests per minute)
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
@@ -39,18 +41,31 @@ function pickFallbackSummary(context: {
   title?: string;
   skills?: string[];
 }): string {
-  const blob = `${context.title ?? ""} ${(context.skills ?? []).join(" ")}`.toLowerCase();
+  const blob =
+    `${context.title ?? ""} ${(context.skills ?? []).join(" ")}`.toLowerCase();
 
-  if (/engineer|develop|software|fullstack|backend|frontend|devops|sre|data engineer|platform/i.test(blob)) {
+  if (
+    /engineer|develop|software|fullstack|backend|frontend|devops|sre|data engineer|platform/i.test(
+      blob,
+    )
+  ) {
     return FALLBACK_SUMMARIES.engineering;
   }
-  if (/market|growth|seo|brand|content|social media|campaign|copywrite/i.test(blob)) {
+  if (
+    /market|growth|seo|brand|content|social media|campaign|copywrite/i.test(
+      blob,
+    )
+  ) {
     return FALLBACK_SUMMARIES.marketing;
   }
   if (/design|ux|ui|figma|sketch|product design|graphic|visual/i.test(blob)) {
     return FALLBACK_SUMMARIES.design;
   }
-  if (/manager|director|lead|vp|head of|operations|project manage|program manage|scrum/i.test(blob)) {
+  if (
+    /manager|director|lead|vp|head of|operations|project manage|program manage|scrum/i.test(
+      blob,
+    )
+  ) {
     return FALLBACK_SUMMARIES.management;
   }
   return FALLBACK_SUMMARIES.default;
@@ -142,13 +157,96 @@ async function callClaude(prompt: string): Promise<string> {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Free-tier usage tracking                                           */
+/* ------------------------------------------------------------------ */
+
+const FREE_SUGGEST_LIMIT = 3;
+/** In-memory fallback for unauthenticated (anonymous) users only. */
+const anonUsageMap = new Map<string, number>();
+
+/* ------------------------------------------------------------------ */
 /*  Route handler                                                      */
 /* ------------------------------------------------------------------ */
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+  const ip =
+    req.headers.get("x-forwarded-for") ||
+    req.headers.get("x-real-ip") ||
+    "unknown";
   if (!checkRateLimit(ip)) {
-    return NextResponse.json({ error: "Too many requests. Please wait a moment." }, { status: 429 });
+    return NextResponse.json(
+      { error: "Too many requests. Please wait a moment." },
+      { status: 429 },
+    );
+  }
+
+  const { isPro, userId } = await checkUserPro();
+
+  /* ---------- Pre-check: free-tier usage gate ---------- */
+  let currentUsed = 0;
+
+  if (!isPro && userId) {
+    // Authenticated free user: read persistent usage from profiles table
+    const supabase = await createClient();
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("suggest_used")
+      .eq("user_id", userId)
+      .single();
+
+    currentUsed = profile?.suggest_used ?? 0;
+
+    if (currentUsed >= FREE_SUGGEST_LIMIT) {
+      return NextResponse.json(
+        {
+          error: "Free limit reached",
+          code: "PRO_REQUIRED",
+          used: currentUsed,
+          limit: FREE_SUGGEST_LIMIT,
+        },
+        { status: 403 },
+      );
+    }
+  } else if (!isPro) {
+    // Anonymous user: fall back to in-memory tracking
+    const anonUsed = anonUsageMap.get(ip) ?? 0;
+    currentUsed = anonUsed;
+
+    if (anonUsed >= FREE_SUGGEST_LIMIT) {
+      return NextResponse.json(
+        {
+          error: "Free limit reached",
+          code: "PRO_REQUIRED",
+          used: anonUsed,
+          limit: FREE_SUGGEST_LIMIT,
+        },
+        { status: 403 },
+      );
+    }
+  }
+
+  /**
+   * Increment usage after a successful suggestion and return `remaining`.
+   * For authenticated users this persists to the profiles table via upsert;
+   * for anonymous users it updates the in-memory map.
+   */
+  async function recordUsage(): Promise<number> {
+    const newUsed = currentUsed + 1;
+    const remaining = FREE_SUGGEST_LIMIT - newUsed;
+
+    if (userId) {
+      const supabase = await createClient();
+      await supabase
+        .from("profiles")
+        .upsert(
+          { user_id: userId, suggest_used: newUsed },
+          { onConflict: "user_id" },
+        );
+    } else {
+      anonUsageMap.set(ip, newUsed);
+    }
+
+    return remaining;
   }
 
   try {
@@ -187,10 +285,18 @@ Requirements:
 
       try {
         const suggestion = await callClaude(prompt);
+        if (!isPro) {
+          const remaining = await recordUsage();
+          return NextResponse.json({ suggestion, remaining });
+        }
         return NextResponse.json({ suggestion });
       } catch (e: unknown) {
         if (e instanceof Error && e.message === "NO_API_KEY") {
           const suggestion = pickFallbackSummary(context);
+          if (!isPro) {
+            const remaining = await recordUsage();
+            return NextResponse.json({ suggestion, remaining });
+          }
           return NextResponse.json({ suggestion });
         }
         throw e;
@@ -200,7 +306,8 @@ Requirements:
     /* ----- Bullets ----- */
     if (field === "bullets") {
       const existing =
-        (context.existingBullets ?? []).filter((b) => b.trim()).join("\n- ") || "none";
+        (context.existingBullets ?? []).filter((b) => b.trim()).join("\n- ") ||
+        "none";
 
       const prompt = `You are a professional resume writer. Generate exactly 5 professional bullet points for a resume.
 
@@ -223,10 +330,18 @@ Requirements:
           .split("\n")
           .map((line) => line.replace(/^[-•*]\s*/, "").trim())
           .filter((line) => line.length > 0);
+        if (!isPro) {
+          const remaining = await recordUsage();
+          return NextResponse.json({ suggestions, remaining });
+        }
         return NextResponse.json({ suggestions });
       } catch (e: unknown) {
         if (e instanceof Error && e.message === "NO_API_KEY") {
           const suggestions = pickFallbackBullets(context);
+          if (!isPro) {
+            const remaining = await recordUsage();
+            return NextResponse.json({ suggestions, remaining });
+          }
           return NextResponse.json({ suggestions });
         }
         throw e;

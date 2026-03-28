@@ -15,6 +15,17 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      // Auto-create profile row for new users (fire-and-forget)
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        supabase
+          .from("profiles")
+          .upsert({ user_id: user.id }, { onConflict: "user_id" })
+          .then(() => {});
+      }
+
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocal = process.env.NODE_ENV === "development";
 

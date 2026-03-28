@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { checkUserPro } from "@/lib/check-pro";
 import type { ResumeData } from "@/lib/types";
 
 // Simple in-memory rate limiter (per IP, 10 requests per minute)
@@ -119,6 +120,14 @@ function buildFallbackCoverLetter(
 /* ------------------------------------------------------------------ */
 
 export async function POST(req: NextRequest) {
+  const { isPro } = await checkUserPro();
+  if (!isPro) {
+    return NextResponse.json(
+      { error: "Pro feature", code: "PRO_REQUIRED" },
+      { status: 403 },
+    );
+  }
+
   const ip =
     req.headers.get("x-forwarded-for") ||
     req.headers.get("x-real-ip") ||

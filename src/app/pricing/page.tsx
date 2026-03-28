@@ -6,20 +6,38 @@ import { useState } from "react";
 
 const freePlanFeatures = [
   "Resume builder with live preview",
-  "6 color palettes",
-  "AI suggestions (limited)",
+  "6 color palettes & 4 layout templates",
   "Share with unique URL",
   "PDF download",
-  "Kavora branding in footer",
+  "3 AI suggestions (then requires Pro)",
+  "LinkedIn text import",
+  "Kavora branding on shared resume",
 ];
 
 const proPlanFeatures = [
-  "Everything in Free",
-  "Remove Kavora branding from resume",
-  "Cover letter generator (unlimited)",
-  "ATS score checker",
-  "Priority AI suggestions",
-  "All future templates included",
+  "Remove Kavora branding from ALL resumes",
+  "Cover letter generator (AI-powered)",
+  "ATS compatibility checker",
+  "Unlimited AI suggestions",
+  "PDF resume import (AI-powered parsing)",
+  "All future templates & features",
+];
+
+const faqItems = [
+  {
+    question: "Is this per-resume or per-user?",
+    answer:
+      "Per-user. Pay once and all your current and future resumes get Pro features.",
+  },
+  {
+    question: "Can I try before I buy?",
+    answer:
+      "Absolutely. Build and share unlimited resumes for free. Pro just unlocks premium tools and removes branding.",
+  },
+  {
+    question: "What if I need a refund?",
+    answer: "Email us within 7 days for a full refund, no questions asked.",
+  },
 ];
 
 function CheckIcon({ gold }: { gold?: boolean }) {
@@ -96,11 +114,11 @@ export default function PricingPage() {
           </p>
           <div className="decorative-line mx-auto mt-4 mb-6" />
           <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold text-navy sm:text-5xl">
-            One Price. Yours Forever.
+            One Price. All Your Resumes. Forever.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-text-muted sm:text-lg">
-            No subscriptions, no recurring fees. Pay once and unlock every
-            premium feature.
+            Pay once and unlock every premium feature across all your resumes.
+            No subscriptions, no per-resume fees.
           </p>
         </div>
 
@@ -117,7 +135,7 @@ export default function PricingPage() {
               </span>
             </div>
             <p className="mt-2 text-sm text-text-muted">
-              Everything you need to get started.
+              Everything you need to get started. No credit card required.
             </p>
 
             <div className="my-8 h-px bg-border-light" />
@@ -161,7 +179,7 @@ export default function PricingPage() {
               <span className="text-sm text-text-muted">one-time</span>
             </div>
             <p className="mt-2 text-sm text-text-muted">
-              Every feature, no branding, forever.
+              Every feature, all resumes, forever.
             </p>
 
             <div className="my-8 h-px bg-border-light" />
@@ -202,8 +220,31 @@ export default function PricingPage() {
           <p className="text-xs leading-relaxed text-text-muted/70">
             Secure payment powered by Stripe. No account required.
             <br />
-            Your purchase is linked to your resume and activates instantly.
+            Your purchase is linked to your account and activates instantly.
           </p>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="border-t border-border-light px-6 py-16 md:py-20">
+        <div className="mx-auto max-w-2xl">
+          <h2 className="text-center font-[family-name:var(--font-cormorant)] text-2xl font-semibold text-navy sm:text-3xl">
+            Questions?
+          </h2>
+          <div className="decorative-line mx-auto mt-4 mb-10" />
+
+          <dl className="flex flex-col gap-8">
+            {faqItems.map((item) => (
+              <div key={item.question}>
+                <dt className="text-sm font-semibold text-navy">
+                  {item.question}
+                </dt>
+                <dd className="mt-1.5 text-sm leading-relaxed text-text-muted">
+                  {item.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
