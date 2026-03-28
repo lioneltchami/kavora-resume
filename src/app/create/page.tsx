@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import ATSChecker from "@/components/ATSChecker";
+import CelebrationModal from "@/components/CelebrationModal";
 import CoverLetterGenerator from "@/components/CoverLetterGenerator";
 import LinkedInImport from "@/components/LinkedInImport";
 import PDFDownload from "@/components/PDFDownload";
 import ResumeForm from "@/components/ResumeForm";
 import ResumePreview from "@/components/ResumePreview";
+import SlugEditor from "@/components/SlugEditor";
 import UserMenu from "@/components/UserMenu";
 import { sampleResume } from "@/lib/sample-data";
 import { slugify } from "@/lib/slugify";
@@ -35,6 +37,11 @@ function CreatePageInner() {
   const [showATSChecker, setShowATSChecker] = useState(false);
   const [showCoverLetter, setShowCoverLetter] = useState(false);
   const [showLinkedIn, setShowLinkedIn] = useState(false);
+  const [linkedInDefaultTab, setLinkedInDefaultTab] = useState<
+    "paste" | "upload" | "pdf"
+  >("paste");
+  const [showSlugEditor, setShowSlugEditor] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [mounted, setMounted] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -177,7 +184,11 @@ function CreatePageInner() {
 
       const url = `${window.location.origin}/r/${slug}`;
       setShareUrl(url);
-      setShowShareModal(true);
+      if (!editSlug) {
+        setShowCelebration(true);
+      } else {
+        setShowShareModal(true);
+      }
       setCopied(false);
     } catch (err) {
       console.error("Save & share failed:", err);
@@ -286,7 +297,32 @@ function CreatePageInner() {
             Try Sample
           </button>
           <button
-            onClick={() => setShowLinkedIn(true)}
+            onClick={() => {
+              setLinkedInDefaultTab("pdf");
+              setShowLinkedIn(true);
+            }}
+            className="inline-flex items-center gap-1 text-[0.75rem] text-[#6b6560] hover:text-[#b08d57] transition-colors"
+          >
+            <svg
+              className="h-3.5 w-3.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+              />
+            </svg>
+            Upload PDF
+          </button>
+          <button
+            onClick={() => {
+              setLinkedInDefaultTab("paste");
+              setShowLinkedIn(true);
+            }}
             className="inline-flex items-center gap-1 text-[0.75rem] text-[#6b6560] hover:text-[#b08d57] transition-colors"
           >
             <svg
@@ -476,6 +512,26 @@ function CreatePageInner() {
               </button>
             </div>
 
+            <button
+              onClick={() => setShowSlugEditor(true)}
+              className="mt-1.5 inline-flex items-center gap-1 text-xs text-[#b08d57] transition-colors hover:text-[#9a7a4a]"
+            >
+              <svg
+                className="h-3 w-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"
+                />
+              </svg>
+              Edit URL
+            </button>
+
             <div className="mt-4 flex justify-end">
               <button
                 onClick={() => setShowShareModal(false)}
@@ -486,6 +542,35 @@ function CreatePageInner() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Slug Editor modal */}
+      {showSlugEditor && shareUrl && (
+        <SlugEditor
+          currentSlug={shareUrl.split("/r/")[1] || ""}
+          onSave={(newSlug) => {
+            const newUrl = `${window.location.origin}/r/${newSlug}`;
+            setShareUrl(newUrl);
+            setShowSlugEditor(false);
+            setCopied(false);
+            // Update local registry
+            const savedResumes = JSON.parse(
+              localStorage.getItem("kavora-saved-resumes") || "[]",
+            );
+            const oldSlug = shareUrl.split("/r/")[1] || "";
+            const idx = savedResumes.findIndex(
+              (r: { slug: string }) => r.slug === oldSlug,
+            );
+            if (idx >= 0) {
+              savedResumes[idx].slug = newSlug;
+              localStorage.setItem(
+                "kavora-saved-resumes",
+                JSON.stringify(savedResumes),
+              );
+            }
+          }}
+          onClose={() => setShowSlugEditor(false)}
+        />
       )}
 
       {/* ATS Checker modal */}
@@ -506,6 +591,16 @@ function CreatePageInner() {
         <LinkedInImport
           onImport={handleLinkedInImport}
           onClose={() => setShowLinkedIn(false)}
+          defaultTab={linkedInDefaultTab}
+        />
+      )}
+
+      {/* First-publish celebration modal */}
+      {showCelebration && shareUrl && (
+        <CelebrationModal
+          url={shareUrl}
+          name={data.name}
+          onClose={() => setShowCelebration(false)}
         />
       )}
     </div>

@@ -191,11 +191,13 @@ export async function generateMetadata({
       description,
       type: "profile",
       siteName: "Kavora Resume Builder",
+      images: [`/r/${slug}/og`],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
+      images: [`/r/${slug}/og`],
     },
   };
 }
