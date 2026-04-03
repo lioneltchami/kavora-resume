@@ -58,6 +58,16 @@ export default function AuthNav() {
           Pricing
         </a>
         <a
+          href="/create/portfolio"
+          style={{
+            fontSize: "0.75rem",
+            color: "#6b6560",
+            textDecoration: "none",
+          }}
+        >
+          Portfolio
+        </a>
+        <a
           href="/create"
           style={{
             display: "flex",
@@ -100,7 +110,7 @@ export default function AuthNav() {
               {initial}
             </div>
           )}
-          Dashboard
+          Resume Editor
         </a>
       </div>
     );

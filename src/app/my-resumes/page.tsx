@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface SavedResume {
   slug: string;
@@ -78,10 +78,29 @@ export default function MyResumesPage() {
               className="opacity-80"
             />
             <span className="text-[0.8rem] font-semibold tracking-[0.03em] text-navy">
-              Kavora Resume Builder
+              Kavora
             </span>
           </Link>
 
+          <Link
+            href="/create/portfolio"
+            className="inline-flex items-center gap-2 rounded-sm border border-[#b08d57] px-5 py-2.5 text-[0.8125rem] font-medium tracking-wide text-[#b08d57] transition-all hover:bg-[#b08d57] hover:text-white"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"
+              />
+            </svg>
+            My Portfolio
+          </Link>
           <Link
             href="/create?new=true"
             className="inline-flex items-center gap-2 rounded-sm bg-navy px-5 py-2.5 text-[0.8125rem] font-medium tracking-wide text-white transition-all hover:bg-navy-light hover:shadow-md"
@@ -110,10 +129,10 @@ export default function MyResumesPage() {
           {/* Page header */}
           <div className="mb-10 text-center">
             <p className="text-[0.6875rem] font-medium tracking-[0.3em] uppercase text-gold">
-              Your Collection
+              Your Workspace
             </p>
             <h1 className="mt-3 font-[family-name:var(--font-cormorant)] text-4xl font-semibold text-navy sm:text-5xl">
-              My Resumes
+              Resumes & Portfolios
             </h1>
             <div className="mx-auto mt-5 h-px w-12 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
           </div>
@@ -140,9 +159,8 @@ export default function MyResumesPage() {
                 No resumes yet
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                You haven&apos;t saved any resumes yet.
-                <br />
-                Create your first one to get started!
+                You haven&apos;t saved any resumes yet. Create your first resume
+                — your portfolio will be ready at /p/your-name once you publish.
               </p>
               <Link
                 href="/create?new=true"
@@ -232,7 +250,26 @@ export default function MyResumesPage() {
                           d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                         />
                       </svg>
-                      View
+                      Resume
+                    </Link>
+                    <Link
+                      href={`/p/${resume.slug}`}
+                      className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-white px-3.5 py-2 text-[0.75rem] font-medium text-navy transition-all hover:border-gold hover:text-gold"
+                    >
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"
+                        />
+                      </svg>
+                      Portfolio
                     </Link>
                     <button
                       onClick={() => handleDelete(resume.slug)}

@@ -7,17 +7,21 @@ import { useState } from "react";
 const freePlanFeatures = [
   "Resume builder with live preview",
   "6 color palettes & 4 layout templates",
-  "Share with unique URL",
-  "PDF download",
+  "Share with unique URL (/r/your-name)",
+  "Portfolio website with 3 projects (/p/your-name)",
+  "PDF download + ATS-Safe PDF",
   "3 AI suggestions (then requires Pro)",
   "LinkedIn text import",
-  "Kavora branding on shared resume",
+  "Kavora branding on shared pages",
 ];
 
 const proPlanFeatures = [
-  "Remove Kavora branding from ALL resumes",
+  "Personal portfolio website (/p/your-name)",
+  "Unlimited portfolio projects (free = 3)",
+  "Contact form + testimonials on portfolio",
+  "Remove Kavora branding from all pages",
   "Cover letter generator (AI-powered)",
-  "ATS compatibility checker",
+  "ATS compatibility checker + ATS-Safe PDF",
   "Unlimited AI suggestions",
   "PDF resume import (AI-powered parsing)",
   "All future templates & features",
@@ -25,14 +29,19 @@ const proPlanFeatures = [
 
 const faqItems = [
   {
+    question: "What's included in the portfolio feature?",
+    answer:
+      "Your portfolio lives at /p/your-name and shows your bio, projects with images, skills, experience, and optionally testimonials and a contact form. Free users get 3 projects; Pro users get unlimited.",
+  },
+  {
     question: "Is this per-resume or per-user?",
     answer:
-      "Per-user. Pay once and all your current and future resumes get Pro features.",
+      "Per-user. Pay once and all your current and future resumes and portfolios get Pro features.",
   },
   {
     question: "Can I try before I buy?",
     answer:
-      "Absolutely. Build and share unlimited resumes for free. Pro just unlocks premium tools and removes branding.",
+      "Absolutely. Build resumes and a basic portfolio for free. Pro just unlocks unlimited projects, testimonials, contact form, and removes Kavora branding.",
   },
   {
     question: "What if I need a refund?",
@@ -114,11 +123,23 @@ export default function PricingPage() {
           </p>
           <div className="decorative-line mx-auto mt-4 mb-6" />
           <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold text-navy sm:text-5xl">
-            One Price. All Your Resumes. Forever.
+            Resume + Portfolio. One Price. Forever.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-text-muted sm:text-lg">
-            Pay once and unlock every premium feature across all your resumes.
-            No subscriptions, no per-resume fees.
+            Pay once and unlock every premium feature — including your personal
+            portfolio website. No subscriptions, no per-resume fees.
+          </p>
+        </div>
+
+        {/* Portfolio feature highlight */}
+        <div className="mx-auto mt-10 max-w-2xl rounded-sm border border-gold/30 bg-gold/5 px-6 py-4 text-center">
+          <p className="text-sm text-[#4a4540]">
+            <span className="font-semibold text-navy">New:</span> Every account
+            now gets a personal portfolio website at{" "}
+            <span className="font-mono text-[0.8rem] text-gold">
+              kavora.app/p/your-name
+            </span>{" "}
+            &mdash; free with 3 projects, unlimited with Pro.
           </p>
         </div>
 
@@ -174,7 +195,7 @@ export default function PricingPage() {
             </p>
             <div className="mt-4 flex items-baseline gap-2">
               <span className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold text-navy">
-                $9
+                $19
               </span>
               <span className="text-sm text-text-muted">one-time</span>
             </div>

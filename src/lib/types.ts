@@ -99,6 +99,7 @@ export interface EducationEntry {
 
 export interface ResumeData {
   slug: string;
+  title?: string; // Professional headline/title, used by portfolio page
   photo?: string;
   name: string;
   location: string;

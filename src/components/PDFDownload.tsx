@@ -11,6 +11,7 @@ interface PDFDownloadProps {
 
 export default function PDFDownload({ name, data }: PDFDownloadProps) {
   const [generating, setGenerating] = useState(false);
+  const [generatingATS, setGeneratingATS] = useState(false);
 
   const handleDownload = useCallback(() => {
     if (!data) {
@@ -57,27 +58,84 @@ export default function PDFDownload({ name, data }: PDFDownloadProps) {
     };
   }, [data]);
 
+  const handleATSSafeDownload = useCallback(() => {
+    if (!data) {
+      window.print();
+      return;
+    }
+    setGeneratingATS(true);
+    const html = buildATSSafeHTML(data);
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "fixed";
+    iframe.style.right = "0";
+    iframe.style.bottom = "0";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "none";
+    document.body.appendChild(iframe);
+    const doc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!doc) {
+      setGeneratingATS(false);
+      return;
+    }
+    doc.open();
+    doc.write(html);
+    doc.close();
+    iframe.onload = () => {
+      setTimeout(() => {
+        iframe.contentWindow?.print();
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+          setGeneratingATS(false);
+        }, 1000);
+      }, 300);
+    };
+  }, [data]);
+
   return (
-    <button
-      onClick={handleDownload}
-      disabled={generating}
-      className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-    >
-      <svg
-        className="h-4 w-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
+    <div className="flex items-center gap-2">
+      <button
+        onClick={handleDownload}
+        disabled={generating}
+        className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-        />
-      </svg>
-      {generating ? "Generating..." : "Download PDF"}
-    </button>
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+          />
+        </svg>
+        {generating ? "Generating..." : "Download PDF"}
+      </button>
+      <button
+        onClick={handleATSSafeDownload}
+        disabled={generatingATS}
+        title="Single-column layout optimized for ATS (Applicant Tracking Systems)"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-green-300 bg-green-50 px-3 py-2 text-sm font-medium text-green-700 shadow-sm transition-colors hover:bg-green-100 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 013 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+          />
+        </svg>
+        {generatingATS ? "Generating..." : "ATS-Safe PDF"}
+      </button>
+    </div>
   );
 }
 
@@ -626,4 +684,172 @@ function esc(str: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+/**
+ * Builds a strictly ATS-safe single-column HTML resume.
+ * - No flexbox, no CSS grid, no multi-column layout anywhere
+ * - Source order: Header -> Summary -> Skills -> Experience -> Education -> Volunteer -> Languages
+ * - No photo (ATS cannot parse images)
+ * - No Google Fonts CDN dependency (system fonts only)
+ * - This is what gets submitted to Taleo, Workday, Greenhouse, iCIMS
+ */
+function buildATSSafeHTML(data: ResumeData): string {
+  const palette = getPalette(data.paletteId);
+
+  const experienceHTML = data.experience
+    .map(
+      (exp) => `
+      <div class="job">
+        <div class="job-title">${esc(exp.title)}</div>
+        <div class="job-meta">${esc(exp.company)}${exp.location ? ` — ${esc(exp.location)}` : ""} | ${esc(exp.startDate)} – ${esc(exp.endDate)}</div>
+        ${
+          exp.bullets.length > 0
+            ? `<ul class="bullets">${exp.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>`
+            : ""
+        }
+      </div>`,
+    )
+    .join("");
+
+  const educationHTML = data.education
+    .map(
+      (edu) => `
+      <div class="edu-item">
+        <strong>${esc(edu.degree)}</strong> — ${esc(edu.school)}${edu.location ? `, ${esc(edu.location)}` : ""}
+      </div>`,
+    )
+    .join("");
+
+  const skillsText =
+    data.skills.length > 0 ? data.skills.map((s) => esc(s)).join(" · ") : "";
+
+  const volunteerHTML =
+    data.volunteer.filter(Boolean).length > 0
+      ? data.volunteer
+          .filter(Boolean)
+          .map((v) => `<div class="vol-item">${esc(v)}</div>`)
+          .join("")
+      : "";
+
+  const languagesHTML =
+    data.languages.length > 0
+      ? data.languages
+          .map(
+            (l) =>
+              `<div class="lang-item">${esc(l.name)} — ${esc(l.level)}</div>`,
+          )
+          .join("")
+      : "";
+
+  const contactParts = [data.location, data.phone, data.email].filter(Boolean);
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>${esc(data.name)} - Resume</title>
+<style>
+  /* ATS-Safe: NO flexbox, NO grid, NO multi-column */
+  @page { size: letter; margin: 0.5in 0.65in; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    color: #000000;
+    line-height: 1.4;
+  }
+  .name {
+    font-size: 20pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    color: ${palette.primary};
+  }
+  .contact {
+    font-size: 9pt;
+    color: #333333;
+    margin-bottom: 8px;
+  }
+  .divider {
+    border: none;
+    border-top: 2px solid ${palette.primary};
+    margin: 6px 0 8px 0;
+  }
+  .section-title {
+    font-size: 10pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: ${palette.primary};
+    border-bottom: 1px solid ${palette.primary};
+    padding-bottom: 2px;
+    margin: 10px 0 5px 0;
+  }
+  .summary {
+    font-size: 9.5pt;
+    color: #222222;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .skills-text {
+    font-size: 9pt;
+    color: #222222;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+  .job { margin-bottom: 8px; }
+  .job-title {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #000000;
+  }
+  .job-meta {
+    font-size: 9pt;
+    color: #444444;
+    margin-bottom: 3px;
+  }
+  .bullets {
+    list-style-type: disc;
+    padding-left: 18px;
+    margin-top: 3px;
+  }
+  .bullets li {
+    font-size: 9pt;
+    color: #222222;
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+  .edu-item {
+    font-size: 9.5pt;
+    color: #222222;
+    margin-bottom: 4px;
+    line-height: 1.35;
+  }
+  .vol-item, .lang-item {
+    font-size: 9pt;
+    color: #333333;
+    margin-bottom: 3px;
+  }
+</style>
+</head>
+<body>
+  <div class="name">${esc(data.name)}</div>
+  ${contactParts.length > 0 ? `<div class="contact">${contactParts.join(" | ")}</div>` : ""}
+  <hr class="divider">
+
+  ${data.summary ? `<div class="section-title">Professional Summary</div><p class="summary">${esc(data.summary)}</p>` : ""}
+
+  ${skillsText ? `<div class="section-title">Core Competencies</div><p class="skills-text">${skillsText}</p>` : ""}
+
+  ${data.experience.length > 0 ? `<div class="section-title">Professional Experience</div>${experienceHTML}` : ""}
+
+  ${data.education.length > 0 ? `<div class="section-title">Education</div>${educationHTML}` : ""}
+
+  ${volunteerHTML ? `<div class="section-title">Volunteer Experience</div>${volunteerHTML}` : ""}
+
+  ${languagesHTML ? `<div class="section-title">Languages</div>${languagesHTML}` : ""}
+</body>
+</html>`;
 }
