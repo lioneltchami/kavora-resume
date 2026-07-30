@@ -117,6 +117,11 @@ export interface ResumeData {
   paidAt?: string;
   userId?: string;
   isPublic?: boolean; // true = anyone can view, false = only owner can view
+  label?: string; // User-facing name for this version, e.g. "Stripe — Senior PM"
+  parentSlug?: string; // Slug of the resume this version was tailored from
+  targetCompany?: string;
+  targetRole?: string;
+  tailoredAt?: string;
 }
 
 export const emptyResume: ResumeData = {
