@@ -1,71 +1,95 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { checkUserPro } from "@/lib/check-pro";
+import { getSiteOrigin } from "@/lib/site-url";
 import { createClient } from "@/lib/supabase/server";
 
+export const PRO_PRICE_CENTS = 1900;
+
 export async function POST(req: NextRequest) {
-  const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
+	try {
+		const { slug } = (await req.json().catch(() => ({}))) as { slug?: string };
 
-  if (!STRIPE_SECRET) {
-    return NextResponse.json(
-      { error: "Payment not configured" },
-      { status: 503 },
-    );
-  }
+		const supabase = await createClient();
+		const {
+			data: { user },
+		} = await supabase.auth.getUser();
 
-  try {
-    const { slug } = await req.json();
+		// Auth first — a missing Stripe key must never hide "sign in required".
+		if (!user) {
+			return NextResponse.json(
+				{
+					error: "Sign in to upgrade so we can attach Pro to your account.",
+					code: "AUTH_REQUIRED",
+				},
+				{ status: 401 },
+			);
+		}
 
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+		const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
+		if (!STRIPE_SECRET) {
+			return NextResponse.json(
+				{ error: "Payment not configured" },
+				{ status: 503 },
+			);
+		}
 
-    const params = new URLSearchParams({
-      mode: "payment",
-      "line_items[0][price_data][currency]": "usd",
-      "line_items[0][price_data][product_data][name]": "Kavora Pro",
-      "line_items[0][price_data][product_data][description]":
-        "One-time payment. Portfolio generator + all premium resume features.",
-      "line_items[0][price_data][unit_amount]": "1900",
-      "line_items[0][quantity]": "1",
-      success_url: `${req.nextUrl.origin}/payment-success?slug=${slug || ""}`,
-      cancel_url: `${req.nextUrl.origin}/pricing`,
-      "metadata[slug]": slug || "",
-    });
+		const { isPro } = await checkUserPro();
+		if (isPro) {
+			return NextResponse.json({ alreadyPro: true });
+		}
 
-    if (user) {
-      params.set("metadata[user_id]", user.id);
-      if (user.email) {
-        params.set("metadata[user_email]", user.email);
-      }
-    }
+		const origin = await getSiteOrigin();
+		const successParams = new URLSearchParams({ slug: slug || "" });
+		successParams.set("session_id", "{CHECKOUT_SESSION_ID}");
 
-    const response = await fetch(
-      "https://api.stripe.com/v1/checkout/sessions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${STRIPE_SECRET}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: params,
-      },
-    );
+		const params = new URLSearchParams({
+			mode: "payment",
+			"line_items[0][price_data][currency]": "usd",
+			"line_items[0][price_data][product_data][name]": "Kavora Pro",
+			"line_items[0][price_data][product_data][description]":
+				"One-time payment. Portfolio generator + all premium resume features.",
+			"line_items[0][price_data][unit_amount]": String(PRO_PRICE_CENTS),
+			"line_items[0][quantity]": "1",
+			success_url: `${origin}/payment-success?${successParams.toString()}`,
+			cancel_url: `${origin}/pricing?checkout=cancelled`,
+			client_reference_id: user.id,
+			"metadata[user_id]": user.id,
+			"metadata[slug]": slug || "",
+		});
 
-    const session = await response.json();
+		if (user.email) {
+			params.set("customer_email", user.email);
+			params.set("metadata[user_email]", user.email);
+		}
 
-    if (session.error) {
-      return NextResponse.json(
-        { error: session.error.message },
-        { status: 400 },
-      );
-    }
+		const response = await fetch(
+			"https://api.stripe.com/v1/checkout/sessions",
+			{
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${STRIPE_SECRET}`,
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: params,
+			},
+		);
 
-    return NextResponse.json({ url: session.url });
-  } catch (err) {
-    console.error("Checkout error:", err);
-    return NextResponse.json(
-      { error: "Failed to create checkout" },
-      { status: 500 },
-    );
-  }
+		const session = await response.json();
+
+		if (session.error) {
+			console.error("Stripe checkout error:", session.error.message);
+			return NextResponse.json(
+				{ error: session.error.message },
+				{ status: 400 },
+			);
+		}
+
+		return NextResponse.json({ url: session.url });
+	} catch (err) {
+		console.error("Checkout error:", err);
+		return NextResponse.json(
+			{ error: "Failed to create checkout" },
+			{ status: 500 },
+		);
+	}
 }

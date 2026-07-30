@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { SITE_DOMAIN } from "@/lib/site";
 
 interface SlugEditorProps {
   currentSlug: string;
@@ -138,7 +139,7 @@ export default function SlugEditor({
         {/* URL input */}
         <div className="mb-3 flex items-center gap-0 rounded-lg border border-[#e8e2da] bg-[#faf8f5] overflow-hidden">
           <span className="shrink-0 bg-[#e8e2da] px-3 py-2.5 text-xs text-[#6b6560] select-none">
-            kavora-resume.vercel.app/r/
+            {SITE_DOMAIN}/r/
           </span>
           <input
             ref={inputRef}

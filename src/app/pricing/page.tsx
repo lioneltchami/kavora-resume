@@ -3,12 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { SITE_DOMAIN } from "@/lib/site";
 
 const freePlanFeatures = [
   "Resume builder with live preview",
   "6 color palettes & 4 layout templates",
   "Share with unique URL (/r/your-name)",
   "Portfolio website with 3 projects (/p/your-name)",
+  "Contact form on your portfolio",
   "PDF download + ATS-Safe PDF",
   "3 AI suggestions (then requires Pro)",
   "LinkedIn text import",
@@ -16,12 +18,11 @@ const freePlanFeatures = [
 ];
 
 const proPlanFeatures = [
-  "Personal portfolio website (/p/your-name)",
   "Unlimited portfolio projects (free = 3)",
-  "Contact form + testimonials on portfolio",
+  "Testimonials on your portfolio",
   "Remove Kavora branding from all pages",
   "Cover letter generator (AI-powered)",
-  "ATS compatibility checker + ATS-Safe PDF",
+  "ATS compatibility checker",
   "Unlimited AI suggestions",
   "PDF resume import (AI-powered parsing)",
   "All future templates & features",
@@ -31,7 +32,7 @@ const faqItems = [
   {
     question: "What's included in the portfolio feature?",
     answer:
-      "Your portfolio lives at /p/your-name and shows your bio, projects with images, skills, experience, and optionally testimonials and a contact form. Free users get 3 projects; Pro users get unlimited.",
+      "Your portfolio lives at /p/your-name and shows your bio, projects with images, skills, experience, an optional contact form, and — on Pro — testimonials. Free users get 3 projects; Pro users get unlimited.",
   },
   {
     question: "Is this per-resume or per-user?",
@@ -41,7 +42,7 @@ const faqItems = [
   {
     question: "Can I try before I buy?",
     answer:
-      "Absolutely. Build resumes and a basic portfolio for free. Pro just unlocks unlimited projects, testimonials, contact form, and removes Kavora branding.",
+      "Absolutely. Build resumes and a portfolio — including your contact form — for free. Pro unlocks unlimited projects, testimonials, AI tools, and removes Kavora branding.",
   },
   {
     question: "What if I need a refund?",
@@ -69,24 +70,45 @@ function CheckIcon({ gold }: { gold?: boolean }) {
 
 export default function PricingPage() {
   const [loading, setLoading] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
   async function handleGetPro() {
     setLoading(true);
+    setNotice(null);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug: "" }),
       });
-      const data = await res.json();
+      const data = (await res.json()) as {
+        url?: string;
+        error?: string;
+        code?: string;
+        alreadyPro?: boolean;
+      };
+
+      // Pro is tied to an account, so sign-in has to happen before paying.
+      if (res.status === 401 || data.code === "AUTH_REQUIRED") {
+        window.location.href = "/login?next=%2Fpricing";
+        return;
+      }
+
+      if (data.alreadyPro) {
+        setNotice("You're already on Pro — every premium feature is unlocked.");
+        setLoading(false);
+        return;
+      }
+
       if (data.url) {
         window.location.href = data.url;
-      } else {
-        alert(data.error || "Failed to start checkout. Please try again.");
-        setLoading(false);
+        return;
       }
+
+      setNotice(data.error || "Failed to start checkout. Please try again.");
+      setLoading(false);
     } catch {
-      alert("Something went wrong. Please try again.");
+      setNotice("Something went wrong. Please try again.");
       setLoading(false);
     }
   }
@@ -137,7 +159,7 @@ export default function PricingPage() {
             <span className="font-semibold text-navy">New:</span> Every account
             now gets a personal portfolio website at{" "}
             <span className="font-mono text-[0.8rem] text-gold">
-              kavora.app/p/your-name
+              {SITE_DOMAIN}/p/your-name
             </span>{" "}
             &mdash; free with 3 projects, unlimited with Pro.
           </p>
@@ -218,6 +240,11 @@ export default function PricingPage() {
             </ul>
 
             <div className="mt-auto pt-8">
+              {notice && (
+                <p className="mb-3 rounded-sm border border-gold/30 bg-gold/5 px-4 py-2.5 text-center text-[0.8rem] text-[#4a4540]">
+                  {notice}
+                </p>
+              )}
               <button
                 onClick={handleGetPro}
                 disabled={loading}

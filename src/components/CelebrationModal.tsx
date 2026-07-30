@@ -1,17 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 interface CelebrationModalProps {
   url: string;
   name: string;
   onClose: () => void;
+  /** Set when the user picked "Resume + Portfolio" so step two stays visible. */
+  emphasizePortfolio?: boolean;
 }
 
 export default function CelebrationModal({
   url,
   name,
   onClose,
+  emphasizePortfolio = false,
 }: CelebrationModalProps) {
   const [visible, setVisible] = useState(false);
   const [checkVisible, setCheckVisible] = useState(false);
@@ -19,6 +23,7 @@ export default function CelebrationModal({
   const backdropRef = useRef<HTMLDivElement>(null);
 
   const firstName = name.split(" ")[0] || "there";
+  const portfolioSlug = url.split("/r/")[1] ?? "your-name";
 
   // Animate in
   useEffect(() => {
@@ -216,6 +221,39 @@ export default function CelebrationModal({
               View Resume
             </a>
           </div>
+
+          {/* Step two: portfolio */}
+          {emphasizePortfolio ? (
+            <div className="mb-5 rounded-lg border border-[#b08d57]/40 bg-[#b08d57]/5 p-4">
+              <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.15em] text-[#b08d57]">
+                Step 2 of 2
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed text-[#4a4540]">
+                Your resume is live. Add your projects and bio to publish the
+                matching portfolio at{" "}
+                <span className="font-medium text-[#1e2a3a]">
+                  /p/{portfolioSlug}
+                </span>
+                .
+              </p>
+              <Link
+                href="/create/portfolio"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#b08d57] px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-[#9a7a4a] active:scale-[0.98]"
+              >
+                Set Up My Portfolio
+                <span aria-hidden="true">&rarr;</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="mb-5 text-center">
+              <Link
+                href="/create/portfolio"
+                className="text-[0.8125rem] font-medium text-[#b08d57] transition-colors hover:text-[#9a7a4a]"
+              >
+                Add a portfolio at /p/{portfolioSlug} &rarr;
+              </Link>
+            </div>
+          )}
 
           {/* Share links */}
           <div className="mb-5">

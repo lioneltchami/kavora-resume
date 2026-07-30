@@ -28,32 +28,83 @@ function formatDate(iso: string): string {
   }
 }
 
+function readLocalResumes(): SavedResume[] {
+  try {
+    const stored = localStorage.getItem(SAVED_KEY);
+    return stored ? (JSON.parse(stored) as SavedResume[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 export default function MyResumesPage() {
   const [resumes, setResumes] = useState<SavedResume[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [offline, setOffline] = useState(false);
 
+  // The account is the source of truth; localStorage is only a fallback so the
+  // list still renders if the request fails.
   useEffect(() => {
-    const stored = localStorage.getItem(SAVED_KEY);
-    if (stored) {
+    let cancelled = false;
+
+    async function load() {
+      setResumes(readLocalResumes());
+
       try {
-        setResumes(JSON.parse(stored));
-      } catch {
-        // ignore
+        const res = await fetch("/api/resume?mine=1");
+        if (!res.ok) throw new Error("Failed to load resumes");
+
+        const { resumes: cloudResumes } = (await res.json()) as {
+          resumes?: SavedResume[];
+        };
+
+        if (cancelled) return;
+
+        if (Array.isArray(cloudResumes)) {
+          setResumes(cloudResumes);
+          setOffline(false);
+          localStorage.setItem(SAVED_KEY, JSON.stringify(cloudResumes));
+        }
+      } catch (err) {
+        console.error("My Resumes load error:", err);
+        if (!cancelled) setOffline(true);
+      } finally {
+        if (!cancelled) setMounted(true);
       }
     }
-    setMounted(true);
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  function handleDelete(slug: string) {
+  async function handleDelete(slug: string) {
     if (
       !confirm(
-        "Remove this resume from your list? This only removes it from your local collection — the published version will still be accessible.",
+        "Delete this resume permanently? Its shared link and published page will stop working.",
       )
     )
       return;
+
+    const previous = resumes;
     const updated = resumes.filter((r) => r.slug !== slug);
     setResumes(updated);
-    localStorage.setItem(SAVED_KEY, JSON.stringify(updated));
+
+    try {
+      const res = await fetch("/api/resume", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug }),
+      });
+      if (!res.ok) throw new Error("Failed to delete resume");
+      localStorage.setItem(SAVED_KEY, JSON.stringify(updated));
+    } catch (err) {
+      console.error("Resume delete error:", err);
+      setResumes(previous);
+      alert("Could not delete that resume. Please try again.");
+    }
   }
 
   if (!mounted) {
@@ -136,6 +187,13 @@ export default function MyResumesPage() {
             </h1>
             <div className="mx-auto mt-5 h-px w-12 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
           </div>
+
+          {offline && (
+            <div className="mx-auto mb-8 max-w-md rounded-sm border border-gold/40 bg-gold/5 px-5 py-4 text-center text-[0.8rem] leading-relaxed text-navy">
+              We couldn&apos;t reach your account just now, so this list may be
+              out of date. Refresh to try again.
+            </div>
+          )}
 
           {/* Empty state */}
           {resumes.length === 0 && (

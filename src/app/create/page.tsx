@@ -20,6 +20,7 @@ import type { ResumeData } from "@/lib/types";
 import { emptyResume } from "@/lib/types";
 
 const STORAGE_KEY = "kavora-resume-draft";
+const INTENT_KEY = "kavora-build-intent";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 type ActiveTab = "edit" | "preview";
@@ -50,7 +51,23 @@ function CreatePageInner() {
     description: string;
   } | null>(null);
   const [atsBannerDismissed, setATSBannerDismissed] = useState(false);
+  const [buildingBoth, setBuildingBoth] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Remember the "Resume + Portfolio" choice from /get-started so the portfolio
+  // step survives the sign-in round trip and any reload.
+  useEffect(() => {
+    try {
+      if (searchParams.get("intent") === "both") {
+        localStorage.setItem(INTENT_KEY, "both");
+        setBuildingBoth(true);
+        return;
+      }
+      setBuildingBoth(localStorage.getItem(INTENT_KEY) === "both");
+    } catch {
+      // ignore storage errors
+    }
+  }, [searchParams]);
 
   // Check Pro status on mount
   useEffect(() => {
@@ -262,6 +279,12 @@ function CreatePageInner() {
           <span className="hidden sm:inline">Kavora Resume Builder</span>
           <span className="sm:hidden">Kavora</span>
         </Link>
+
+        {buildingBoth && (
+          <span className="hidden items-center gap-1.5 rounded-sm border border-[#b08d57]/40 bg-[#b08d57]/5 px-2.5 py-1 text-[0.7rem] font-medium tracking-wide text-[#b08d57] md:inline-flex">
+            Step 1 of 2 · Resume
+          </span>
+        )}
 
         {/* Center: Save status */}
         <div className="hidden items-center gap-1.5 text-sm text-[#6b6560] sm:flex">
@@ -733,6 +756,7 @@ function CreatePageInner() {
         <CelebrationModal
           url={shareUrl}
           name={data.name}
+          emphasizePortfolio={buildingBoth}
           onClose={() => setShowCelebration(false)}
         />
       )}

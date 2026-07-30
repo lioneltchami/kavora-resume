@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const proUnlocked = [
 	"Branding-free sharing on all resumes",
@@ -33,9 +33,46 @@ function GoldCheck() {
 	);
 }
 
+type ActivationState = "activating" | "active" | "pending" | "signin";
+
 function SuccessContent() {
 	const searchParams = useSearchParams();
 	const slug = searchParams.get("slug");
+	const sessionId = searchParams.get("session_id");
+	const [activation, setActivation] = useState<ActivationState>(
+		sessionId ? "activating" : "active",
+	);
+
+	// Confirms Pro directly with Stripe so access never depends on the webhook
+	// having been delivered.
+	useEffect(() => {
+		if (!sessionId) return;
+
+		let cancelled = false;
+
+		fetch("/api/claim-pro", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ session_id: sessionId }),
+		})
+			.then(async (res) => {
+				if (cancelled) return;
+				if (res.ok) {
+					setActivation("active");
+				} else if (res.status === 401) {
+					setActivation("signin");
+				} else {
+					setActivation("pending");
+				}
+			})
+			.catch(() => {
+				if (!cancelled) setActivation("pending");
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [sessionId]);
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center px-6 py-24">
@@ -67,6 +104,40 @@ function SuccessContent() {
 				resumes — cover letters, ATS checker, unlimited AI suggestions, and
 				branding-free sharing.
 			</p>
+
+			{activation === "activating" && (
+				<div className="animate-fade-in mt-6 flex items-center gap-2 text-sm text-text-muted">
+					<div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-gray-300 border-t-gold" />
+					Activating your Pro features...
+				</div>
+			)}
+
+			{activation === "signin" && (
+				<div className="animate-fade-in mt-6 max-w-md rounded-sm border border-gold/30 bg-gold/5 px-5 py-3 text-center text-sm text-[#4a4540]">
+					Your payment went through.{" "}
+					<Link
+						href="/login?next=%2Fcreate"
+						className="font-medium text-gold underline"
+					>
+						Sign in
+					</Link>{" "}
+					to finish activating Pro on your account.
+				</div>
+			)}
+
+			{activation === "pending" && (
+				<div className="animate-fade-in mt-6 max-w-md rounded-sm border border-gold/30 bg-gold/5 px-5 py-3 text-center text-sm text-[#4a4540]">
+					Your payment was received and Pro is being activated. If premium
+					features are still locked in a few minutes, email{" "}
+					<a
+						href="mailto:contact@kavorasystems.com"
+						className="font-medium text-gold underline"
+					>
+						contact@kavorasystems.com
+					</a>{" "}
+					and we&apos;ll switch it on right away.
+				</div>
+			)}
 
 			{/* What's unlocked */}
 			<div className="animate-fade-in-up animate-delay-3 mt-10 w-full max-w-sm rounded-sm border border-gold/20 bg-gold/[0.03] p-6">

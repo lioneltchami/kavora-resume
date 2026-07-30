@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { notifyOwnerOfContactMessage } from "@/lib/notify-owner";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -82,11 +83,20 @@ export async function POST(req: NextRequest) {
     });
 
     if (error) {
+      console.error("portfolio/contact insert failed:", error.message);
       return NextResponse.json(
         { error: "Failed to send message" },
         { status: 500 },
       );
     }
+
+    await notifyOwnerOfContactMessage({
+      ownerUserId: settings.user_id,
+      slug,
+      senderName: name,
+      senderEmail: email,
+      message,
+    });
 
     return NextResponse.json({
       success: true,

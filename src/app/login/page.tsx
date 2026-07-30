@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_POST_AUTH_PATH, safeNextPath } from "@/lib/safe-path";
 import { signInWithEmail, signInWithGoogle, signUpWithEmail } from "./actions";
 
 function GoogleIcon() {
@@ -28,11 +29,13 @@ function GoogleIcon() {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; message?: string }>;
+  searchParams: Promise<{ error?: string; message?: string; next?: string }>;
 }) {
   const params = await searchParams;
   const error = params.error;
   const message = params.message;
+  const next = safeNextPath(params.next);
+  const continuing = next !== DEFAULT_POST_AUTH_PATH || Boolean(params.next);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-bg px-4 py-12">
@@ -60,10 +63,12 @@ export default async function LoginPage({
 
             {/* Heading */}
             <h1 className="font-[family-name:var(--font-cormorant)] text-3xl font-semibold text-navy sm:text-4xl">
-              Welcome Back
+              {continuing ? "Sign In to Continue" : "Welcome Back"}
             </h1>
             <p className="mt-2 text-center text-sm leading-relaxed text-text-muted">
-              Sign in to your Kavora Resume Builder account
+              {continuing
+                ? "Your account keeps your resume and portfolio saved. Sign in, or create one free below — it takes a few seconds."
+                : "Sign in to your Kavora Resume Builder account"}
             </p>
           </div>
 
@@ -75,19 +80,34 @@ export default async function LoginPage({
           )}
           {error === "signup" && (
             <div className="mt-6 rounded-sm border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700">
-              Could not create account. The email may already be registered.
+              Could not create account. The email may already be registered —
+              try signing in instead.
+            </div>
+          )}
+          {error === "auth" && (
+            <div className="mt-6 rounded-sm border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700">
+              We couldn&apos;t finish signing you in. That sign-in link may have
+              expired — please try again.
+            </div>
+          )}
+          {error === "oauth" && (
+            <div className="mt-6 rounded-sm border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700">
+              Google sign-in is unavailable right now. Use your email and
+              password below, or try again in a moment.
             </div>
           )}
 
           {/* Success message */}
           {message === "check-email" && (
             <div className="mt-6 rounded-sm border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm text-emerald-700">
-              Check your email to confirm your account.
+              Check your email to confirm your account, then come back and sign
+              in.
             </div>
           )}
 
           {/* Google Sign In */}
           <form className="mt-8">
+            <input type="hidden" name="next" value={next} />
             <button
               formAction={signInWithGoogle}
               type="submit"
@@ -109,6 +129,7 @@ export default async function LoginPage({
 
           {/* Email/password form */}
           <form className="space-y-4">
+            <input type="hidden" name="next" value={next} />
             <div>
               <label
                 htmlFor="email"
