@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { resolveSlugOwnership, toResumeListItem } from "@/lib/resume-record";
 import { createClient } from "@/lib/supabase/server";
 import type { ResumeData } from "@/lib/types";
 
@@ -23,6 +24,29 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json(
 				{ error: "Missing slug or data" },
 				{ status: 400 },
+			);
+		}
+
+		// The upsert conflicts on `slug` alone, so without this check a signed-in
+		// user could overwrite anyone else's resume by reusing their slug.
+		const { data: existing, error: lookupError } = await supabase
+			.from("resumes")
+			.select("user_id")
+			.eq("slug", slug)
+			.maybeSingle();
+
+		if (lookupError) {
+			console.error("Supabase slug lookup error:", lookupError.message);
+			return NextResponse.json(
+				{ error: "Failed to save resume" },
+				{ status: 500 },
+			);
+		}
+
+		if (!resolveSlugOwnership(existing, user.id).allowed) {
+			return NextResponse.json(
+				{ error: "Slug already taken" },
+				{ status: 409 },
 			);
 		}
 
@@ -92,15 +116,13 @@ export async function GET(req: NextRequest) {
 				);
 			}
 
-			const resumes = (data ?? []).map((row) => {
-				const resumeData = (row.data ?? {}) as Partial<ResumeData>;
-				return {
+			const resumes = (data ?? []).map((row) =>
+				toResumeListItem({
 					slug: row.slug as string,
-					name: resumeData.name ?? "",
-					paletteId: resumeData.paletteId,
-					savedAt: (row.updated_at as string) ?? new Date().toISOString(),
-				};
-			});
+					data: row.data,
+					updated_at: row.updated_at as string | null,
+				}),
+			);
 
 			return NextResponse.json({ resumes });
 		}
