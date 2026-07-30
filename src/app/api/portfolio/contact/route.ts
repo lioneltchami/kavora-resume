@@ -51,6 +51,17 @@ export async function POST(req: NextRequest) {
 
     const { slug, name, email, message } = parsed.data;
 
+    // Hardcoded marketing demo — accept the form so visitors don't see a
+    // broken contact UX, but don't persist or notify anyone.
+    if (slug === "reena") {
+      return NextResponse.json({
+        success: true,
+        demo: true,
+        message:
+          "Thanks! This is a demo portfolio, so your message wasn't delivered. Build your own free at kavoraresume.cv.",
+      });
+    }
+
     const supabase = await createClient();
 
     // Verify the portfolio exists and contact form is enabled

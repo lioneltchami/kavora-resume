@@ -291,15 +291,15 @@ Requirements:
         }
         return NextResponse.json({ suggestion });
       } catch (e: unknown) {
-        if (e instanceof Error && e.message === "NO_API_KEY") {
-          const suggestion = pickFallbackSummary(context);
-          if (!isPro) {
-            const remaining = await recordUsage();
-            return NextResponse.json({ suggestion, remaining });
-          }
-          return NextResponse.json({ suggestion });
+        // Missing OR invalid Anthropic key → template fallback so the editor
+        // still works instead of surfacing a raw 500 to the user.
+        console.error("Suggest summary Claude failed, using fallback:", e);
+        const suggestion = pickFallbackSummary(context);
+        if (!isPro) {
+          const remaining = await recordUsage();
+          return NextResponse.json({ suggestion, remaining, fallback: true });
         }
-        throw e;
+        return NextResponse.json({ suggestion, fallback: true });
       }
     }
 
@@ -336,15 +336,13 @@ Requirements:
         }
         return NextResponse.json({ suggestions });
       } catch (e: unknown) {
-        if (e instanceof Error && e.message === "NO_API_KEY") {
-          const suggestions = pickFallbackBullets(context);
-          if (!isPro) {
-            const remaining = await recordUsage();
-            return NextResponse.json({ suggestions, remaining });
-          }
-          return NextResponse.json({ suggestions });
+        console.error("Suggest bullets Claude failed, using fallback:", e);
+        const suggestions = pickFallbackBullets(context);
+        if (!isPro) {
+          const remaining = await recordUsage();
+          return NextResponse.json({ suggestions, remaining, fallback: true });
         }
-        throw e;
+        return NextResponse.json({ suggestions, fallback: true });
       }
     }
 

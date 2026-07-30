@@ -1,6 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 import { ImageResponse } from "next/og";
-import type { PortfolioSettings } from "@/lib/portfolio-types";
 import type { ResumeData } from "@/lib/types";
 
 export const runtime = "edge";
@@ -18,39 +17,44 @@ export async function GET(
   let name = "";
   let title = "";
 
-  try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
+  if (slug === "reena") {
+    name = "Reena Sumputh";
+    title = "Client Service Representative";
+  } else {
+    try {
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      );
 
-    // Fetch portfolio settings to verify it exists
-    const { data: settings, error: settingsError } = await supabase
-      .from("portfolio_settings")
-      .select("bio")
-      .eq("slug", slug)
-      .single();
+      // Fetch portfolio settings to verify it exists
+      const { data: settings, error: settingsError } = await supabase
+        .from("portfolio_settings")
+        .select("bio")
+        .eq("slug", slug)
+        .single();
 
-    if (settingsError || !settings) {
+      if (settingsError || !settings) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      // Fetch resume data for name and title
+      const { data: resumeRow, error: resumeError } = await supabase
+        .from("resumes")
+        .select("data")
+        .eq("slug", slug)
+        .single();
+
+      if (resumeError || !resumeRow) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      const resumeData = resumeRow.data as ResumeData;
+      name = resumeData.name;
+      title = resumeData.title ?? resumeData.experience?.[0]?.title ?? "";
+    } catch {
       return new Response("Not found", { status: 404 });
     }
-
-    // Fetch resume data for name and title
-    const { data: resumeRow, error: resumeError } = await supabase
-      .from("resumes")
-      .select("data")
-      .eq("slug", slug)
-      .single();
-
-    if (resumeError || !resumeRow) {
-      return new Response("Not found", { status: 404 });
-    }
-
-    const resumeData = resumeRow.data as ResumeData;
-    name = resumeData.name;
-    title = resumeData.title ?? resumeData.experience?.[0]?.title ?? "";
-  } catch {
-    return new Response("Not found", { status: 404 });
   }
 
   if (!name) {
