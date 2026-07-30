@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { pdfToText } from "pdf-ts";
+import { generateAIText } from "@/lib/ai-text";
 import { checkUserPro } from "@/lib/check-pro";
 import type { ResumeData } from "@/lib/types";
 import { createId } from "@/lib/types";
@@ -11,87 +12,85 @@ export const maxDuration = 30; // Allow up to 30s for AI extraction
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + 60_000 });
-    return true;
-  }
-  if (entry.count >= 5) return false;
-  entry.count++;
-  return true;
+	const now = Date.now();
+	const entry = rateLimit.get(ip);
+	if (!entry || now > entry.resetAt) {
+		rateLimit.set(ip, { count: 1, resetAt: now + 60_000 });
+		return true;
+	}
+	if (entry.count >= 5) return false;
+	entry.count++;
+	return true;
 }
 
 export async function POST(req: NextRequest) {
-  const { isPro } = await checkUserPro();
-  if (!isPro) {
-    return NextResponse.json(
-      { error: "Pro feature", code: "PRO_REQUIRED" },
-      { status: 403 },
-    );
-  }
+	const { isPro } = await checkUserPro();
+	if (!isPro) {
+		return NextResponse.json(
+			{ error: "Pro feature", code: "PRO_REQUIRED" },
+			{ status: 403 },
+		);
+	}
 
-  const ip =
-    req.headers.get("x-forwarded-for") ||
-    req.headers.get("x-real-ip") ||
-    "unknown";
-  if (!checkRateLimit(ip)) {
-    return NextResponse.json(
-      { error: "Too many requests. Please wait." },
-      { status: 429 },
-    );
-  }
+	const ip =
+		req.headers.get("x-forwarded-for") ||
+		req.headers.get("x-real-ip") ||
+		"unknown";
+	if (!checkRateLimit(ip)) {
+		return NextResponse.json(
+			{ error: "Too many requests. Please wait." },
+			{ status: 429 },
+		);
+	}
 
-  try {
-    const formData = await req.formData();
-    const file = formData.get("pdf") as File | null;
+	try {
+		const formData = await req.formData();
+		const file = formData.get("pdf") as File | null;
 
-    if (!file || !file.name.endsWith(".pdf")) {
-      return NextResponse.json(
-        { error: "Please upload a PDF file" },
-        { status: 400 },
-      );
-    }
+		if (!file || !file.name.endsWith(".pdf")) {
+			return NextResponse.json(
+				{ error: "Please upload a PDF file" },
+				{ status: 400 },
+			);
+		}
 
-    if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json(
-        { error: "File must be under 5MB" },
-        { status: 400 },
-      );
-    }
+		if (file.size > 5 * 1024 * 1024) {
+			return NextResponse.json(
+				{ error: "File must be under 5MB" },
+				{ status: 400 },
+			);
+		}
 
-    // Extract text from PDF
-    const arrayBuffer = await file.arrayBuffer();
-    const uint8Array = new Uint8Array(arrayBuffer);
-    const pdfText = await pdfToText(uint8Array);
+		// Extract text from PDF
+		const arrayBuffer = await file.arrayBuffer();
+		const uint8Array = new Uint8Array(arrayBuffer);
+		const pdfText = await pdfToText(uint8Array);
 
-    if (!pdfText || pdfText.trim().length < 50) {
-      return NextResponse.json(
-        {
-          error:
-            "Could not extract text from PDF. Try pasting the text instead.",
-        },
-        { status: 400 },
-      );
-    }
+		if (!pdfText || pdfText.trim().length < 50) {
+			return NextResponse.json(
+				{
+					error:
+						"Could not extract text from PDF. Try pasting the text instead.",
+				},
+				{ status: 400 },
+			);
+		}
 
-    // Use AI to extract structured resume data
-    const resumeData = await extractWithAI(pdfText);
+		// Use AI to extract structured resume data
+		const resumeData = await extractWithAI(pdfText);
 
-    return NextResponse.json({ data: resumeData });
-  } catch (err) {
-    console.error("PDF extraction error:", err);
-    return NextResponse.json(
-      { error: "Failed to process PDF" },
-      { status: 500 },
-    );
-  }
+		return NextResponse.json({ data: resumeData });
+	} catch (err) {
+		console.error("PDF extraction error:", err);
+		return NextResponse.json(
+			{ error: "Failed to process PDF" },
+			{ status: 500 },
+		);
+	}
 }
 
 async function extractWithAI(text: string): Promise<Partial<ResumeData>> {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-
-  const prompt = `Extract structured resume data from the following text. Return a JSON object with these exact fields:
+	const prompt = `Extract structured resume data from the following text. Return a JSON object with these exact fields:
 
 {
   "name": "Full Name",
@@ -135,76 +134,61 @@ IMPORTANT RULES:
 RESUME TEXT:
 ${text.slice(0, 8000)}`;
 
-  if (!apiKey) {
-    // Fallback: basic text parsing without AI
-    return parseBasicText(text);
-  }
+	let content: string;
+	try {
+		content = await generateAIText({
+			prompt,
+			maxOutputTokens: 4096,
+		});
+	} catch (error) {
+		console.error("AI extraction failed, using basic parser:", error);
+		return parseBasicText(text);
+	}
 
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 4096,
-      messages: [{ role: "user", content: prompt }],
-    }),
-  });
+	// Parse JSON from response (handle potential markdown wrapping)
+	const jsonMatch = content.match(/\{[\s\S]*\}/);
+	if (!jsonMatch) throw new Error("AI did not return valid JSON");
 
-  if (!response.ok) {
-    throw new Error(`AI extraction failed: ${response.status}`);
-  }
+	const parsed = JSON.parse(jsonMatch[0]);
 
-  const result = await response.json();
-  const content = result.content?.[0]?.text || "";
+	// Ensure IDs exist
+	if (parsed.experience) {
+		parsed.experience = parsed.experience.map((e: any) => ({
+			...e,
+			id: e.id || createId(),
+		}));
+	}
+	if (parsed.education) {
+		parsed.education = parsed.education.map((e: any) => ({
+			...e,
+			id: e.id || createId(),
+		}));
+	}
 
-  // Parse JSON from response (handle potential markdown wrapping)
-  const jsonMatch = content.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error("AI did not return valid JSON");
-
-  const parsed = JSON.parse(jsonMatch[0]);
-
-  // Ensure IDs exist
-  if (parsed.experience) {
-    parsed.experience = parsed.experience.map((e: any) => ({
-      ...e,
-      id: e.id || createId(),
-    }));
-  }
-  if (parsed.education) {
-    parsed.education = parsed.education.map((e: any) => ({
-      ...e,
-      id: e.id || createId(),
-    }));
-  }
-
-  return parsed;
+	return parsed;
 }
 
 // Basic fallback parser when no API key
 function parseBasicText(text: string): Partial<ResumeData> {
-  const lines = text
-    .split("\n")
-    .map((l) => l.trim())
-    .filter(Boolean);
-  const emailMatch = text.match(/[\w.-]+@[\w.-]+\.\w+/);
-  const phoneMatch = text.match(
-    /[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}/,
-  );
+	const lines = text
+		.split("\n")
+		.map((l) => l.trim())
+		.filter(Boolean);
+	const emailMatch = text.match(/[\w.-]+@[\w.-]+\.\w+/);
+	const phoneMatch = text.match(
+		/[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}/,
+	);
 
-  return {
-    name: lines[0]?.length < 50 ? lines[0] : "",
-    email: emailMatch?.[0] || "",
-    phone: phoneMatch?.[0] || "",
-    location: "",
-    summary: "",
-    skills: [],
-    experience: [],
-    education: [],
-    volunteer: [],
-    languages: [],
-  };
+	return {
+		name: lines[0]?.length < 50 ? lines[0] : "",
+		email: emailMatch?.[0] || "",
+		phone: phoneMatch?.[0] || "",
+		location: "",
+		summary: "",
+		skills: [],
+		experience: [],
+		education: [],
+		volunteer: [],
+		languages: [],
+	};
 }
