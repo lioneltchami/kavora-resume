@@ -1,8 +1,25 @@
 "use client";
 
 import type { User } from "@supabase/supabase-js";
+import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+
+const linkStyle: CSSProperties = {
+  fontSize: "0.75rem",
+  color: "#6b6560",
+  textDecoration: "none",
+};
+
+const signInStyle: CSSProperties = {
+  fontSize: "0.75rem",
+  fontWeight: 500,
+  color: "#b08d57",
+  textDecoration: "none",
+  padding: "6px 14px",
+  border: "1px solid #b08d57",
+  borderRadius: 2,
+};
 
 export default function AuthNav() {
   const [user, setUser] = useState<User | null>(null);
@@ -26,17 +43,20 @@ export default function AuthNav() {
   if (loading) {
     return (
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <a
-          href="/pricing"
-          style={{
-            fontSize: "0.75rem",
-            color: "#6b6560",
-            textDecoration: "none",
-          }}
-        >
+        <a href="/pricing" style={linkStyle}>
           Pricing
         </a>
-        <div style={{ width: 60, height: 20 }} />
+        <span
+          aria-hidden="true"
+          style={{
+            ...signInStyle,
+            opacity: 0.45,
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        >
+          Sign In
+        </span>
       </div>
     );
   }
@@ -47,24 +67,13 @@ export default function AuthNav() {
 
     return (
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <a
-          href="/pricing"
-          style={{
-            fontSize: "0.75rem",
-            color: "#6b6560",
-            textDecoration: "none",
-          }}
-        >
+        <a href="/pricing" style={linkStyle}>
           Pricing
         </a>
-        <a
-          href="/create/portfolio"
-          style={{
-            fontSize: "0.75rem",
-            color: "#6b6560",
-            textDecoration: "none",
-          }}
-        >
+        <a href="/my-resumes" style={linkStyle}>
+          My Resumes
+        </a>
+        <a href="/create/portfolio" style={linkStyle}>
           Portfolio
         </a>
         <a
@@ -118,28 +127,10 @@ export default function AuthNav() {
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-      <a
-        href="/pricing"
-        style={{
-          fontSize: "0.75rem",
-          color: "#6b6560",
-          textDecoration: "none",
-        }}
-      >
+      <a href="/pricing" style={linkStyle}>
         Pricing
       </a>
-      <a
-        href="/login"
-        style={{
-          fontSize: "0.75rem",
-          fontWeight: 500,
-          color: "#b08d57",
-          textDecoration: "none",
-          padding: "6px 14px",
-          border: "1px solid #b08d57",
-          borderRadius: 2,
-        }}
-      >
+      <a href="/login" style={signInStyle}>
         Sign In
       </a>
     </div>
