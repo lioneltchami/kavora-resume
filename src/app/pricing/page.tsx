@@ -24,6 +24,7 @@ const proPlanFeatures = [
   "Remove Kavora branding from all pages",
   "Unlimited job targeting",
   "Cover letter generator (AI-powered)",
+  "Apply Pack ZIP (resume PDF + letter + share link)",
   "ATS compatibility checker",
   "Unlimited AI suggestions",
   "PDF resume import (AI-powered parsing)",

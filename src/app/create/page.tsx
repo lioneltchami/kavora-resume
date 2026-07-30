@@ -191,65 +191,82 @@ function CreatePageInner() {
     setShowLinkedIn(false);
   }
 
-  async function handleSaveAndShare() {
+  async function publishResume(options?: {
+    showCelebration?: boolean;
+  }): Promise<string> {
     if (!data.name.trim()) {
-      alert("Please enter your name before sharing.");
-      return;
+      throw new Error("Please enter your name before sharing.");
     }
 
-    setPublishing(true);
-    try {
-      const slug =
-        (data.parentSlug && data.slug) ||
-        editSlug ||
-        slugify(data.name) + "-" + Math.random().toString(36).slice(2, 6);
-      const res = await fetch("/api/resume", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, data: { ...data, slug } }),
-      });
+    const slug =
+      (data.parentSlug && data.slug) ||
+      editSlug ||
+      slugify(data.name) + "-" + Math.random().toString(36).slice(2, 6);
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to save");
-      }
+    const payload = { ...data, slug };
+    const res = await fetch("/api/resume", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug, data: payload }),
+    });
 
-      // Save to local resume registry
-      const savedResumes = JSON.parse(
-        localStorage.getItem("kavora-saved-resumes") || "[]",
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(
+        (err as { error?: string }).error || "Failed to save resume",
       );
-      const existing = savedResumes.findIndex(
-        (r: { slug: string }) => r.slug === slug,
-      );
-      const entry = {
-        slug,
-        name: data.name,
-        savedAt: new Date().toISOString(),
-        paletteId: data.paletteId,
-        label: data.label,
-        parentSlug: data.parentSlug,
-      };
-      if (existing >= 0) {
-        savedResumes[existing] = entry;
-      } else {
-        savedResumes.unshift(entry);
-      }
-      localStorage.setItem(
-        "kavora-saved-resumes",
-        JSON.stringify(savedResumes),
-      );
+    }
 
-      const url = `${window.location.origin}/r/${slug}`;
-      setShareUrl(url);
+    setData(payload);
+    saveToLocalStorage(payload);
+
+    const savedResumes = JSON.parse(
+      localStorage.getItem("kavora-saved-resumes") || "[]",
+    );
+    const existing = savedResumes.findIndex(
+      (r: { slug: string }) => r.slug === slug,
+    );
+    const entry = {
+      slug,
+      name: data.name,
+      savedAt: new Date().toISOString(),
+      paletteId: data.paletteId,
+      label: data.label,
+      parentSlug: data.parentSlug,
+    };
+    if (existing >= 0) {
+      savedResumes[existing] = entry;
+    } else {
+      savedResumes.unshift(entry);
+    }
+    localStorage.setItem("kavora-saved-resumes", JSON.stringify(savedResumes));
+
+    const url = `${window.location.origin}/r/${slug}`;
+    setShareUrl(url);
+
+    if (options?.showCelebration) {
       if (!editSlug || data.parentSlug) {
         setShowCelebration(true);
       } else {
         setShowShareModal(true);
       }
       setCopied(false);
+    }
+
+    return url;
+  }
+
+  async function handleSaveAndShare() {
+    setPublishing(true);
+    try {
+      await publishResume({ showCelebration: true });
     } catch (err) {
       console.error("Save & share failed:", err);
-      alert("Failed to publish resume. Please try again.");
+      alert(
+        err instanceof Error
+          ? err.message
+          : "Failed to publish resume. Please try again.",
+      );
     } finally {
       setPublishing(false);
     }
@@ -802,6 +819,7 @@ function CreatePageInner() {
           data={data}
           initialCompanyName={coverLetterDefaults.companyName}
           initialJobDescription={coverLetterDefaults.jobDescription}
+          onEnsurePublished={() => publishResume({ showCelebration: false })}
           onClose={() => {
             setShowCoverLetter(false);
             setCoverLetterDefaults({});

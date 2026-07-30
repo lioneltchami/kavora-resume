@@ -30,11 +30,27 @@ type TestimonialDraft = Omit<
   id?: string;
 };
 
+const TAB_IDS: TabId[] = [
+  "settings",
+  "projects",
+  "testimonials",
+  "messages",
+  "analytics",
+];
+
+export function resolvePortfolioTab(
+  raw: string | null | undefined,
+): TabId | null {
+  if (!raw) return null;
+  return TAB_IDS.includes(raw as TabId) ? (raw as TabId) : null;
+}
+
 interface PortfolioEditorProps {
   settings: PortfolioSettings;
   projects: PortfolioProject[];
   testimonials: PortfolioTestimonial[];
   isPro: boolean;
+  initialTab?: TabId | null;
   onSettingsChange: (settings: PortfolioSettings) => void;
   onProjectsChange: (projects: PortfolioProject[]) => void;
   onTestimonialsChange: (testimonials: PortfolioTestimonial[]) => void;
@@ -53,11 +69,16 @@ export default function PortfolioEditor({
   projects,
   testimonials,
   isPro,
+  initialTab = null,
   onSettingsChange,
   onProjectsChange,
   onTestimonialsChange,
 }: PortfolioEditorProps) {
-  const [activeTab, setActiveTab] = useState<TabId>("settings");
+  const [activeTab, setActiveTab] = useState<TabId>(() => {
+    if (!initialTab) return "settings";
+    if (initialTab === "testimonials" && !isPro) return "settings";
+    return initialTab;
+  });
   const [proGateInfo, setProGateInfo] = useState<{
     feature: string;
     description: string;
