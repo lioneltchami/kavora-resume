@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  type DashboardResume,
+  groupResumesForDashboard,
+  portfolioSlugForResume,
+} from "@/lib/resume-groups";
 
-interface SavedResume {
-  slug: string;
-  name: string;
-  savedAt: string;
-  paletteId?: string;
-}
+interface SavedResume extends DashboardResume {}
 
 const SAVED_KEY = "kavora-saved-resumes";
 
@@ -106,6 +106,8 @@ export default function MyResumesPage() {
       alert("Could not delete that resume. Please try again.");
     }
   }
+
+  const groups = useMemo(() => groupResumesForDashboard(resumes), [resumes]);
 
   if (!mounted) {
     return (
@@ -235,120 +237,25 @@ export default function MyResumesPage() {
           {/* Resume cards */}
           {resumes.length > 0 && (
             <div className="grid gap-4 sm:grid-cols-2">
-              {resumes.map((resume) => (
-                <div
-                  key={resume.slug}
-                  className="group rounded-sm border border-border-light bg-white/70 p-6 transition-all duration-300 hover:border-gold hover:bg-white hover:shadow-md"
-                >
-                  {/* Name & palette indicator */}
-                  <div className="mb-3 flex items-start justify-between gap-3">
-                    <h3 className="font-[family-name:var(--font-cormorant)] text-xl font-semibold text-navy">
-                      {resume.name || "Untitled Resume"}
-                    </h3>
-                    {resume.paletteId && (
-                      <span className="mt-1 shrink-0 rounded-full border border-border-light px-2.5 py-0.5 text-[0.65rem] tracking-wide text-text-muted">
-                        {resume.paletteId.replace("-", " ")}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Slug URL */}
-                  <Link
-                    href={`/r/${resume.slug}`}
-                    className="inline-block text-[0.8rem] text-gold-dark transition-colors hover:text-gold"
-                  >
-                    /r/{resume.slug}
-                  </Link>
-
-                  {/* Date */}
-                  <p className="mt-2 text-xs text-text-muted/70">
-                    Last saved {formatDate(resume.savedAt)}
-                  </p>
-
-                  {/* Actions */}
-                  <div className="mt-5 flex items-center gap-2 border-t border-border-light pt-4">
-                    <Link
-                      href={`/create?edit=${resume.slug}`}
-                      className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-white px-3.5 py-2 text-[0.75rem] font-medium text-navy transition-all hover:border-navy hover:bg-navy hover:text-white"
-                    >
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+              {groups.map(({ parent, children }) => (
+                <div key={parent.slug} className="space-y-3">
+                  <ResumeCard
+                    resume={parent}
+                    onDelete={handleDelete}
+                    showPortfolio
+                  />
+                  {children.length > 0 && (
+                    <div className="ml-3 space-y-3 border-l-2 border-gold/25 pl-3">
+                      {children.map((child) => (
+                        <ResumeCard
+                          key={child.slug}
+                          resume={child}
+                          onDelete={handleDelete}
+                          tailored
                         />
-                      </svg>
-                      Edit
-                    </Link>
-                    <Link
-                      href={`/r/${resume.slug}`}
-                      className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-white px-3.5 py-2 text-[0.75rem] font-medium text-navy transition-all hover:border-gold hover:text-gold"
-                    >
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      Resume
-                    </Link>
-                    <Link
-                      href={`/p/${resume.slug}`}
-                      className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-white px-3.5 py-2 text-[0.75rem] font-medium text-navy transition-all hover:border-gold hover:text-gold"
-                    >
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"
-                        />
-                      </svg>
-                      Portfolio
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(resume.slug)}
-                      className="ml-auto inline-flex items-center gap-1.5 rounded-sm px-3 py-2 text-[0.75rem] font-medium text-text-muted/60 transition-all hover:bg-red-50 hover:text-red-500"
-                    >
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                        />
-                      </svg>
-                      Delete
-                    </button>
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -371,6 +278,93 @@ export default function MyResumesPage() {
           </p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function ResumeCard({
+  resume,
+  onDelete,
+  showPortfolio = false,
+  tailored = false,
+}: {
+  resume: SavedResume;
+  onDelete: (slug: string) => void;
+  showPortfolio?: boolean;
+  tailored?: boolean;
+}) {
+  const portfolioSlug = portfolioSlugForResume(resume);
+  const label = resume.label?.trim();
+
+  return (
+    <div
+      className={`group rounded-sm border border-border-light bg-white/70 p-6 transition-all duration-300 hover:border-gold hover:bg-white hover:shadow-md ${
+        tailored ? "bg-white/90 p-5" : ""
+      }`}
+    >
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="font-[family-name:var(--font-cormorant)] text-xl font-semibold text-navy">
+            {resume.name || "Untitled Resume"}
+          </h3>
+          {label && (
+            <span className="mt-1.5 inline-flex rounded-full border border-gold/40 bg-gold/10 px-2.5 py-0.5 text-[0.65rem] font-medium tracking-wide text-gold-dark">
+              {label}
+            </span>
+          )}
+        </div>
+        {resume.paletteId && (
+          <span className="mt-1 shrink-0 rounded-full border border-border-light px-2.5 py-0.5 text-[0.65rem] tracking-wide text-text-muted">
+            {resume.paletteId.replace("-", " ")}
+          </span>
+        )}
+      </div>
+
+      <Link
+        href={`/r/${resume.slug}`}
+        className="inline-block text-[0.8rem] text-gold-dark transition-colors hover:text-gold"
+      >
+        /r/{resume.slug}
+      </Link>
+
+      <p className="mt-2 text-xs text-text-muted/70">
+        Last saved {formatDate(resume.savedAt)}
+      </p>
+
+      <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-border-light pt-4">
+        <Link
+          href={`/create?edit=${resume.slug}`}
+          className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-white px-3.5 py-2 text-[0.75rem] font-medium text-navy transition-all hover:border-navy hover:bg-navy hover:text-white"
+        >
+          Edit
+        </Link>
+        <Link
+          href={`/create?edit=${resume.slug}&job=1`}
+          className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-white px-3.5 py-2 text-[0.75rem] font-medium text-navy transition-all hover:border-gold hover:text-gold"
+        >
+          Tailor again
+        </Link>
+        <Link
+          href={`/r/${resume.slug}`}
+          className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-white px-3.5 py-2 text-[0.75rem] font-medium text-navy transition-all hover:border-gold hover:text-gold"
+        >
+          Resume
+        </Link>
+        {showPortfolio && (
+          <Link
+            href={`/p/${portfolioSlug}`}
+            className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-white px-3.5 py-2 text-[0.75rem] font-medium text-navy transition-all hover:border-gold hover:text-gold"
+          >
+            Portfolio
+          </Link>
+        )}
+        <button
+          onClick={() => onDelete(resume.slug)}
+          className="ml-auto inline-flex items-center gap-1.5 rounded-sm px-3 py-2 text-[0.75rem] font-medium text-text-muted/60 transition-all hover:bg-red-50 hover:text-red-500"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }

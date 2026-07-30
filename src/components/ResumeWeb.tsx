@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import ShareKit from "@/components/ShareKit";
 import ViewCounter from "@/components/ViewCounter";
 import { SITE_URL } from "@/lib/site";
 import type { ResumeData } from "@/lib/types";
@@ -66,41 +67,12 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
   const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
 
   // ═══════════ SOCIAL SHARING ═══════════
-  const getShareUrl = () =>
-    typeof window !== "undefined" ? window.location.href : "";
-  const shareTitle = `${data.name}'s Resume`;
-
-  const shareLinkedIn = () => {
-    window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl())}`,
-      "_blank",
-    );
-  };
-
-  const shareWhatsApp = () => {
-    window.open(
-      `https://wa.me/?text=${encodeURIComponent(`Check out ${data.name}'s resume: ${getShareUrl()}`)}`,
-      "_blank",
-    );
-  };
-
-  const shareTwitter = () => {
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${data.name}'s resume`)}&url=${encodeURIComponent(getShareUrl())}`,
-      "_blank",
-    );
-  };
-
-  const shareEmail = () => {
-    window.location.href = `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`I'd like to share my resume with you: ${getShareUrl()}`)}`;
-  };
-
-  const [linkCopied, setLinkCopied] = useState(false);
-  const copyLink = async () => {
-    await navigator.clipboard.writeText(getShareUrl());
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 2000);
-  };
+  const shareUrl =
+    typeof window !== "undefined"
+      ? window.location.href
+      : slug
+        ? `${SITE_URL}/r/${slug}`
+        : SITE_URL;
 
   // ═══════════ JSON-LD STRUCTURED DATA ═══════════
   function cleanJsonLd(obj: Record<string, any>): Record<string, any> {
@@ -367,6 +339,7 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
           gap: 12px;
           margin-top: 24px;
           justify-content: center;
+          flex-wrap: wrap;
           opacity: 0;
           animation: rw-fadeUp 0.8s var(--rw-ease-out) 1.6s forwards;
         }
@@ -380,25 +353,9 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
           color: var(--rw-muted);
         }
 
-        .rw-share-btn {
+        .rw-share-kit {
           display: flex;
-          align-items: center;
           justify-content: center;
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          border: 1px solid rgba(0, 0, 0, 0.08);
-          background: rgba(255, 255, 255, 0.5);
-          color: var(--rw-slate);
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .rw-share-btn:hover {
-          border-color: var(--rw-accent);
-          color: var(--rw-accent);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
         .rw-btn {
@@ -1016,119 +973,9 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
             </div>
             <div className="rw-share-row">
               <span className="rw-share-label">Share</span>
-              <button
-                onClick={() => shareLinkedIn()}
-                className="rw-share-btn"
-                title="Share on LinkedIn"
-                type="button"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="1" y="1" width="14" height="14" rx="2" />
-                  <path d="M5 6.5v4M5 4.5v.01M8 10.5v-2.5a1.5 1.5 0 0 1 3 0v2.5M11 10.5v-2.5" />
-                </svg>
-              </button>
-              <button
-                onClick={() => shareWhatsApp()}
-                className="rw-share-btn"
-                title="Share on WhatsApp"
-                type="button"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M2.5 13.5l1-3.5a5.5 5.5 0 1 1 2.1 2.1l-3.1.9z" />
-                  <path d="M6 7.5c.3.6.8 1.1 1.4 1.4l.6-.6a.5.5 0 0 1 .5-.1l1.2.4a.5.5 0 0 1 .3.5v.4a1 1 0 0 1-1 1c-2.2 0-4.5-2.3-4.5-4.5a1 1 0 0 1 1-1h.4a.5.5 0 0 1 .5.3l.4 1.2a.5.5 0 0 1-.1.5l-.7.5z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => shareTwitter()}
-                className="rw-share-btn"
-                title="Share on X"
-                type="button"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 3l4.5 5.5M3 13l4.5-5.5m0 0L10 3h3l-4.5 5.5m0 0L13 13h-3" />
-                </svg>
-              </button>
-              <button
-                onClick={() => shareEmail()}
-                className="rw-share-btn"
-                title="Share via Email"
-                type="button"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="1.5" y="3" width="13" height="10" rx="1.5" />
-                  <path d="M1.5 5l6.5 4 6.5-4" />
-                </svg>
-              </button>
-              <button
-                onClick={() => copyLink()}
-                className="rw-share-btn"
-                title="Copy link"
-                type="button"
-              >
-                {linkCopied ? (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M3 8.5l3 3 7-7" />
-                  </svg>
-                ) : (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M6.5 9.5l3-3M5 10.5l-1.3 1.3a1.5 1.5 0 0 0 2.1 2.1L7 12.5M9 5.5l1.3-1.3a1.5 1.5 0 0 1 2.1 2.1L11 7.5" />
-                  </svg>
-                )}
-              </button>
+              <div className="rw-share-kit">
+                <ShareKit url={shareUrl} name={data.name} compact showQr />
+              </div>
             </div>
           </div>
           <div className="rw-scroll-hint">

@@ -16,6 +16,7 @@
     "ai": "^6.0.141",
     "next": "^16.2.1",
     "pdf-ts": "^0.0.2",
+    "qrcode": "^1.5.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-dropzone": "^15.0.0",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^25.5.0",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19.2.14",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",

@@ -7,11 +7,13 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import ATSChecker from "@/components/ATSChecker";
 import CelebrationModal from "@/components/CelebrationModal";
 import CoverLetterGenerator from "@/components/CoverLetterGenerator";
+import JobTargetModal from "@/components/JobTargetModal";
 import LinkedInImport from "@/components/LinkedInImport";
 import PDFDownload from "@/components/PDFDownload";
 import ProGate from "@/components/ProGate";
 import ResumeForm from "@/components/ResumeForm";
 import ResumePreview from "@/components/ResumePreview";
+import ShareKit from "@/components/ShareKit";
 import SlugEditor from "@/components/SlugEditor";
 import UserMenu from "@/components/UserMenu";
 import { sampleResume } from "@/lib/sample-data";
@@ -38,6 +40,11 @@ function CreatePageInner() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("edit");
   const [showATSChecker, setShowATSChecker] = useState(false);
   const [showCoverLetter, setShowCoverLetter] = useState(false);
+  const [showJobTarget, setShowJobTarget] = useState(false);
+  const [coverLetterDefaults, setCoverLetterDefaults] = useState<{
+    companyName?: string;
+    jobDescription?: string;
+  }>({});
   const [showLinkedIn, setShowLinkedIn] = useState(false);
   const [linkedInDefaultTab, setLinkedInDefaultTab] = useState<
     "paste" | "upload" | "pdf"
@@ -66,6 +73,12 @@ function CreatePageInner() {
       setBuildingBoth(localStorage.getItem(INTENT_KEY) === "both");
     } catch {
       // ignore storage errors
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (searchParams.get("job") === "1") {
+      setShowJobTarget(true);
     }
   }, [searchParams]);
 
@@ -187,6 +200,7 @@ function CreatePageInner() {
     setPublishing(true);
     try {
       const slug =
+        (data.parentSlug && data.slug) ||
         editSlug ||
         slugify(data.name) + "-" + Math.random().toString(36).slice(2, 6);
       const res = await fetch("/api/resume", {
@@ -212,6 +226,8 @@ function CreatePageInner() {
         name: data.name,
         savedAt: new Date().toISOString(),
         paletteId: data.paletteId,
+        label: data.label,
+        parentSlug: data.parentSlug,
       };
       if (existing >= 0) {
         savedResumes[existing] = entry;
@@ -225,7 +241,7 @@ function CreatePageInner() {
 
       const url = `${window.location.origin}/r/${slug}`;
       setShareUrl(url);
-      if (!editSlug) {
+      if (!editSlug || data.parentSlug) {
         setShowCelebration(true);
       } else {
         setShowShareModal(true);
@@ -423,6 +439,25 @@ function CreatePageInner() {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowJobTarget(true)}
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-[#b08d57]/40 bg-[#b08d57]/5 px-3 py-2 text-[0.8rem] font-medium text-[#b08d57] transition-colors hover:border-[#b08d57] hover:bg-[#b08d57]/10"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"
+              />
+            </svg>
+            Job Target
+          </button>
           <button
             onClick={() => {
               if (!userIsPro) {
@@ -688,6 +723,10 @@ function CreatePageInner() {
               Edit URL
             </button>
 
+            <div className="mt-5">
+              <ShareKit url={shareUrl} name={data.name} compact />
+            </div>
+
             <div className="mt-4 flex justify-end">
               <button
                 onClick={() => setShowShareModal(false)}
@@ -734,11 +773,39 @@ function CreatePageInner() {
         <ATSChecker data={data} onClose={() => setShowATSChecker(false)} />
       )}
 
+      {showJobTarget && (
+        <JobTargetModal
+          data={data}
+          parentSlug={data.parentSlug || editSlug}
+          onClose={() => setShowJobTarget(false)}
+          onApply={(next) => {
+            setData(next);
+            saveToLocalStorage(next);
+          }}
+          onRequestCoverLetter={({ companyName, jobDescription }) => {
+            setCoverLetterDefaults({ companyName, jobDescription });
+            setShowCoverLetter(true);
+          }}
+          onProRequired={() =>
+            setProGateFeature({
+              feature: "Unlimited Job Targeting",
+              description:
+                "Free accounts get one job tailor. Upgrade to Pro for unlimited role-specific resume copies.",
+            })
+          }
+        />
+      )}
+
       {/* Cover Letter Generator modal */}
       {showCoverLetter && (
         <CoverLetterGenerator
           data={data}
-          onClose={() => setShowCoverLetter(false)}
+          initialCompanyName={coverLetterDefaults.companyName}
+          initialJobDescription={coverLetterDefaults.jobDescription}
+          onClose={() => {
+            setShowCoverLetter(false);
+            setCoverLetterDefaults({});
+          }}
         />
       )}
 
