@@ -293,34 +293,30 @@ function CreatePageInner() {
 
   if (!mounted) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#faf8f5]">
+      <div className="flex h-screen items-center justify-center bg-paper">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen flex-col bg-[#faf8f5]">
+    <div className="flex h-screen flex-col bg-paper">
       {/* Top bar */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-[#e8e2da] bg-white px-4 shadow-sm">
+      <header className="app-bar h-14 shrink-0 px-4">
         {/* Left: Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-[0.8rem] font-semibold tracking-[0.03em] text-[#1b1b1b]"
-        >
-          <Image src="/kavora-logo.png" alt="Kavora" width={22} height={19} />
-          <span className="hidden sm:inline">Kavora Resume Builder</span>
-          <span className="sm:hidden">Kavora</span>
+        <Link href="/" className="site-nav__brand">
+          <Image src="/kavora-logo.png" alt="" width={20} height={17} />
+          <span className="hidden sm:inline">Kavora</span>
         </Link>
 
         {buildingBoth && (
-          <span className="hidden items-center gap-1.5 rounded-sm border border-[#b08d57]/40 bg-[#b08d57]/5 px-2.5 py-1 text-[0.7rem] font-medium tracking-wide text-[#b08d57] md:inline-flex">
+          <span className="hidden items-center gap-1.5 border border-rule bg-paper-2 px-2.5 py-1 font-mono text-[0.7rem] text-ink-2 md:inline-flex">
             Step 1 of 2 · Resume
           </span>
         )}
 
         {/* Center: Save status */}
-        <div className="hidden items-center gap-1.5 text-sm text-[#6b6560] sm:flex">
+        <div className="hidden items-center gap-1.5 text-sm text-ink-2 sm:flex">
           {saveStatus === "saving" && (
             <>
               <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
@@ -359,7 +355,7 @@ function CreatePageInner() {
         <div className="hidden sm:flex items-center gap-3">
           <button
             onClick={handleLoadSample}
-            className="inline-flex items-center gap-1 text-[0.75rem] text-[#6b6560] hover:text-[#b08d57] transition-colors"
+            className="inline-flex items-center gap-1 text-[0.75rem] text-ink-2 hover:text-accent transition-colors"
           >
             <svg
               className="h-3.5 w-3.5"
@@ -389,7 +385,7 @@ function CreatePageInner() {
               setLinkedInDefaultTab("pdf");
               setShowLinkedIn(true);
             }}
-            className="inline-flex items-center gap-1 text-[0.75rem] text-[#6b6560] hover:text-[#b08d57] transition-colors"
+            className="inline-flex items-center gap-1 text-[0.75rem] text-ink-2 hover:text-accent transition-colors"
           >
             <svg
               className="h-3.5 w-3.5"
@@ -416,7 +412,7 @@ function CreatePageInner() {
               setLinkedInDefaultTab("paste");
               setShowLinkedIn(true);
             }}
-            className="inline-flex items-center gap-1 text-[0.75rem] text-[#6b6560] hover:text-[#b08d57] transition-colors"
+            className="inline-flex items-center gap-1 text-[0.75rem] text-ink-2 hover:text-accent transition-colors"
           >
             <svg
               className="h-3.5 w-3.5"
@@ -435,7 +431,7 @@ function CreatePageInner() {
           </button>
           <Link
             href="/create/portfolio"
-            className="inline-flex items-center gap-1 text-[0.75rem] text-[#6b6560] hover:text-[#b08d57] transition-colors border-l border-[#e8e2da] pl-3"
+            className="inline-flex items-center gap-1 text-[0.75rem] text-ink-2 hover:text-accent transition-colors border-l border-rule pl-3"
           >
             <svg
               className="h-3.5 w-3.5"
@@ -458,7 +454,7 @@ function CreatePageInner() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowJobTarget(true)}
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-[#b08d57]/40 bg-[#b08d57]/5 px-3 py-2 text-[0.8rem] font-medium text-[#b08d57] transition-colors hover:border-[#b08d57] hover:bg-[#b08d57]/10"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-[2px] border border-accent/40 bg-accent/5 px-3 py-2 text-[0.8rem] font-medium text-accent transition-colors hover:border-accent hover:bg-accent/10"
           >
             <svg
               className="h-4 w-4"
@@ -487,7 +483,7 @@ function CreatePageInner() {
               }
               setShowATSChecker(true);
             }}
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-[#d4cfc8] bg-white px-3 py-2 text-[0.8rem] font-medium text-[#4a4540] transition-colors hover:border-[#b08d57] hover:text-[#b08d57]"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-[2px] border border-rule bg-paper px-3 py-2 text-[0.8rem] font-medium text-ink-2 transition-colors hover:border-accent hover:text-accent"
           >
             <svg
               className="h-4 w-4"
@@ -521,7 +517,7 @@ function CreatePageInner() {
               }
               setShowCoverLetter(true);
             }}
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-[#d4cfc8] bg-white px-3 py-2 text-[0.8rem] font-medium text-[#4a4540] transition-colors hover:border-[#b08d57] hover:text-[#b08d57]"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-[2px] border border-rule bg-paper px-3 py-2 text-[0.8rem] font-medium text-ink-2 transition-colors hover:border-accent hover:text-accent"
           >
             <svg
               className="h-4 w-4"
@@ -547,7 +543,7 @@ function CreatePageInner() {
           <button
             onClick={handleSaveAndShare}
             disabled={publishing}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#1e2a3a] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#2d3f54] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-[2px] bg-ink px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-50"
           >
             {publishing ? (
               <>
@@ -582,7 +578,7 @@ function CreatePageInner() {
         (data.layoutId === "modern" ||
           data.layoutId === "compact" ||
           data.layoutId === "executive") && (
-          <div className="hidden md:flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 mx-4 mt-2 mb-1">
+          <div className="hidden md:flex items-start gap-3 rounded-[2px] border border-amber-200 bg-amber-50 px-4 py-3 mx-4 mt-2 mb-1">
             <svg
               className="h-4 w-4 shrink-0 text-amber-600 mt-0.5"
               fill="none"
@@ -625,13 +621,13 @@ function CreatePageInner() {
         )}
 
       {/* Mobile tab switcher */}
-      <div className="flex border-b border-[#e8e2da] bg-white md:hidden">
+      <div className="flex border-b border-rule bg-paper md:hidden">
         <button
           onClick={() => setActiveTab("edit")}
           className={`flex-1 py-2.5 text-center text-sm font-medium transition-colors ${
             activeTab === "edit"
-              ? "border-b-2 border-[#1e2a3a] text-[#1b1b1b]"
-              : "text-[#6b6560] hover:text-[#4a4540]"
+              ? "border-b-2 border-ink text-ink"
+              : "text-ink-2 hover:text-ink"
           }`}
         >
           Edit
@@ -640,8 +636,8 @@ function CreatePageInner() {
           onClick={() => setActiveTab("preview")}
           className={`flex-1 py-2.5 text-center text-sm font-medium transition-colors ${
             activeTab === "preview"
-              ? "border-b-2 border-[#1e2a3a] text-[#1b1b1b]"
-              : "text-[#6b6560] hover:text-[#4a4540]"
+              ? "border-b-2 border-ink text-ink"
+              : "text-ink-2 hover:text-ink"
           }`}
         >
           Preview
@@ -652,7 +648,7 @@ function CreatePageInner() {
       <div className="flex min-h-0 flex-1">
         {/* Left pane: Form */}
         <div
-          className={`w-full overflow-y-auto bg-[#faf8f5] md:w-[45%] ${
+          className={`w-full overflow-y-auto bg-paper md:w-[45%] ${
             activeTab !== "edit" ? "hidden md:block" : ""
           }`}
         >
@@ -662,11 +658,11 @@ function CreatePageInner() {
         </div>
 
         {/* Divider */}
-        <div className="hidden w-px bg-[#e8e2da] md:block" />
+        <div className="hidden w-px bg-rule md:block" />
 
         {/* Right pane: Preview */}
         <div
-          className={`w-full overflow-y-auto bg-[#f5f0ea] md:w-[55%] ${
+          className={`w-full overflow-y-auto bg-paper-2 md:w-[55%] ${
             activeTab !== "preview" ? "hidden md:block" : ""
           }`}
         >
@@ -679,14 +675,14 @@ function CreatePageInner() {
       {/* Share modal */}
       {showShareModal && shareUrl && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-sm bg-white p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-sm bg-paper p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-[#1b1b1b]">
+              <h2 className="text-lg font-semibold text-ink">
                 Resume Published!
               </h2>
               <button
                 onClick={() => setShowShareModal(false)}
-                className="rounded-lg p-1 text-[#9a9590] transition-colors hover:bg-[#f5f0ea] hover:text-[#6b6560]"
+                className="rounded-[2px] p-1 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink-2"
               >
                 <svg
                   className="h-5 w-5"
@@ -704,17 +700,17 @@ function CreatePageInner() {
               </button>
             </div>
 
-            <p className="mb-4 text-sm text-[#6b6560]">
+            <p className="mb-4 text-sm text-ink-2">
               Your resume is live. Share this link with anyone:
             </p>
 
-            <div className="flex items-center gap-2 rounded-lg border border-[#e8e2da] bg-[#faf8f5] p-3">
-              <span className="flex-1 truncate text-sm text-[#4a4540]">
+            <div className="flex items-center gap-2 rounded-[2px] border border-rule bg-paper p-3">
+              <span className="flex-1 truncate text-sm text-ink-2">
                 {shareUrl}
               </span>
               <button
                 onClick={handleCopy}
-                className="shrink-0 rounded-md bg-[#1e2a3a] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2d3f54]"
+                className="shrink-0 rounded-md bg-ink px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-navy-light"
               >
                 {copied ? "Copied!" : "Copy"}
               </button>
@@ -722,7 +718,7 @@ function CreatePageInner() {
 
             <button
               onClick={() => setShowSlugEditor(true)}
-              className="mt-1.5 inline-flex items-center gap-1 text-xs text-[#b08d57] transition-colors hover:text-[#9a7a4a]"
+              className="mt-1.5 inline-flex items-center gap-1 text-xs text-accent transition-colors hover:text-gold-dark"
             >
               <svg
                 className="h-3 w-3"
@@ -747,7 +743,7 @@ function CreatePageInner() {
             <div className="mt-4 flex justify-end">
               <button
                 onClick={() => setShowShareModal(false)}
-                className="rounded-lg px-4 py-2 text-sm font-medium text-[#4a4540] transition-colors hover:bg-[#f5f0ea]"
+                className="rounded-[2px] px-4 py-2 text-sm font-medium text-ink-2 transition-colors hover:bg-paper-2"
               >
                 Done
               </button>

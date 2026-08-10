@@ -142,28 +142,27 @@ function StickyNav({
   };
 
   return (
-    <nav className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="flex gap-1 overflow-x-auto no-scrollbar">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleClick(tab.id)}
-              className="px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors relative"
-              style={{
-                color: activeTab === tab.id ? accentColor : "#6b7280",
-              }}
-            >
-              {tab.label}
-              {activeTab === tab.id && (
-                <span
-                  className="absolute bottom-0 left-0 right-0 h-0.5"
-                  style={{ backgroundColor: accentColor }}
-                />
-              )}
-            </button>
-          ))}
-        </div>
+    <nav className="sticky top-0 z-30 border-b border-rule bg-paper">
+      <div className="flex gap-0 overflow-x-auto no-scrollbar px-[clamp(1rem,3.5vw,3rem)]">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => handleClick(tab.id)}
+            className="relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors"
+            style={{
+              color: activeTab === tab.id ? accentColor : "var(--color-ink-2)",
+            }}
+          >
+            {tab.label}
+            {activeTab === tab.id && (
+              <span
+                className="absolute bottom-0 left-0 right-0 h-0.5"
+                style={{ backgroundColor: accentColor }}
+              />
+            )}
+          </button>
+        ))}
       </div>
     </nav>
   );
@@ -203,7 +202,7 @@ function SocialLinks({
           href={links[item.key]}
           target="_blank"
           rel="noopener noreferrer"
-          className="p-2 rounded-full transition-opacity hover:opacity-80"
+          className="p-2 rounded-[2px] transition-opacity hover:opacity-80"
           style={{ color, backgroundColor: "rgba(255,255,255,0.15)" }}
           aria-label={item.label}
         >
@@ -297,90 +296,80 @@ export default function PortfolioPage({
   }, [tabs.length]);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#faf8f5" }}>
-      {/* ============================================================ */}
-      {/*  TOP NAV — back to Kavora home                                */}
-      {/* ============================================================ */}
-      <div className="flex items-center justify-between px-4 sm:px-6 py-3 bg-white border-b border-gray-100">
-        <a
-          href="/"
-          className="flex items-center gap-2 text-[0.8rem] font-semibold tracking-[0.03em] text-navy opacity-80 hover:opacity-100 transition-opacity"
-          style={{ color: "#1e2a3a" }}
-        >
-          <svg width="18" height="16" viewBox="0 0 32 28" fill="none" aria-hidden="true">
-            <path d="M16 2L2 14h4v12h8v-8h4v8h8V14h4L16 2z" fill="#1e2a3a" fillOpacity="0.8"/>
+    <div className="min-h-screen bg-paper text-ink">
+      <nav className="site-nav" aria-label="Site">
+        <a href="/" className="site-nav__brand">
+          <svg
+            width="18"
+            height="16"
+            viewBox="0 0 32 28"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M16 2L2 14h4v12h8v-8h4v8h8V14h4L16 2z"
+              fill="currentColor"
+              fillOpacity="0.85"
+            />
           </svg>
           Kavora
         </a>
-        <a
-          href="/"
-          className="text-[0.75rem] transition-colors"
-          style={{ color: "#6b6560" }}
-          onMouseOver={(e) => (e.currentTarget.style.color = "#b08d57")}
-          onMouseOut={(e) => (e.currentTarget.style.color = "#6b6560")}
-        >
-          ← Back to home
-        </a>
-      </div>
+        <div className="site-nav__actions">
+          <a
+            href="/"
+            className="text-sm text-ink-2 no-underline hover:text-ink"
+          >
+            ← Home
+          </a>
+        </div>
+      </nav>
 
-      {/* ============================================================ */}
-      {/*  HERO / HEADER                                                */}
-      {/* ============================================================ */}
       <header
-        className="relative py-16 px-4 sm:px-6"
+        className="relative px-[clamp(1rem,3.5vw,3rem)] py-14 md:py-20"
         style={{ backgroundColor: palette.headerBg }}
       >
-        <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
-          {/* Avatar */}
+        <div className="flex max-w-4xl flex-col items-start text-left">
           {settings.avatar_url && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={settings.avatar_url}
               alt={resume.name}
-              className="w-28 h-28 rounded-full object-cover border-4 mb-6"
-              style={{ borderColor: palette.accent }}
+              className="mb-6 h-24 w-24 rounded-[2px] object-cover"
+              style={{ border: `2px solid ${palette.accent}` }}
             />
           )}
 
-          {/* Name */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+          <h1 className="font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
             {resume.name}
           </h1>
 
-          {/* Professional title */}
           {resume.title && (
             <p
-              className="mt-2 text-lg sm:text-xl font-medium"
+              className="mt-3 text-lg font-medium sm:text-xl"
               style={{ color: palette.accent }}
             >
               {resume.title}
             </p>
           )}
 
-          {/* Location */}
           {resume.location && (
-            <p
-              className="mt-2 text-sm"
-              style={{ color: "rgba(255,255,255,0.7)" }}
-            >
-              {resume.location}
-            </p>
+            <p className="mt-2 text-sm text-white/70">{resume.location}</p>
           )}
 
-          {/* Social links */}
           <SocialLinks links={settings.social_links} color={palette.accent} />
 
-          {/* Owner edit link */}
           {isOwner && (
             <Link
               href="/create/portfolio"
-              className="mt-6 inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-opacity hover:opacity-80"
+              className="mt-6 inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-medium transition-opacity hover:opacity-80"
               style={{
                 color: palette.accent,
-                backgroundColor: "rgba(255,255,255,0.1)",
-                border: `1px solid ${palette.accent}40`,
+                backgroundColor: "rgba(255,255,255,0.08)",
+                borderColor: `${palette.accent}55`,
+                borderRadius: 2,
               }}
             >
-              Edit Portfolio
+              Edit portfolio
             </Link>
           )}
         </div>
@@ -401,7 +390,7 @@ export default function PortfolioPage({
       <section
         id="about"
         ref={setSectionRef("about")}
-        className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16"
+        className="mx-auto max-w-5xl px-[clamp(1rem,3.5vw,3rem)] py-12 sm:py-16"
       >
         <h2
           className="text-2xl font-bold mb-6"
@@ -412,7 +401,7 @@ export default function PortfolioPage({
 
         {/* Bio */}
         {settings.bio && (
-          <p className="text-gray-700 leading-relaxed mb-10 max-w-3xl">
+          <p className="text-ink-2 leading-relaxed mb-10 max-w-3xl">
             {settings.bio}
           </p>
         )}
@@ -426,16 +415,11 @@ export default function PortfolioPage({
             >
               Skills
             </h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-x-3 gap-y-2">
               {resume.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="px-3 py-1 rounded-full text-sm font-medium"
-                  style={{
-                    color: palette.primary,
-                    backgroundColor: `${palette.accent}20`,
-                    border: `1px solid ${palette.accent}40`,
-                  }}
+                  className="border-b border-rule pb-0.5 text-sm font-medium text-ink"
                 >
                   {skill}
                 </span>
@@ -457,17 +441,16 @@ export default function PortfolioPage({
               {resume.experience.map((exp) => (
                 <div
                   key={exp.id}
-                  className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 border-l-2 pl-4 py-1"
-                  style={{ borderColor: palette.accent }}
+                  className="flex flex-col gap-1 border-t border-rule py-4 sm:flex-row sm:items-baseline sm:gap-4"
                 >
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-900">{exp.title}</p>
+                    <p className="font-semibold text-ink">{exp.title}</p>
                     <p className="text-sm" style={{ color: palette.accent }}>
                       {exp.company}
                       {exp.location ? ` \u2014 ${exp.location}` : ""}
                     </p>
                   </div>
-                  <p className="text-xs text-gray-500 whitespace-nowrap">
+                  <p className="text-xs text-ink-2 whitespace-nowrap">
                     {exp.startDate} – {exp.endDate ?? "Present"}
                   </p>
                 </div>
@@ -488,8 +471,8 @@ export default function PortfolioPage({
             <div className="space-y-3">
               {resume.education.map((edu) => (
                 <div key={edu.id} className="flex flex-col">
-                  <p className="font-semibold text-gray-900">{edu.degree}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-semibold text-ink">{edu.degree}</p>
+                  <p className="text-sm text-ink-2">
                     {edu.school}
                     {edu.location ? ` \u2014 ${edu.location}` : ""}
                   </p>
@@ -507,7 +490,7 @@ export default function PortfolioPage({
         <section
           id="projects"
           ref={setSectionRef("projects")}
-          className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16"
+          className="mx-auto max-w-5xl px-[clamp(1rem,3.5vw,3rem)] py-12 sm:py-16"
         >
           <h2
             className="text-2xl font-bold mb-8"
@@ -520,10 +503,10 @@ export default function PortfolioPage({
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+                className="overflow-hidden rounded-[2px] border border-rule bg-paper-2"
               >
                 {project.image_url && (
-                  <div className="aspect-video overflow-hidden bg-gray-100">
+                  <div className="aspect-video overflow-hidden bg-paper-2">
                     <img
                       src={project.image_url}
                       alt={project.title}
@@ -534,19 +517,16 @@ export default function PortfolioPage({
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2">
                     <span
-                      className="text-xs font-medium px-2 py-0.5 rounded-full"
-                      style={{
-                        color: palette.primary,
-                        backgroundColor: `${palette.accent}20`,
-                      }}
+                      className="font-mono text-xs font-medium"
+                      style={{ color: palette.accent }}
                     >
                       {getCategoryLabel(project.category)}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  <h3 className="text-lg font-semibold text-ink mb-1">
                     {project.title}
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                  <p className="text-sm text-ink-2 leading-relaxed mb-3">
                     {project.description}
                   </p>
                   {project.live_url && (
@@ -586,7 +566,7 @@ export default function PortfolioPage({
         <section
           id="testimonials"
           ref={setSectionRef("testimonials")}
-          className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16"
+          className="mx-auto max-w-5xl px-[clamp(1rem,3.5vw,3rem)] py-12 sm:py-16"
         >
           <h2
             className="text-2xl font-bold mb-8"
@@ -599,14 +579,12 @@ export default function PortfolioPage({
             {testimonials.map((t) => (
               <div
                 key={t.id}
-                className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 relative"
+                className="relative rounded-[2px] border border-rule bg-paper-2 p-6"
               >
                 <div className="absolute top-4 right-4">
                   <QuoteIcon color={palette.accent} />
                 </div>
-                <p className="text-gray-700 leading-relaxed mb-4 pr-8">
-                  {t.text}
-                </p>
+                <p className="text-ink-2 leading-relaxed mb-4 pr-8">{t.text}</p>
                 <div className="flex items-center gap-3">
                   {t.avatar_url ? (
                     <img
@@ -623,10 +601,8 @@ export default function PortfolioPage({
                     </div>
                   )}
                   <div>
-                    <p className="font-semibold text-gray-900 text-sm">
-                      {t.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-semibold text-ink text-sm">{t.name}</p>
+                    <p className="text-xs text-ink-2">
                       {t.role}
                       {t.company ? ` at ${t.company}` : ""}
                     </p>
@@ -645,7 +621,7 @@ export default function PortfolioPage({
         <section
           id="contact"
           ref={setSectionRef("contact")}
-          className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16"
+          className="mx-auto max-w-5xl px-[clamp(1rem,3.5vw,3rem)] py-12 sm:py-16"
         >
           <h2
             className="text-2xl font-bold mb-8"
@@ -666,8 +642,8 @@ export default function PortfolioPage({
         className="py-8 px-4 sm:px-6 mt-8"
         style={{ backgroundColor: palette.headerBg }}
       >
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-white font-medium">{resume.name}</p>
+        <div className="px-[clamp(1rem,3.5vw,3rem)] text-left">
+          <p className="font-medium text-white">{resume.name}</p>
           {resume.title && (
             <p
               className="text-sm mt-1"
@@ -695,12 +671,7 @@ export default function PortfolioPage({
         <div className="fixed bottom-4 right-4 z-40">
           <a
             href="/"
-            className="text-xs px-3 py-1.5 rounded-full shadow-md transition-opacity hover:opacity-90"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.95)",
-              color: "#6b7280",
-              border: "1px solid #e5e7eb",
-            }}
+            className="border border-rule bg-paper px-3 py-1.5 text-xs text-ink-2 transition-opacity hover:opacity-90"
           >
             Made with Kavora
           </a>

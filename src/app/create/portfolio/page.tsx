@@ -121,28 +121,24 @@ function PortfolioEditorPageInner() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#faf8f5]">
+      <div className="flex h-screen items-center justify-center bg-paper">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen flex-col bg-[#faf8f5]">
+    <div className="flex h-screen flex-col bg-paper">
       {/* Header */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-[#e8e2da] bg-white px-4 shadow-sm">
+      <header className="app-bar h-14 shrink-0 px-4">
         {/* Left: Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-[0.8rem] font-semibold tracking-[0.03em] text-[#1b1b1b]"
-        >
-          <Image src="/kavora-logo.png" alt="Kavora" width={22} height={19} />
-          <span className="hidden sm:inline">Kavora Portfolio Editor</span>
-          <span className="sm:hidden">Kavora</span>
+        <Link href="/" className="site-nav__brand">
+          <Image src="/kavora-logo.png" alt="" width={20} height={17} />
+          <span className="hidden sm:inline">Kavora</span>
         </Link>
 
         {/* Center: Save status */}
-        <div className="hidden items-center gap-1.5 text-sm text-[#6b6560] sm:flex">
+        <div className="hidden items-center gap-1.5 text-sm text-ink-2 sm:flex">
           {saveStatus === "saving" && (
             <>
               <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
@@ -180,7 +176,7 @@ function PortfolioEditorPageInner() {
               href={`/p/${settings.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#d4cfc8] bg-white px-3 py-2 text-[0.8rem] font-medium text-[#4a4540] transition-colors hover:border-[#b08d57] hover:text-[#b08d57]"
+              className="inline-flex items-center gap-1.5 rounded-[2px] border border-rule bg-paper px-3 py-2 text-[0.8rem] font-medium text-ink-2 transition-colors hover:border-accent hover:text-accent"
             >
               <svg
                 className="h-4 w-4"
@@ -200,7 +196,7 @@ function PortfolioEditorPageInner() {
           )}
           <Link
             href="/create"
-            className="inline-flex items-center gap-1.5 text-[0.75rem] text-[#6b6560] hover:text-[#b08d57] transition-colors"
+            className="inline-flex items-center gap-1.5 text-[0.75rem] text-ink-2 hover:text-accent transition-colors"
           >
             <svg
               className="h-3.5 w-3.5"
@@ -244,7 +240,7 @@ export default function PortfolioEditorPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex h-screen items-center justify-center bg-[#faf8f5]">
+        <div className="flex h-screen items-center justify-center bg-paper">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
         </div>
       }

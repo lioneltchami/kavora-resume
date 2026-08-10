@@ -1,25 +1,8 @@
 "use client";
 
 import type { User } from "@supabase/supabase-js";
-import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-
-const linkStyle: CSSProperties = {
-  fontSize: "0.75rem",
-  color: "#6b6560",
-  textDecoration: "none",
-};
-
-const signInStyle: CSSProperties = {
-  fontSize: "0.75rem",
-  fontWeight: 500,
-  color: "#b08d57",
-  textDecoration: "none",
-  padding: "6px 14px",
-  border: "1px solid #b08d57",
-  borderRadius: 2,
-};
 
 export default function AuthNav() {
   const [user, setUser] = useState<User | null>(null);
@@ -40,99 +23,46 @@ export default function AuthNav() {
     return () => subscription.unsubscribe();
   }, []);
 
+  const link =
+    "text-sm text-ink-2 no-underline whitespace-nowrap hover:text-ink transition-colors";
+
   if (loading) {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <a href="/pricing" style={linkStyle}>
+      <>
+        <a href="/pricing" className={link}>
           Pricing
         </a>
-        <span
-          aria-hidden="true"
-          style={{
-            ...signInStyle,
-            opacity: 0.45,
-            pointerEvents: "none",
-            userSelect: "none",
-          }}
-        >
-          Sign In
+        <span className={`${link} opacity-45`} aria-hidden>
+          Sign in
         </span>
-      </div>
+      </>
     );
   }
 
   if (user) {
-    const avatar = user.user_metadata?.avatar_url;
-    const initial = (user.email?.[0] || "U").toUpperCase();
-
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <a href="/pricing" style={linkStyle}>
+      <>
+        <a href="/pricing" className={link}>
           Pricing
         </a>
-        <a href="/my-resumes" style={linkStyle}>
-          My Resumes
+        <a href="/my-resumes" className={link}>
+          My resumes
         </a>
-        <a href="/create/portfolio" style={linkStyle}>
-          Portfolio
+        <a href="/create" className={link}>
+          Editor
         </a>
-        <a
-          href="/create"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: "0.75rem",
-            fontWeight: 500,
-            color: "#b08d57",
-            textDecoration: "none",
-            padding: "6px 14px",
-            border: "1px solid #b08d57",
-            borderRadius: 2,
-          }}
-        >
-          {avatar ? (
-            <img
-              src={avatar}
-              alt=""
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: "50%",
-              }}
-            />
-          ) : (
-            <div
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: "50%",
-                background: "#1e2a3a",
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "0.6rem",
-                fontWeight: 600,
-              }}
-            >
-              {initial}
-            </div>
-          )}
-          Resume Editor
-        </a>
-      </div>
+      </>
     );
   }
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-      <a href="/pricing" style={linkStyle}>
+    <>
+      <a href="/pricing" className={link}>
         Pricing
       </a>
-      <a href="/login" style={signInStyle}>
-        Sign In
+      <a href="/login" className={link}>
+        Sign in
       </a>
-    </div>
+    </>
   );
 }

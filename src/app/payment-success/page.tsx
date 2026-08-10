@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import SiteChrome from "@/components/SiteChrome";
 
 const proUnlocked = [
 	"Branding-free sharing on all resumes",
@@ -13,25 +13,6 @@ const proUnlocked = [
 	"PDF resume import with AI parsing",
 	"All future templates & features",
 ];
-
-function GoldCheck() {
-	return (
-		<svg
-			width="18"
-			height="18"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="#b08d57"
-			strokeWidth="2.5"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-			className="shrink-0"
-			aria-hidden="true"
-		>
-			<path d="M20 6L9 17l-5-5" />
-		</svg>
-	);
-}
 
 type ActivationState = "activating" | "active" | "pending" | "signin";
 
@@ -75,137 +56,100 @@ function SuccessContent() {
 	}, [sessionId]);
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-center px-6 py-24">
-			{/* Success icon */}
-			<div className="animate-fade-in-up flex h-20 w-20 items-center justify-center rounded-full border-2 border-gold/30 bg-gold/5">
-				<svg
-					width="36"
-					height="36"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="#b08d57"
-					strokeWidth="2"
-					strokeLinecap="round"
-					strokeLinejoin="round"
-				>
-					<path d="M20 6L9 17l-5-5" />
-				</svg>
-			</div>
-
-			{/* Heading */}
-			<h1 className="animate-fade-in-up animate-delay-1 mt-8 font-[family-name:var(--font-cormorant)] text-4xl font-semibold text-navy sm:text-5xl">
-				Payment Successful
-			</h1>
-
-			<div className="decorative-line animate-fade-in-up animate-delay-2 mt-6 mb-6" />
-
-			<p className="animate-fade-in-up animate-delay-2 max-w-md text-center text-base leading-relaxed text-text-muted">
-				Welcome to Pro! All premium features are now active across all your
-				resumes — cover letters, ATS checker, unlimited AI suggestions, and
-				branding-free sharing.
-			</p>
-
-			{activation === "activating" && (
-				<div className="animate-fade-in mt-6 flex items-center gap-2 text-sm text-text-muted">
-					<div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-gray-300 border-t-gold" />
-					Activating your Pro features...
-				</div>
-			)}
-
-			{activation === "signin" && (
-				<div className="animate-fade-in mt-6 max-w-md rounded-sm border border-gold/30 bg-gold/5 px-5 py-3 text-center text-sm text-[#4a4540]">
-					Your payment went through.{" "}
-					<Link
-						href="/login?next=%2Fcreate"
-						className="font-medium text-gold underline"
-					>
-						Sign in
-					</Link>{" "}
-					to finish activating Pro on your account.
-				</div>
-			)}
-
-			{activation === "pending" && (
-				<div className="animate-fade-in mt-6 max-w-md rounded-sm border border-gold/30 bg-gold/5 px-5 py-3 text-center text-sm text-[#4a4540]">
-					Your payment was received and Pro is being activated. If premium
-					features are still locked in a few minutes, email{" "}
-					<a
-						href="mailto:contact@kavorasystems.com"
-						className="font-medium text-gold underline"
-					>
-						contact@kavorasystems.com
-					</a>{" "}
-					and we&apos;ll switch it on right away.
-				</div>
-			)}
-
-			{/* What's unlocked */}
-			<div className="animate-fade-in-up animate-delay-3 mt-10 w-full max-w-sm rounded-sm border border-gold/20 bg-gold/[0.03] p-6">
-				<p className="text-[0.6875rem] font-semibold tracking-[0.25em] text-gold uppercase">
-					What&apos;s unlocked
+		<section className="px-[clamp(1rem,3.5vw,3rem)] py-16 md:py-24">
+			<div className="max-w-xl">
+				<p className="font-mono text-xs text-accent">Pro activated</p>
+				<h1 className="mt-4 text-display-s text-ink">Payment successful</h1>
+				<p className="mt-5 max-w-md text-base leading-relaxed text-ink-2">
+					Welcome to Pro. Cover letters, ATS checker, unlimited AI, Apply Pack,
+					and branding-free sharing are unlocked on your account.
 				</p>
-				<ul className="mt-4 flex flex-col gap-3">
-					{proUnlocked.map((feature) => (
-						<li
-							key={feature}
-							className="flex items-start gap-3 text-sm text-[#4a4540]"
-						>
-							<GoldCheck />
-							<span>{feature}</span>
-						</li>
-					))}
-				</ul>
-			</div>
 
-			{/* Actions */}
-			<div className="animate-fade-in-up animate-delay-4 mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
-				{slug && (
-					<Link href={`/r/${slug}`} className="btn-primary">
-						View Your Resume
-						<span className="text-gold-light" aria-hidden="true">
-							&rarr;
-						</span>
-					</Link>
+				{activation === "activating" && (
+					<div className="mt-6 flex items-center gap-2 text-sm text-ink-2">
+						<div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-rule border-t-ink" />
+						Activating your Pro features…
+					</div>
 				)}
-				<Link href="/create" className="btn-secondary">
-					{slug ? "Edit Resume" : "Create a Resume"}
+
+				{activation === "signin" && (
+					<div className="mt-6 border border-rule bg-paper-2 px-5 py-3 text-sm text-ink-2">
+						Your payment went through.{" "}
+						<Link
+							href="/login?next=%2Fcreate"
+							className="font-medium text-ink underline"
+						>
+							Sign in
+						</Link>{" "}
+						to finish activating Pro on your account.
+					</div>
+				)}
+
+				{activation === "pending" && (
+					<div className="mt-6 border border-rule bg-paper-2 px-5 py-3 text-sm text-ink-2">
+						Your payment was received and Pro is being activated. If premium
+						features are still locked in a few minutes, email{" "}
+						<a
+							href="mailto:contact@kavorasystems.com"
+							className="font-medium text-ink underline"
+						>
+							contact@kavorasystems.com
+						</a>
+						.
+					</div>
+				)}
+
+				<div className="mt-10 border-t border-rule pt-8">
+					<p className="font-mono text-xs text-ink-2">What&apos;s unlocked</p>
+					<ul className="mt-4 flex flex-col gap-3">
+						{proUnlocked.map((feature) => (
+							<li
+								key={feature}
+								className="flex items-start gap-3 text-sm text-ink"
+							>
+								<span className="text-accent" aria-hidden>
+									—
+								</span>
+								<span>{feature}</span>
+							</li>
+						))}
+					</ul>
+				</div>
+
+				<div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
+					{slug && (
+						<Link href={`/r/${slug}`} className="btn-primary">
+							View your resume →
+						</Link>
+					)}
+					<Link href="/create" className="btn-secondary">
+						{slug ? "Edit resume" : "Create a resume"}
+					</Link>
+				</div>
+
+				<Link
+					href="/my-resumes"
+					className="mt-6 inline-block text-sm text-ink-2 transition-colors hover:text-accent"
+				>
+					Go to my resumes
 				</Link>
 			</div>
-
-			<Link
-				href="/my-resumes"
-				className="animate-fade-in-up animate-delay-4 mt-4 text-sm font-medium text-[#6b6560] transition-colors hover:text-[#b08d57]"
-			>
-				Go to My Resumes
-			</Link>
-
-			{/* Footer */}
-			<footer className="absolute bottom-8 flex flex-col items-center gap-3">
-				<Image
-					src="/kavora-logo.png"
-					alt="Kavora Systems"
-					width={22}
-					height={19}
-					className="opacity-40"
-				/>
-				<p className="text-[0.625rem] tracking-[0.12em] text-text-muted/40">
-					&copy; 2026 Kavora Systems
-				</p>
-			</footer>
-		</main>
+		</section>
 	);
 }
 
 export default function PaymentSuccessPage() {
 	return (
-		<Suspense
-			fallback={
-				<div className="flex min-h-screen items-center justify-center">
-					<div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
-				</div>
-			}
-		>
-			<SuccessContent />
-		</Suspense>
+		<SiteChrome backHref="/create" backLabel="← Editor">
+			<Suspense
+				fallback={
+					<div className="flex items-center justify-center px-[clamp(1rem,3.5vw,3rem)] py-24">
+						<div className="h-6 w-6 animate-spin rounded-full border-2 border-rule border-t-ink" />
+					</div>
+				}
+			>
+				<SuccessContent />
+			</Suspense>
+		</SiteChrome>
 	);
 }

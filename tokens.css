@@ -1,0 +1,62 @@
+/* Hallmark · genre: modern-minimal · macrostructure: Marquee Hero · design-system: design.md · designed-as-app
+ * pre-emit critique: P5 H4 E5 S4 R5 V4
+ */
+:root {
+  --color-paper: oklch(97.5% 0.006 250);
+  --color-paper-2: oklch(94.5% 0.008 250);
+  --color-ink: oklch(24% 0.028 250);
+  --color-ink-2: oklch(42% 0.02 250);
+  --color-rule: oklch(88% 0.01 250);
+  --color-accent: oklch(62% 0.09 75);
+  --color-accent-ink: oklch(98% 0.005 75);
+  --color-focus: oklch(55% 0.12 250);
+  --color-surface: var(--color-paper-2);
+
+  /* Legacy aliases — existing class names keep working */
+  --color-bg: var(--color-paper);
+  --color-bg-warm: var(--color-paper-2);
+  --color-text: var(--color-ink);
+  --color-text-muted: var(--color-ink-2);
+  --color-gold: var(--color-accent);
+  --color-gold-light: oklch(72% 0.08 75);
+  --color-gold-dark: oklch(52% 0.09 75);
+  --color-navy: var(--color-ink);
+  --color-navy-light: oklch(32% 0.03 250);
+  --color-border: var(--color-rule);
+  --color-border-light: oklch(92% 0.008 250);
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-body: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7rem;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.25rem;
+  --text-display: clamp(2.75rem, 8vw, 5.5rem);
+  --text-display-s: clamp(2rem, 5vw, 3.25rem);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-short: 220ms;
+  --dur-med: 320ms;
+
+  --radius-card: 2px;
+  --radius-pill: 2px;
+  --radius-input: 2px;
+  --rule-hair: 1px;
+  --rule-thick: 3px;
+}

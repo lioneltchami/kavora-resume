@@ -10,34 +10,17 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-bg text-text">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="mx-auto max-w-[700px] px-6 py-16 md:py-24">
-        {/* Back link */}
         <Link
           href="/"
-          className="mb-12 inline-flex items-center gap-2 text-sm text-text-muted/70 transition-colors hover:text-gold"
+          className="mb-12 inline-flex items-center gap-2 text-sm text-ink-2 transition-colors hover:text-accent"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M19 12H5" />
-            <path d="M12 19l-7-7 7-7" />
-          </svg>
-          Back to Home
+          ← Back to home
         </Link>
 
-        {/* Title */}
-        <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold tracking-tight text-navy md:text-5xl">
-          Privacy Policy
-        </h1>
-        <p className="mt-4 text-sm text-text-muted/70">
+        <h1 className="text-display-s text-ink">Privacy Policy</h1>
+        <p className="mt-4 text-sm text-ink-2">
           Effective Date: March 27, 2026
         </p>
 

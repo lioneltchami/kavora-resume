@@ -163,19 +163,19 @@ export default function CoverLetterGenerator({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
       onClick={handleBackdropClick}
     >
       <div
         ref={modalRef}
-        className="relative flex max-h-[90vh] w-full max-w-[700px] flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
+        className="relative flex max-h-[90vh] w-full max-w-[700px] flex-col overflow-hidden rounded-[2px] bg-paper"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#e8e2da] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-rule px-6 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1e2a3a]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-[2px] bg-ink">
               <svg
-                className="h-4 w-4 text-[#b08d57]"
+                className="h-4 w-4 text-accent"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
@@ -188,13 +188,13 @@ export default function CoverLetterGenerator({
                 />
               </svg>
             </div>
-            <h2 className="text-lg font-semibold text-[#1b1b1b]">
+            <h2 className="text-lg font-semibold text-ink">
               Cover Letter Generator
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#9a9590] transition-colors hover:bg-[#f5f0ea] hover:text-[#6b6560]"
+            className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink-2"
           >
             <svg
               className="h-5 w-5"
@@ -217,7 +217,7 @@ export default function CoverLetterGenerator({
           {/* Input form */}
           <div className="space-y-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-[#4a4540]">
+              <label className="mb-1.5 block text-sm font-medium text-ink-2">
                 Company Name <span className="text-red-400">*</span>
               </label>
               <input
@@ -225,14 +225,14 @@ export default function CoverLetterGenerator({
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="e.g. Acme Corp"
-                className="w-full rounded-lg border border-[#d4cfc8] bg-white px-3.5 py-2.5 text-sm text-[#1b1b1b] placeholder-[#b5b0a8] outline-none transition-colors focus:border-[#b08d57] focus:ring-1 focus:ring-[#b08d57]/30"
+                className="w-full rounded-[2px] border border-rule bg-paper px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-2/50 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/30"
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-[#4a4540]">
+              <label className="mb-1.5 block text-sm font-medium text-ink-2">
                 Hiring Manager Name{" "}
-                <span className="text-xs font-normal text-[#9a9590]">
+                <span className="text-xs font-normal text-ink-2">
                   (Leave blank if unknown)
                 </span>
               </label>
@@ -241,12 +241,12 @@ export default function CoverLetterGenerator({
                 value={hiringManager}
                 onChange={(e) => setHiringManager(e.target.value)}
                 placeholder="e.g. Jane Smith"
-                className="w-full rounded-lg border border-[#d4cfc8] bg-white px-3.5 py-2.5 text-sm text-[#1b1b1b] placeholder-[#b5b0a8] outline-none transition-colors focus:border-[#b08d57] focus:ring-1 focus:ring-[#b08d57]/30"
+                className="w-full rounded-[2px] border border-rule bg-paper px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-2/50 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/30"
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-[#4a4540]">
+              <label className="mb-1.5 block text-sm font-medium text-ink-2">
                 Job Description <span className="text-red-400">*</span>
               </label>
               <textarea
@@ -254,7 +254,7 @@ export default function CoverLetterGenerator({
                 onChange={(e) => setJobDescription(e.target.value)}
                 rows={6}
                 placeholder="Paste the full job description here..."
-                className="w-full resize-none rounded-lg border border-[#d4cfc8] bg-white px-3.5 py-2.5 text-sm text-[#1b1b1b] placeholder-[#b5b0a8] outline-none transition-colors focus:border-[#b08d57] focus:ring-1 focus:ring-[#b08d57]/30"
+                className="w-full resize-none rounded-[2px] border border-rule bg-paper px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-2/50 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/30"
               />
             </div>
 
@@ -263,7 +263,7 @@ export default function CoverLetterGenerator({
             <button
               onClick={handleGenerate}
               disabled={loading}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#1e2a3a] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#2d3f54] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-ink px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
                 <>
@@ -310,26 +310,26 @@ export default function CoverLetterGenerator({
 
           {/* Loading skeleton */}
           {loading && (
-            <div className="mt-6 space-y-4 rounded-lg border border-[#e8e2da] bg-[#fdfcfa] p-8">
-              <div className="h-4 w-40 animate-pulse rounded bg-[#e8e2da]" />
+            <div className="mt-6 space-y-4 rounded-[2px] border border-rule bg-paper p-8">
+              <div className="h-4 w-40 animate-pulse rounded bg-rule" />
               <div className="space-y-2.5">
-                <div className="h-3.5 w-full animate-pulse rounded bg-[#ede9e3]" />
-                <div className="h-3.5 w-full animate-pulse rounded bg-[#ede9e3]" />
-                <div className="h-3.5 w-[85%] animate-pulse rounded bg-[#ede9e3]" />
+                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-[85%] animate-pulse rounded bg-paper-2" />
               </div>
               <div className="space-y-2.5 pt-2">
-                <div className="h-3.5 w-full animate-pulse rounded bg-[#ede9e3]" />
-                <div className="h-3.5 w-full animate-pulse rounded bg-[#ede9e3]" />
-                <div className="h-3.5 w-[70%] animate-pulse rounded bg-[#ede9e3]" />
+                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-[70%] animate-pulse rounded bg-paper-2" />
               </div>
               <div className="space-y-2.5 pt-2">
-                <div className="h-3.5 w-full animate-pulse rounded bg-[#ede9e3]" />
-                <div className="h-3.5 w-full animate-pulse rounded bg-[#ede9e3]" />
-                <div className="h-3.5 w-[90%] animate-pulse rounded bg-[#ede9e3]" />
+                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-[90%] animate-pulse rounded bg-paper-2" />
               </div>
               <div className="space-y-2.5 pt-2">
-                <div className="h-3.5 w-full animate-pulse rounded bg-[#ede9e3]" />
-                <div className="h-3.5 w-[50%] animate-pulse rounded bg-[#ede9e3]" />
+                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-[50%] animate-pulse rounded bg-paper-2" />
               </div>
             </div>
           )}
@@ -341,7 +341,7 @@ export default function CoverLetterGenerator({
               <div className="mb-3 flex flex-wrap items-center gap-2">
                 <button
                   onClick={handleCopy}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#d4cfc8] bg-white px-3 py-1.5 text-xs font-medium text-[#4a4540] transition-colors hover:border-[#b08d57] hover:text-[#b08d57]"
+                  className="inline-flex items-center gap-1.5 rounded-[2px] border border-rule bg-paper px-3 py-1.5 text-xs font-medium text-ink-2 transition-colors hover:border-accent hover:text-accent"
                 >
                   <svg
                     className="h-3.5 w-3.5"
@@ -361,7 +361,7 @@ export default function CoverLetterGenerator({
 
                 <button
                   onClick={handleDownload}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#d4cfc8] bg-white px-3 py-1.5 text-xs font-medium text-[#4a4540] transition-colors hover:border-[#b08d57] hover:text-[#b08d57]"
+                  className="inline-flex items-center gap-1.5 rounded-[2px] border border-rule bg-paper px-3 py-1.5 text-xs font-medium text-ink-2 transition-colors hover:border-accent hover:text-accent"
                 >
                   <svg
                     className="h-3.5 w-3.5"
@@ -382,11 +382,11 @@ export default function CoverLetterGenerator({
                 <button
                   onClick={handleApplyPack}
                   disabled={packing || !onEnsurePublished}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#b08d57]/50 bg-[#b08d57]/10 px-3 py-1.5 text-xs font-medium text-[#9a7a4a] transition-colors hover:border-[#b08d57] hover:bg-[#b08d57]/15 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-[2px] border border-accent/50 bg-accent/10 px-3 py-1.5 text-xs font-medium text-gold-dark transition-colors hover:border-accent hover:bg-accent/15 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {packing ? (
                     <>
-                      <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#b08d57]/40 border-t-[#b08d57]" />
+                      <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-accent/40 border-t-accent" />
                       Building pack...
                     </>
                   ) : (
@@ -411,10 +411,10 @@ export default function CoverLetterGenerator({
 
                 <button
                   onClick={handleEditToggle}
-                  className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                  className={`inline-flex items-center gap-1.5 rounded-[2px] border px-3 py-1.5 text-xs font-medium transition-colors ${
                     editing
-                      ? "border-[#b08d57] bg-[#b08d57]/10 text-[#b08d57]"
-                      : "border-[#d4cfc8] bg-white text-[#4a4540] hover:border-[#b08d57] hover:text-[#b08d57]"
+                      ? "border-accent bg-accent/10 text-accent"
+                      : "border-rule bg-paper text-ink-2 hover:border-accent hover:text-accent"
                   }`}
                 >
                   <svg
@@ -436,21 +436,21 @@ export default function CoverLetterGenerator({
 
               {/* Letter display */}
               <div
-                className="rounded-lg border border-[#d4cfc8] shadow-sm"
+                className="rounded-[2px] border border-rule"
                 style={{
                   background:
-                    "linear-gradient(135deg, #fdfcfa 0%, #f9f6f1 50%, #fdfcfa 100%)",
+                    "linear-gradient(135deg, var(--color-paper) 0%, var(--color-paper-2) 50%, var(--color-paper) 100%)",
                 }}
               >
                 {/* Paper top accent */}
-                <div className="h-1 rounded-t-lg bg-gradient-to-r from-[#1e2a3a] via-[#b08d57] to-[#1e2a3a]" />
+                <div className="h-[3px] bg-ink" />
 
                 <div className="px-8 py-8 sm:px-10 sm:py-10">
                   {editing ? (
                     <div>
                       {/* Greeting (non-editable preview) */}
                       <p
-                        className="mb-4 text-[0.95rem] leading-relaxed text-[#2a2520]"
+                        className="mb-4 text-[0.95rem] leading-relaxed text-ink"
                         style={{
                           fontFamily: "var(--font-cormorant), Georgia, serif",
                         }}
@@ -463,7 +463,7 @@ export default function CoverLetterGenerator({
                         value={coverLetter}
                         onChange={(e) => setCoverLetter(e.target.value)}
                         rows={16}
-                        className="w-full resize-y rounded-lg border border-[#d4cfc8] bg-white/80 px-4 py-3 text-[0.95rem] leading-relaxed text-[#2a2520] outline-none transition-colors focus:border-[#b08d57] focus:ring-1 focus:ring-[#b08d57]/30"
+                        className="w-full resize-y rounded-[2px] border border-rule bg-paper px-4 py-3 text-[0.95rem] leading-relaxed text-ink outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/30"
                         style={{
                           fontFamily: "var(--font-cormorant), Georgia, serif",
                         }}
@@ -471,7 +471,7 @@ export default function CoverLetterGenerator({
 
                       {/* Closing (non-editable preview) */}
                       <p
-                        className="mt-4 whitespace-pre-line text-[0.95rem] leading-relaxed text-[#2a2520]"
+                        className="mt-4 whitespace-pre-line text-[0.95rem] leading-relaxed text-ink"
                         style={{
                           fontFamily: "var(--font-cormorant), Georgia, serif",
                         }}
@@ -481,7 +481,7 @@ export default function CoverLetterGenerator({
                     </div>
                   ) : (
                     <div
-                      className="whitespace-pre-line text-[0.95rem] leading-[1.85] text-[#2a2520]"
+                      className="whitespace-pre-line text-[0.95rem] leading-[1.85] text-ink"
                       style={{
                         fontFamily: "var(--font-cormorant), Georgia, serif",
                       }}
