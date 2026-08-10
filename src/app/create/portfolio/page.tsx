@@ -122,7 +122,7 @@ function PortfolioEditorPageInner() {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-paper">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-rule border-t-ink" />
       </div>
     );
   }
@@ -141,7 +141,7 @@ function PortfolioEditorPageInner() {
         <div className="hidden items-center gap-1.5 text-sm text-ink-2 sm:flex">
           {saveStatus === "saving" && (
             <>
-              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
+              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-rule border-t-ink" />
               <span>Saving...</span>
             </>
           )}
@@ -241,7 +241,7 @@ export default function PortfolioEditorPage() {
     <Suspense
       fallback={
         <div className="flex h-screen items-center justify-center bg-paper">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-rule border-t-ink" />
         </div>
       }
     >

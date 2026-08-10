@@ -98,7 +98,7 @@ export default function PDFDownload({ name, data }: PDFDownloadProps) {
       <button
         onClick={handleDownload}
         disabled={generating}
-        className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-ghost disabled:cursor-not-allowed disabled:opacity-50"
       >
         <svg
           className="h-4 w-4"
@@ -119,7 +119,7 @@ export default function PDFDownload({ name, data }: PDFDownloadProps) {
         onClick={handleATSSafeDownload}
         disabled={generatingATS}
         title="Single-column layout optimized for ATS (Applicant Tracking Systems)"
-        className="inline-flex items-center gap-1.5 rounded-lg border border-green-300 bg-green-50 px-3 py-2 text-sm font-medium text-green-700 shadow-sm transition-colors hover:bg-green-100 disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-ghost disabled:cursor-not-allowed disabled:opacity-50"
       >
         <svg
           className="h-4 w-4"
@@ -280,20 +280,20 @@ function buildClassicHTML(
 <style>
   @page { size: letter; margin: 0.45in 0.55in; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #1a1a1a; line-height: 1.4; }
+  body { font-family: 'DM Sans', Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #2a323c; line-height: 1.4; }
 
   .header { text-align: center; margin-bottom: 6px; }
   .header h1 { font-size: 22pt; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 4px; color: ${palette.primary}; }
-  .contact { font-size: 9pt; color: #555; }
+  .contact { font-size: 9pt; color: #5a6570; }
   .divider { height: 2px; background: linear-gradient(90deg, ${palette.primary}, ${palette.accent}); margin: 8px 0; border: none; }
-  .divider-thin { height: 1px; background: #d0d0d0; margin: 5px 0; border: none; }
+  .divider-thin { height: 1px; background: #d5dae0; margin: 5px 0; border: none; }
 
   .section-title {
     font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
     color: ${palette.primary}; border-bottom: 1.5px solid ${palette.primary}; padding-bottom: 2px; margin: 8px 0 4px 0;
   }
 
-  .summary { font-size: 9pt; color: #333; line-height: 1.5; text-align: justify; margin: 4px 0 6px 0; }
+  .summary { font-size: 9pt; color: #3d4650; line-height: 1.5; text-align: justify; margin: 4px 0 6px 0; }
 
   .skills-row { display: flex; flex-wrap: wrap; gap: 4px 6px; margin: 4px 0 6px 0; }
   .skill-tag {
@@ -303,13 +303,13 @@ function buildClassicHTML(
 
   .job { margin: 6px 0; }
   .job-header { display: flex; justify-content: space-between; align-items: baseline; }
-  .job-title { font-size: 10pt; font-weight: 700; color: #1a1a1a; }
-  .job-dates { font-size: 8.5pt; color: #555; font-style: italic; }
+  .job-title { font-size: 10pt; font-weight: 700; color: #2a323c; }
+  .job-dates { font-size: 8.5pt; color: #5a6570; font-style: italic; }
   .job-company { font-size: 9pt; color: ${palette.primary}; font-weight: 600; margin-bottom: 2px; }
 
   .bullets { list-style: none; padding-left: 12px; margin-top: 2px; }
   .bullets li {
-    font-size: 9pt; color: #333; line-height: 1.45; margin-bottom: 1.5px;
+    font-size: 9pt; color: #3d4650; line-height: 1.45; margin-bottom: 1.5px;
     padding-left: 9px; position: relative;
   }
   .bullets li::before {
@@ -318,10 +318,10 @@ function buildClassicHTML(
 
   .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; margin-top: 4px; }
   .edu-item { font-size: 9pt; margin: 3px 0; line-height: 1.35; }
-  .edu-item strong { color: #1a1a1a; }
-  .edu-school { color: #555; font-size: 8.5pt; }
-  .vol-item { font-size: 9pt; color: #333; margin: 2px 0; }
-  .lang-item { font-size: 9pt; color: #333; margin: 2px 0; }
+  .edu-item strong { color: #2a323c; }
+  .edu-school { color: #5a6570; font-size: 8.5pt; }
+  .vol-item { font-size: 9pt; color: #3d4650; margin: 2px 0; }
+  .lang-item { font-size: 9pt; color: #3d4650; margin: 2px 0; }
 </style>
 </head>
 <body>
@@ -398,7 +398,7 @@ function buildModernHTML(
 <style>
   @page { size: letter; margin: 0; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #1a1a1a; line-height: 1.4; }
+  body { font-family: 'DM Sans', Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #2a323c; line-height: 1.4; }
 
   .layout { display: flex; min-height: 100vh; }
   .sidebar {
@@ -429,23 +429,23 @@ function buildModernHTML(
     font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
     color: ${palette.primary}; border-bottom: 1.5px solid ${palette.primary}; padding-bottom: 2px; margin: 10px 0 4px 0;
   }
-  .summary { font-size: 9pt; color: #333; line-height: 1.5; text-align: justify; margin: 4px 0 6px 0; }
+  .summary { font-size: 9pt; color: #3d4650; line-height: 1.5; text-align: justify; margin: 4px 0 6px 0; }
   .divider { height: 2px; background: ${palette.accent}; margin: 8px 0; border: none; }
 
   .job { margin: 6px 0; }
   .job-header { display: flex; justify-content: space-between; align-items: baseline; }
-  .job-title { font-size: 10pt; font-weight: 700; color: #1a1a1a; }
-  .job-dates { font-size: 8.5pt; color: #555; font-style: italic; }
+  .job-title { font-size: 10pt; font-weight: 700; color: #2a323c; }
+  .job-dates { font-size: 8.5pt; color: #5a6570; font-style: italic; }
   .job-company { font-size: 9pt; color: ${palette.primary}; font-weight: 600; margin-bottom: 2px; }
   .bullets { list-style: none; padding-left: 12px; margin-top: 2px; }
   .bullets li {
-    font-size: 9pt; color: #333; line-height: 1.45; margin-bottom: 1.5px;
+    font-size: 9pt; color: #3d4650; line-height: 1.45; margin-bottom: 1.5px;
     padding-left: 9px; position: relative;
   }
   .bullets li::before {
     content: "\\25AA"; position: absolute; left: -4px; color: ${palette.primary}; font-size: 6pt; top: 2px;
   }
-  .vol-item { font-size: 9pt; color: #333; margin: 2px 0; }
+  .vol-item { font-size: 9pt; color: #3d4650; margin: 2px 0; }
 </style>
 </head>
 <body>
@@ -512,19 +512,19 @@ function buildCompactHTML(
 <style>
   @page { size: letter; margin: 0.4in 0.5in; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', Arial, Helvetica, sans-serif; font-size: 9pt; color: #1a1a1a; line-height: 1.35; }
+  body { font-family: 'DM Sans', Arial, Helvetica, sans-serif; font-size: 9pt; color: #2a323c; line-height: 1.35; }
 
   .header { text-align: center; margin-bottom: 4px; }
   .header h1 { font-size: 20pt; font-weight: 700; letter-spacing: 1px; margin-bottom: 3px; color: ${palette.primary}; }
-  .contact { font-size: 8.5pt; color: #555; }
+  .contact { font-size: 8.5pt; color: #5a6570; }
   .divider { height: 2px; background: linear-gradient(90deg, ${palette.primary}, ${palette.accent}); margin: 6px 0; border: none; }
-  .divider-thin { height: 1px; background: #d0d0d0; margin: 4px 0; border: none; }
+  .divider-thin { height: 1px; background: #d5dae0; margin: 4px 0; border: none; }
 
   .section-title {
     font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
     color: ${palette.primary}; border-bottom: 1px solid ${palette.primary}; padding-bottom: 2px; margin: 6px 0 3px 0;
   }
-  .summary { font-size: 8.5pt; color: #333; line-height: 1.45; text-align: justify; margin: 3px 0 4px 0; }
+  .summary { font-size: 8.5pt; color: #3d4650; line-height: 1.45; text-align: justify; margin: 3px 0 4px 0; }
 
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
 
@@ -535,12 +535,12 @@ function buildCompactHTML(
   }
 
   .job { margin: 4px 0; }
-  .job-title { font-size: 9pt; font-weight: 700; color: #1a1a1a; }
-  .job-dates { font-size: 7.5pt; color: #888; font-style: italic; margin-bottom: 1px; }
+  .job-title { font-size: 9pt; font-weight: 700; color: #2a323c; }
+  .job-dates { font-size: 7.5pt; color: #7a8490; font-style: italic; margin-bottom: 1px; }
   .job-company { font-size: 8pt; color: ${palette.primary}; font-weight: 600; }
   .bullets { list-style: none; padding-left: 10px; margin-top: 1px; }
   .bullets li {
-    font-size: 8pt; color: #333; line-height: 1.35; margin-bottom: 1px;
+    font-size: 8pt; color: #3d4650; line-height: 1.35; margin-bottom: 1px;
     padding-left: 8px; position: relative;
   }
   .bullets li::before {
@@ -548,10 +548,10 @@ function buildCompactHTML(
   }
 
   .edu-item { font-size: 8.5pt; margin: 3px 0; line-height: 1.3; }
-  .edu-item strong { color: #1a1a1a; }
-  .edu-school { color: #555; font-size: 8pt; }
-  .vol-item { font-size: 8.5pt; color: #333; margin: 2px 0; }
-  .lang-item { font-size: 8.5pt; color: #333; margin: 2px 0; }
+  .edu-item strong { color: #2a323c; }
+  .edu-school { color: #5a6570; font-size: 8pt; }
+  .vol-item { font-size: 8.5pt; color: #3d4650; margin: 2px 0; }
+  .lang-item { font-size: 8.5pt; color: #3d4650; margin: 2px 0; }
 </style>
 </head>
 <body>
@@ -602,7 +602,7 @@ function buildExecutiveHTML(
 <style>
   @page { size: letter; margin: 0; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #1a1a1a; line-height: 1.4; }
+  body { font-family: 'DM Sans', Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #2a323c; line-height: 1.4; }
 
   .exec-header {
     background: ${palette.headerBg}; color: white; text-align: center;
@@ -621,7 +621,7 @@ function buildExecutiveHTML(
     color: ${palette.primary}; border-bottom: 2px solid ${palette.accent}; padding-bottom: 3px; margin: 12px 0 6px 0;
   }
 
-  .summary { font-size: 10pt; color: #333; line-height: 1.55; text-align: justify; margin: 6px 0 8px 0; }
+  .summary { font-size: 10pt; color: #3d4650; line-height: 1.55; text-align: justify; margin: 6px 0 8px 0; }
 
   .skills-row { display: flex; flex-wrap: wrap; gap: 4px 6px; margin: 4px 0 6px 0; }
   .skill-tag {
@@ -631,12 +631,12 @@ function buildExecutiveHTML(
 
   .job { margin: 6px 0; }
   .job-header { display: flex; justify-content: space-between; align-items: baseline; }
-  .job-title { font-size: 10pt; font-weight: 700; color: #1a1a1a; }
-  .job-dates { font-size: 8.5pt; color: #555; font-style: italic; }
+  .job-title { font-size: 10pt; font-weight: 700; color: #2a323c; }
+  .job-dates { font-size: 8.5pt; color: #5a6570; font-style: italic; }
   .job-company { font-size: 9pt; color: ${palette.primary}; font-weight: 600; margin-bottom: 2px; }
   .bullets { list-style: none; padding-left: 12px; margin-top: 2px; }
   .bullets li {
-    font-size: 9pt; color: #333; line-height: 1.45; margin-bottom: 1.5px;
+    font-size: 9pt; color: #3d4650; line-height: 1.45; margin-bottom: 1.5px;
     padding-left: 9px; position: relative;
   }
   .bullets li::before {
@@ -645,10 +645,10 @@ function buildExecutiveHTML(
 
   .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; margin-top: 4px; }
   .edu-item { font-size: 9pt; margin: 3px 0; line-height: 1.35; }
-  .edu-item strong { color: #1a1a1a; }
-  .edu-school { color: #555; font-size: 8.5pt; }
-  .vol-item { font-size: 9pt; color: #333; margin: 2px 0; }
-  .lang-item { font-size: 9pt; color: #333; margin: 2px 0; }
+  .edu-item strong { color: #2a323c; }
+  .edu-school { color: #5a6570; font-size: 8.5pt; }
+  .vol-item { font-size: 9pt; color: #3d4650; margin: 2px 0; }
+  .lang-item { font-size: 9pt; color: #3d4650; margin: 2px 0; }
 </style>
 </head>
 <body>

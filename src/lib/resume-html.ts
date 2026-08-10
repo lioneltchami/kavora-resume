@@ -77,7 +77,7 @@ export function buildATSSafeHTML(data: ResumeData): string {
   body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10pt;
-    color: #000000;
+    color: #2a323c;
     line-height: 1.4;
   }
   .name {
@@ -90,7 +90,7 @@ export function buildATSSafeHTML(data: ResumeData): string {
   }
   .contact {
     font-size: 9pt;
-    color: #333333;
+    color: #3d4650;
     margin-bottom: 8px;
   }
   .divider {
@@ -110,13 +110,13 @@ export function buildATSSafeHTML(data: ResumeData): string {
   }
   .summary {
     font-size: 9.5pt;
-    color: #222222;
+    color: #2a323c;
     line-height: 1.5;
     margin-bottom: 6px;
   }
   .skills-text {
     font-size: 9pt;
-    color: #222222;
+    color: #2a323c;
     line-height: 1.6;
     margin-bottom: 6px;
   }
@@ -124,11 +124,11 @@ export function buildATSSafeHTML(data: ResumeData): string {
   .job-title {
     font-size: 10pt;
     font-weight: bold;
-    color: #000000;
+    color: #2a323c;
   }
   .job-meta {
     font-size: 9pt;
-    color: #444444;
+    color: #5a6570;
     margin-bottom: 3px;
   }
   .bullets {
@@ -138,19 +138,19 @@ export function buildATSSafeHTML(data: ResumeData): string {
   }
   .bullets li {
     font-size: 9pt;
-    color: #222222;
+    color: #2a323c;
     line-height: 1.4;
     margin-bottom: 2px;
   }
   .edu-item {
     font-size: 9.5pt;
-    color: #222222;
+    color: #2a323c;
     margin-bottom: 4px;
     line-height: 1.35;
   }
   .vol-item, .lang-item {
     font-size: 9pt;
-    color: #333333;
+    color: #3d4650;
     margin-bottom: 3px;
   }
 </style>

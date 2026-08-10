@@ -267,7 +267,7 @@ export default function CoverLetterGenerator({
             >
               {loading ? (
                 <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-500 border-t-white" />
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
                   Generating...
                 </>
               ) : coverLetter ? (
@@ -311,25 +311,25 @@ export default function CoverLetterGenerator({
           {/* Loading skeleton */}
           {loading && (
             <div className="mt-6 space-y-4 rounded-[2px] border border-rule bg-paper p-8">
-              <div className="h-4 w-40 animate-pulse rounded bg-rule" />
+              <div className="h-4 w-40 rounded-[2px] bg-rule" />
               <div className="space-y-2.5">
-                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
-                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
-                <div className="h-3.5 w-[85%] animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-full rounded-[2px] bg-paper-2" />
+                <div className="h-3.5 w-full rounded-[2px] bg-paper-2" />
+                <div className="h-3.5 w-[85%] rounded-[2px] bg-paper-2" />
               </div>
               <div className="space-y-2.5 pt-2">
-                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
-                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
-                <div className="h-3.5 w-[70%] animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-full rounded-[2px] bg-paper-2" />
+                <div className="h-3.5 w-full rounded-[2px] bg-paper-2" />
+                <div className="h-3.5 w-[70%] rounded-[2px] bg-paper-2" />
               </div>
               <div className="space-y-2.5 pt-2">
-                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
-                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
-                <div className="h-3.5 w-[90%] animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-full rounded-[2px] bg-paper-2" />
+                <div className="h-3.5 w-full rounded-[2px] bg-paper-2" />
+                <div className="h-3.5 w-[90%] rounded-[2px] bg-paper-2" />
               </div>
               <div className="space-y-2.5 pt-2">
-                <div className="h-3.5 w-full animate-pulse rounded bg-paper-2" />
-                <div className="h-3.5 w-[50%] animate-pulse rounded bg-paper-2" />
+                <div className="h-3.5 w-full rounded-[2px] bg-paper-2" />
+                <div className="h-3.5 w-[50%] rounded-[2px] bg-paper-2" />
               </div>
             </div>
           )}
