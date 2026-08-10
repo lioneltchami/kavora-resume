@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import ShareKit from "@/components/ShareKit";
 import ViewCounter from "@/components/ViewCounter";
 import { SITE_URL } from "@/lib/site";
@@ -15,32 +14,6 @@ interface ResumeWebProps {
 
 export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
   const palette = getPalette(data.paletteId);
-  const revealRefs = useRef<HTMLElement[]>([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("rw-visible");
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
-    );
-
-    revealRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  const addRevealRef = (el: HTMLElement | null) => {
-    if (el && !revealRefs.current.includes(el)) {
-      revealRefs.current.push(el);
-    }
-  };
 
   const handlePrint = () => {
     window.print();
@@ -709,33 +682,6 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
           color: var(--rw-accent-light);
         }
 
-        /* ═══════════ SCROLL REVEAL ═══════════ */
-        .rw-reveal {
-          opacity: 0;
-          transform: translateY(32px);
-          transition:
-            opacity 0.7s var(--rw-ease-out),
-            transform 0.7s var(--rw-ease-out);
-        }
-
-        .rw-visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .rw-delay-1 {
-          transition-delay: 0.1s;
-        }
-        .rw-delay-2 {
-          transition-delay: 0.2s;
-        }
-        .rw-delay-3 {
-          transition-delay: 0.3s;
-        }
-        .rw-delay-4 {
-          transition-delay: 0.4s;
-        }
-
         /* ═══════════ RESPONSIVE ═══════════ */
         @media (max-width: 768px) {
           .rw-section {
@@ -809,10 +755,6 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
           }
           .rw-share-row {
             display: none;
-          }
-          .rw-reveal {
-            opacity: 1 !important;
-            transform: none !important;
           }
           .rw-section {
             padding: 32px 0;
@@ -987,24 +929,17 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
         {data.skills.length > 0 && (
           <section className="rw-competencies" id="rw-competencies">
             <div className="rw-container">
-              <div className="rw-section-header rw-reveal" ref={addRevealRef}>
+              <div className="rw-section-header">
                 <span className="rw-section-number">01</span>
                 <h2 className="rw-section-title">Core Competencies</h2>
                 <div className="rw-section-line" />
               </div>
               <div className="rw-skills-grid">
-                {data.skills.map((skill, i) => {
-                  const delayClass = `rw-delay-${Math.min(Math.floor(i / 3) + 1, 4)}`;
-                  return (
-                    <div
-                      key={i}
-                      className={`rw-skill-chip rw-reveal ${delayClass}`}
-                      ref={addRevealRef}
-                    >
-                      {skill}
-                    </div>
-                  );
-                })}
+                {data.skills.map((skill, i) => (
+                  <div key={i} className="rw-skill-chip">
+                    {skill}
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -1014,7 +949,7 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
         {data.experience.length > 0 && (
           <section className="rw-section" id="rw-experience">
             <div className="rw-container">
-              <div className="rw-section-header rw-reveal" ref={addRevealRef}>
+              <div className="rw-section-header">
                 <span className="rw-section-number">
                   {data.skills.length > 0 ? "02" : "01"}
                 </span>
@@ -1023,11 +958,7 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
               </div>
 
               {data.experience.map((exp) => (
-                <div
-                  key={exp.id}
-                  className="rw-experience-item rw-reveal"
-                  ref={addRevealRef}
-                >
+                <div key={exp.id} className="rw-experience-item">
                   <div className="rw-exp-header">
                     <span className="rw-exp-title">{exp.title}</span>
                     <span className="rw-exp-dates">
@@ -1060,7 +991,7 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
             <div className="rw-container">
               <div className="rw-bottom-grid">
                 {data.education.length > 0 && (
-                  <div className="rw-reveal" ref={addRevealRef}>
+                  <div>
                     <div className="rw-bottom-col-title">Education</div>
                     {data.education.map((edu) => (
                       <div key={edu.id} className="rw-edu-entry">
@@ -1075,7 +1006,7 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
                 )}
 
                 {data.volunteer.length > 0 && (
-                  <div className="rw-reveal rw-delay-1" ref={addRevealRef}>
+                  <div>
                     <div className="rw-bottom-col-title">Volunteering</div>
                     {data.volunteer.map((vol, i) => (
                       <div key={i} className="rw-vol-item">
@@ -1086,7 +1017,7 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
                 )}
 
                 {data.languages.length > 0 && (
-                  <div className="rw-reveal rw-delay-2" ref={addRevealRef}>
+                  <div>
                     <div className="rw-bottom-col-title">Languages</div>
                     {data.languages.map((lang, i) => (
                       <div key={i} className="rw-lang-item">

@@ -73,6 +73,14 @@ Legacy aliases (keep for existing Tailwind classes):
 - N9 edge-aligned nav on marketing; Workbench top bar on app
 - Ft5 statement footer on marketing
 
+## Stamping
+
+The Hallmark stamp on `tokens.css` and the mirrored `@theme` / chrome blocks in
+`src/app/globals.css` covers the whole app. Per-route CSS stamps are not
+required — routes consume shared tokens and chrome classes from those files.
+Public resume (`ResumeWeb`) may keep palette-driven CSS for owner theming; it
+must not use scroll-reveal stagger (static content render).
+
 ## What pages MAY differ on
 
 - Macrostructure within family only

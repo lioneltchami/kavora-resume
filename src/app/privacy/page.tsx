@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <div className="mx-auto max-w-[700px] px-6 py-16 md:py-24">
+      <div className="max-w-[42rem] px-[clamp(1rem,3.5vw,3rem)] py-16 md:py-24">
         <Link
           href="/"
           className="mb-12 inline-flex items-center gap-2 text-sm text-ink-2 transition-colors hover:text-accent"
@@ -24,13 +24,13 @@ export default function PrivacyPolicyPage() {
           Effective Date: March 27, 2026
         </p>
 
-        <div className="mt-2 h-px w-16 bg-gold/40" />
+        <hr className="rule-hair mt-6 w-16" />
 
         {/* Content */}
-        <div className="mt-12 space-y-10 text-[0.9375rem] leading-relaxed text-text-muted">
+        <div className="mt-12 space-y-10 text-[0.9375rem] leading-relaxed text-ink-2">
           {/* 1 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               1. Introduction
             </h2>
             <p>
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
               at{" "}
               <a
                 href={SITE_URL}
-                className="text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
+                className="text-accent underline decoration-accent/30 underline-offset-2 hover:decoration-accent"
               >
                 {SITE_DOMAIN}
               </a>{" "}
@@ -53,14 +53,14 @@ export default function PrivacyPolicyPage() {
 
           {/* 2 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               2. Information We Collect
             </h2>
             <p className="mb-3">
               We collect information that you provide directly and information
               that is gathered automatically when you use our Service.
             </p>
-            <h3 className="mb-2 text-sm font-semibold tracking-wide text-navy/80 uppercase">
+            <h3 className="mb-2 text-sm font-semibold tracking-wide text-ink uppercase">
               Information You Provide
             </h3>
             <ul className="mb-4 list-disc space-y-1 pl-5">
@@ -80,7 +80,7 @@ export default function PrivacyPolicyPage() {
                 store your full credit card number.
               </li>
             </ul>
-            <h3 className="mb-2 text-sm font-semibold tracking-wide text-navy/80 uppercase">
+            <h3 className="mb-2 text-sm font-semibold tracking-wide text-ink uppercase">
               Information Collected Automatically
             </h3>
             <ul className="list-disc space-y-1 pl-5">
@@ -98,7 +98,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 3 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               3. How We Use Your Information
             </h2>
             <ul className="list-disc space-y-1 pl-5">
@@ -124,7 +124,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 4 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               4. Data Storage
             </h2>
             <p>
@@ -139,7 +139,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 5 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               5. Third-Party Services
             </h2>
             <p className="mb-3">
@@ -168,7 +168,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 6 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               6. Data Retention
             </h2>
             <p>
@@ -183,7 +183,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 7 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               7. Your Rights
             </h2>
             <p className="mb-3">
@@ -216,7 +216,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 8 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               8. Cookies
             </h2>
             <p>
@@ -229,7 +229,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 9 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               9. Children&rsquo;s Privacy
             </h2>
             <p>
@@ -243,7 +243,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 10 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               10. Changes to This Policy
             </h2>
             <p>
@@ -257,19 +257,19 @@ export default function PrivacyPolicyPage() {
 
           {/* 11 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               11. Contact Us
             </h2>
             <p>
               If you have any questions about this Privacy Policy or our data
               practices, please contact us at:
             </p>
-            <p className="mt-3 font-medium text-navy">
+            <p className="mt-3 font-medium text-ink">
               Kavora Systems
               <br />
               <a
                 href="mailto:contact@kavorasystems.com"
-                className="text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
+                className="text-accent underline decoration-accent/30 underline-offset-2 hover:decoration-accent"
               >
                 contact@kavorasystems.com
               </a>

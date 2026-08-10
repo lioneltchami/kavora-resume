@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function TermsOfServicePage() {
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <div className="mx-auto max-w-[700px] px-6 py-16 md:py-24">
+      <div className="max-w-[42rem] px-[clamp(1rem,3.5vw,3rem)] py-16 md:py-24">
         <Link
           href="/"
           className="mb-12 inline-flex items-center gap-2 text-sm text-ink-2 transition-colors hover:text-accent"
@@ -28,7 +28,7 @@ export default function TermsOfServicePage() {
         <div className="mt-12 space-y-10 text-[0.9375rem] leading-relaxed text-ink-2">
           {/* 1 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               1. Acceptance of Terms
             </h2>
             <p>
@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
 
           {/* 2 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               2. Description of Service
             </h2>
             <p>
@@ -56,7 +56,7 @@ export default function TermsOfServicePage() {
 
           {/* 3 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               3. User Accounts
             </h2>
             <p>
@@ -71,7 +71,7 @@ export default function TermsOfServicePage() {
 
           {/* 4 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               4. User Content
             </h2>
             <p>
@@ -87,7 +87,7 @@ export default function TermsOfServicePage() {
 
           {/* 5 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               5. Acceptable Use
             </h2>
             <p className="mb-3">You agree not to use the Service to:</p>
@@ -117,7 +117,7 @@ export default function TermsOfServicePage() {
 
           {/* 6 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               6. AI-Generated Content
             </h2>
             <p>
@@ -134,7 +134,7 @@ export default function TermsOfServicePage() {
 
           {/* 7 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               7. Payments and Refunds
             </h2>
             <p>
@@ -150,7 +150,7 @@ export default function TermsOfServicePage() {
 
           {/* 8 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               8. Intellectual Property
             </h2>
             <p>
@@ -165,7 +165,7 @@ export default function TermsOfServicePage() {
 
           {/* 9 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               9. Limitation of Liability
             </h2>
             <p>
@@ -182,7 +182,7 @@ export default function TermsOfServicePage() {
 
           {/* 10 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               10. Termination
             </h2>
             <p>
@@ -198,7 +198,7 @@ export default function TermsOfServicePage() {
 
           {/* 11 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               11. Governing Law
             </h2>
             <p>
@@ -211,7 +211,7 @@ export default function TermsOfServicePage() {
 
           {/* 12 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               12. Changes to Terms
             </h2>
             <p>
@@ -224,18 +224,18 @@ export default function TermsOfServicePage() {
 
           {/* 13 */}
           <section>
-            <h2 className="font-[family-name:var(--font-cormorant)] mb-3 text-xl font-semibold text-navy">
+            <h2 className="font-display mb-3 text-xl font-semibold text-ink">
               13. Contact Us
             </h2>
             <p>
               If you have any questions about these Terms, please contact us at:
             </p>
-            <p className="mt-3 font-medium text-navy">
+            <p className="mt-3 font-medium text-ink">
               Kavora Systems
               <br />
               <a
                 href="mailto:contact@kavorasystems.com"
-                className="text-gold underline decoration-gold/30 underline-offset-2 hover:decoration-gold"
+                className="text-accent underline decoration-accent/30 underline-offset-2 hover:decoration-accent"
               >
                 contact@kavorasystems.com
               </a>
