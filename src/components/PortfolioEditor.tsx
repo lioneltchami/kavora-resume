@@ -428,8 +428,8 @@ export default function PortfolioEditor({
               </span>
             )}
             {!tab.proBadge && Boolean(tab.count) && (
-              <span className="ml-1.5 inline-flex min-w-[1.15rem] items-center justify-center rounded-full bg-ink px-1.5 py-0.5 text-[0.6rem] font-bold text-white">
-                {tab.count}
+              <span className="ml-1.5 font-mono text-xs font-normal text-ink-2">
+                ({tab.count})
               </span>
             )}
           </button>
@@ -489,7 +489,7 @@ export default function PortfolioEditor({
                     title={palette.name}
                   >
                     <div
-                      className={`h-9 w-9 rounded-full transition-all ${
+                      className={`h-9 w-9 rounded-[2px] transition-all ${
                         isSelected
                           ? "ring-2 ring-accent ring-offset-2"
                           : "ring-1 ring-rule group-hover:ring-accent/50"
@@ -616,9 +616,7 @@ export default function PortfolioEditor({
                   ? `${window.location.origin}/p/${settings.slug}`
                   : `/p/${settings.slug}`}
               </a>
-              <p className="mt-1 text-xs text-ink-2">
-                Matches your resume URL
-              </p>
+              <p className="mt-1 text-xs text-ink-2">Matches your resume URL</p>
             </div>
           )}
         </div>
@@ -692,90 +690,91 @@ export default function PortfolioEditor({
 
           {/* Project list */}
           {projects.length === 0 && !editingProject && (
-            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+            <div className="border-t border-rule py-10 text-left">
               <p className="text-sm text-ink-2">
                 No projects yet. Add your first project to get started.
               </p>
             </div>
           )}
 
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              className="flex items-start gap-4 rounded-[2px] border border-rule bg-paper p-4"
-            >
-              {/* Thumbnail */}
-              {project.image_url && (
-                <img
-                  src={project.image_url}
-                  alt={project.title}
-                  className="h-16 w-20 shrink-0 rounded-[2px] border border-rule object-cover"
-                />
-              )}
+          {projects.length > 0 && (
+            <div className="border-t border-rule">
+              {projects.map((project) => (
+                <div
+                  key={project.id}
+                  className="flex items-start gap-4 border-b border-rule py-4"
+                >
+                  {project.image_url && (
+                    <img
+                      src={project.image_url}
+                      alt={project.title}
+                      className="h-16 w-20 shrink-0 rounded-[2px] border border-rule object-cover"
+                    />
+                  )}
 
-              {/* Info */}
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="truncate text-sm font-semibold text-ink">
-                    {project.title}
-                  </h3>
-                  <span className="shrink-0 rounded-full bg-paper-2 px-2 py-0.5 text-[0.65rem] font-medium text-ink-2">
-                    {categoryLabel(project.category)}
-                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                      <h3 className="truncate text-sm font-semibold text-ink">
+                        {project.title}
+                      </h3>
+                      <span className="font-mono text-xs text-ink-2">
+                        {categoryLabel(project.category)}
+                      </span>
+                    </div>
+                    {project.description && (
+                      <p className="mt-1 line-clamp-2 text-xs text-ink-2">
+                        {project.description}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex shrink-0 items-center gap-1">
+                    <button
+                      onClick={() => handleEditProject(project)}
+                      className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
+                      title="Edit"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteProject(project.id)}
+                      className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-red-50 hover:text-red-500"
+                      title="Delete"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-                {project.description && (
-                  <p className="mt-1 line-clamp-2 text-xs text-ink-2">
-                    {project.description}
-                  </p>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex shrink-0 items-center gap-1">
-                <button
-                  onClick={() => handleEditProject(project)}
-                  className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
-                  title="Edit"
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => handleDeleteProject(project.id)}
-                  className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-red-50 hover:text-red-500"
-                  title="Delete"
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                    />
-                  </svg>
-                </button>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
 
           {projects.length > 1 && (
-            <p className="text-center text-xs text-ink-2">
+            <p className="text-left text-xs text-ink-2">
               Tip: Projects display in the order shown
             </p>
           )}
@@ -827,7 +826,7 @@ export default function PortfolioEditor({
           )}
 
           {testimonials.length === 0 && !editingTestimonial && (
-            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+            <div className="border-t border-rule py-10 text-left">
               <p className="text-sm text-ink-2">
                 No testimonials yet. Add testimonials from clients or
                 colleagues.
@@ -835,81 +834,82 @@ export default function PortfolioEditor({
             </div>
           )}
 
-          {testimonials.map((t) => (
-            <div
-              key={t.id}
-              className="rounded-[2px] border border-rule bg-paper p-4"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  {t.avatar_url ? (
-                    <img
-                      src={t.avatar_url}
-                      alt={t.name}
-                      className="h-10 w-10 rounded-full border border-rule object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white">
-                      {t.name.charAt(0).toUpperCase()}
+          {testimonials.length > 0 && (
+            <div className="border-t border-rule">
+              {testimonials.map((t) => (
+                <div key={t.id} className="border-b border-rule py-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      {t.avatar_url ? (
+                        <img
+                          src={t.avatar_url}
+                          alt={t.name}
+                          className="h-10 w-10 rounded-[2px] border border-rule object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-10 w-10 items-center justify-center rounded-[2px] bg-ink text-sm font-semibold text-white">
+                          {t.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-semibold text-ink">
+                          {t.name}
+                        </p>
+                        {(t.role || t.company) && (
+                          <p className="text-xs text-ink-2">
+                            {[t.role, t.company].filter(Boolean).join(" at ")}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  )}
-                  <div>
-                    <p className="text-sm font-semibold text-ink">
-                      {t.name}
-                    </p>
-                    {(t.role || t.company) && (
-                      <p className="text-xs text-ink-2">
-                        {[t.role, t.company].filter(Boolean).join(" at ")}
-                      </p>
-                    )}
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleEditTestimonial(t)}
+                        className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
+                        title="Edit"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTestimonial(t.id)}
+                        className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-red-50 hover:text-red-500"
+                        title="Delete"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-2">
+                    &ldquo;{t.text}&rdquo;
+                  </p>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => handleEditTestimonial(t)}
-                    className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
-                    title="Edit"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={() => handleDeleteTestimonial(t.id)}
-                    className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-red-50 hover:text-red-500"
-                    title="Delete"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <p className="mt-3 text-sm italic text-ink-2 leading-relaxed">
-                &ldquo;{t.text}&rdquo;
-              </p>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       )}
 
@@ -918,9 +918,7 @@ export default function PortfolioEditor({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-ink">
-                Contact messages
-              </p>
+              <p className="text-sm font-semibold text-ink">Contact messages</p>
               <p className="mt-0.5 text-xs text-ink-2">
                 {settings.show_contact_form
                   ? "Messages visitors send through your portfolio contact form."
@@ -938,7 +936,7 @@ export default function PortfolioEditor({
           </div>
 
           {!settings.slug ? (
-            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+            <div className="border-t border-rule py-10 text-left">
               <p className="text-sm text-ink-2">
                 Publish your portfolio to start receiving messages.
               </p>
@@ -948,7 +946,7 @@ export default function PortfolioEditor({
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-rule border-t-ink" />
             </div>
           ) : messages && messages.length === 0 ? (
-            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+            <div className="border-t border-rule py-10 text-left">
               <p className="text-sm text-ink-2">
                 No messages yet. They&apos;ll show up here as soon as someone
                 reaches out.
@@ -1055,7 +1053,7 @@ export default function PortfolioEditor({
       {activeTab === "analytics" && (
         <div className="space-y-4">
           {!settings.slug ? (
-            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+            <div className="border-t border-rule py-10 text-left">
               <p className="text-sm text-ink-2">
                 Publish your portfolio to start seeing analytics.
               </p>
@@ -1065,31 +1063,24 @@ export default function PortfolioEditor({
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-rule border-t-ink" />
             </div>
           ) : viewsData ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="rounded-[2px] border border-rule bg-paper p-5 text-center">
-                <p className="text-3xl font-bold text-ink">
-                  {viewsData.views}
-                </p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-ink-2">
-                  Total Views
-                </p>
-              </div>
-              <div className="rounded-[2px] border border-rule bg-paper p-5 text-center">
-                <p className="text-3xl font-bold text-ink">
-                  {viewsData.last7}
-                </p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-ink-2">
-                  Views This Week
-                </p>
-              </div>
-              <div className="rounded-[2px] border border-rule bg-paper p-5 text-center">
-                <p className="text-3xl font-bold text-ink">
-                  {viewsData.last30}
-                </p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-ink-2">
-                  Views This Month
-                </p>
-              </div>
+            <div className="border-t border-rule">
+              {(
+                [
+                  { label: "Total views", value: viewsData.views },
+                  { label: "Views this week", value: viewsData.last7 },
+                  { label: "Views this month", value: viewsData.last30 },
+                ] as const
+              ).map((row) => (
+                <div
+                  key={row.label}
+                  className="flex items-baseline justify-between gap-4 border-b border-rule py-4"
+                >
+                  <p className="text-sm text-ink-2">{row.label}</p>
+                  <p className="font-display text-2xl font-semibold text-ink">
+                    {row.value}
+                  </p>
+                </div>
+              ))}
             </div>
           ) : null}
         </div>

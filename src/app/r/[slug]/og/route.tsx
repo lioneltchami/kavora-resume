@@ -5,15 +5,19 @@ import { getPalette } from "@/lib/types";
 
 export const runtime = "edge";
 
-/* ------------------------------------------------------------------ */
-/*  Hardcoded fallback for the "reena" demo slug                      */
-/* ------------------------------------------------------------------ */
+/* Hallmark OG tokens — approximate design.md paper/ink/accent for Satori */
+const OG = {
+	paper: "#f3f5f7",
+	ink: "#2a323c",
+	ink2: "#5a6570",
+	accent: "#a8894a",
+} as const;
 
 const reenaOgData = {
-  name: "Reena Sumputh",
-  title: "Client Service Representative",
-  paletteId: undefined as string | undefined,
-  photo: undefined as string | undefined,
+	name: "Reena Sumputh",
+	title: "Client Service Representative",
+	paletteId: undefined as string | undefined,
+	photo: undefined as string | undefined,
 };
 
 /* ------------------------------------------------------------------ */
@@ -21,134 +25,141 @@ const reenaOgData = {
 /* ------------------------------------------------------------------ */
 
 export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ slug: string }> },
+	_request: Request,
+	{ params }: { params: Promise<{ slug: string }> },
 ) {
-  const { slug } = await params;
+	const { slug } = await params;
 
-  let name = "";
-  let title = "";
-  let paletteId: string | undefined;
-  let photo: string | undefined;
+	let name = "";
+	let title = "";
+	let paletteId: string | undefined;
+	let photo: string | undefined;
 
-  if (slug === "reena") {
-    name = reenaOgData.name;
-    title = reenaOgData.title;
-    paletteId = reenaOgData.paletteId;
-    photo = reenaOgData.photo;
-  } else {
-    try {
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      );
+	if (slug === "reena") {
+		name = reenaOgData.name;
+		title = reenaOgData.title;
+		paletteId = reenaOgData.paletteId;
+		photo = reenaOgData.photo;
+	} else {
+		try {
+			const supabase = createClient(
+				process.env.NEXT_PUBLIC_SUPABASE_URL!,
+				process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+			);
 
-      const { data, error } = await supabase
-        .from("resumes")
-        .select("data")
-        .eq("slug", slug)
-        .single();
+			const { data, error } = await supabase
+				.from("resumes")
+				.select("data")
+				.eq("slug", slug)
+				.single();
 
-      if (error || !data) {
-        return new Response("Not found", { status: 404 });
-      }
+			if (error || !data) {
+				return new Response("Not found", { status: 404 });
+			}
 
-      const resumeData = data.data as ResumeData;
+			const resumeData = data.data as ResumeData;
 
-      // Respect privacy — don't generate OG images for private resumes
-      if (resumeData.isPublic === false) {
-        return new Response("Not found", { status: 404 });
-      }
+			if (resumeData.isPublic === false) {
+				return new Response("Not found", { status: 404 });
+			}
 
-      name = resumeData.name;
-      title = resumeData.experience?.[0]?.title ?? "";
-      paletteId = resumeData.paletteId;
-      photo = resumeData.photo;
-    } catch {
-      return new Response("Not found", { status: 404 });
-    }
-  }
+			name = resumeData.name;
+			title = resumeData.experience?.[0]?.title ?? "";
+			paletteId = resumeData.paletteId;
+			photo = resumeData.photo;
+		} catch {
+			return new Response("Not found", { status: 404 });
+		}
+	}
 
-  const palette = getPalette(paletteId);
+	const palette = getPalette(paletteId);
+	const accent = palette.accent || OG.accent;
 
-  return new ImageResponse(
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: `linear-gradient(135deg, ${palette.headerBg} 0%, ${palette.primary} 50%, ${palette.headerBg} 100%)`,
-        fontFamily: "sans-serif",
-      }}
-    >
-      {/* Photo */}
-      {photo && (
-        <img
-          src={photo}
-          width={120}
-          height={120}
-          style={{
-            borderRadius: "50%",
-            border: `4px solid ${palette.accent}`,
-            objectFit: "cover",
-            marginBottom: 24,
-          }}
-        />
-      )}
+	return new ImageResponse(
+		<div
+			style={{
+				width: "100%",
+				height: "100%",
+				display: "flex",
+				flexDirection: "column",
+				justifyContent: "flex-end",
+				alignItems: "flex-start",
+				background: OG.paper,
+				fontFamily: "Georgia, 'Times New Roman', serif",
+				padding: "64px 72px",
+			}}
+		>
+			{photo ? (
+				<img
+					src={photo}
+					width={96}
+					height={96}
+					style={{
+						borderRadius: 2,
+						border: `1px solid ${accent}`,
+						objectFit: "cover",
+						marginBottom: 24,
+					}}
+				/>
+			) : null}
 
-      {/* Name */}
-      <div
-        style={{
-          fontSize: 64,
-          fontWeight: 700,
-          color: "#ffffff",
-          textAlign: "center",
-          lineHeight: 1.1,
-          padding: "0 60px",
-          maxWidth: "100%",
-        }}
-      >
-        {name}
-      </div>
+			<div
+				style={{
+					display: "flex",
+					width: "120px",
+					height: "3px",
+					background: accent,
+					marginBottom: 28,
+				}}
+			/>
 
-      {/* Title */}
-      {title && (
-        <div
-          style={{
-            fontSize: 30,
-            fontWeight: 400,
-            color: palette.accent,
-            textAlign: "center",
-            marginTop: 16,
-            padding: "0 60px",
-            maxWidth: "100%",
-          }}
-        >
-          {title}
-        </div>
-      )}
+			<div
+				style={{
+					fontSize: 64,
+					fontWeight: 600,
+					color: OG.ink,
+					textAlign: "left",
+					lineHeight: 1.1,
+					maxWidth: "90%",
+				}}
+			>
+				{name}
+			</div>
 
-      {/* Branding */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 32,
-          fontSize: 16,
-          fontWeight: 600,
-          color: "rgba(255, 255, 255, 0.4)",
-          letterSpacing: "0.15em",
-          textTransform: "uppercase",
-        }}
-      >
-        Kavora Resume Builder
-      </div>
-    </div>,
-    {
-      width: 1200,
-      height: 630,
-    },
-  );
+			{title ? (
+				<div
+					style={{
+						fontSize: 28,
+						fontWeight: 400,
+						color: OG.ink2,
+						textAlign: "left",
+						marginTop: 16,
+						maxWidth: "90%",
+						fontFamily: "sans-serif",
+					}}
+				>
+					{title}
+				</div>
+			) : null}
+
+			<div
+				style={{
+					display: "flex",
+					marginTop: 40,
+					fontSize: 16,
+					fontWeight: 600,
+					color: accent,
+					letterSpacing: "0.12em",
+					textTransform: "uppercase",
+					fontFamily: "sans-serif",
+				}}
+			>
+				Resume — Kavora
+			</div>
+		</div>,
+		{
+			width: 1200,
+			height: 630,
+		},
+	);
 }
