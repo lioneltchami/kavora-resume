@@ -7,92 +7,92 @@ import type { ResumeData } from "@/lib/types";
 import { getPalette } from "@/lib/types";
 
 interface ResumeWebProps {
-  data: ResumeData;
-  slug?: string;
-  isOwner?: boolean;
+	data: ResumeData;
+	slug?: string;
+	isOwner?: boolean;
 }
 
 export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
-  const palette = getPalette(data.paletteId);
+	const palette = getPalette(data.paletteId);
 
-  const handlePrint = () => {
-    window.print();
-  };
+	const handlePrint = () => {
+		window.print();
+	};
 
-  const scrollToExperience = (e: React.MouseEvent) => {
-    e.preventDefault();
-    document
-      .getElementById("rw-experience")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+	const scrollToExperience = (e: React.MouseEvent) => {
+		e.preventDefault();
+		document
+			.getElementById("rw-experience")
+			?.scrollIntoView({ behavior: "smooth", block: "start" });
+	};
 
-  // Extract a short tagline from the summary (first sentence or first 160 chars)
-  const tagline = data.summary
-    ? data.summary.length > 160
-      ? data.summary.slice(0, data.summary.indexOf(".", 80) + 1) ||
-        data.summary.slice(0, 160) + "..."
-      : data.summary
-    : "";
+	// Extract a short tagline from the summary (first sentence or first 160 chars)
+	const tagline = data.summary
+		? data.summary.length > 160
+			? data.summary.slice(0, data.summary.indexOf(".", 80) + 1) ||
+				data.summary.slice(0, 160) + "..."
+			: data.summary
+		: "";
 
-  // Split the name for display on two lines if it has a space
-  const nameParts = data.name.trim().split(/\s+/);
-  const firstName = nameParts.slice(0, -1).join(" ") || nameParts[0];
-  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+	// Split the name for display on two lines if it has a space
+	const nameParts = data.name.trim().split(/\s+/);
+	const firstName = nameParts.slice(0, -1).join(" ") || nameParts[0];
+	const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
 
-  // ═══════════ SOCIAL SHARING ═══════════
-  const shareUrl =
-    typeof window !== "undefined"
-      ? window.location.href
-      : slug
-        ? `${SITE_URL}/r/${slug}`
-        : SITE_URL;
+	// ═══════════ SOCIAL SHARING ═══════════
+	const shareUrl =
+		typeof window !== "undefined"
+			? window.location.href
+			: slug
+				? `${SITE_URL}/r/${slug}`
+				: SITE_URL;
 
-  // ═══════════ JSON-LD STRUCTURED DATA ═══════════
-  function cleanJsonLd(obj: Record<string, any>): Record<string, any> {
-    return Object.fromEntries(
-      Object.entries(obj).filter(
-        ([, v]) => v !== undefined && v !== null && v !== "",
-      ),
-    );
-  }
+	// ═══════════ JSON-LD STRUCTURED DATA ═══════════
+	function cleanJsonLd(obj: Record<string, any>): Record<string, any> {
+		return Object.fromEntries(
+			Object.entries(obj).filter(
+				([, v]) => v !== undefined && v !== null && v !== "",
+			),
+		);
+	}
 
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            cleanJsonLd({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: data.name,
-              jobTitle: data.experience?.[0]?.title || undefined,
-              worksFor: data.experience?.[0]?.company
-                ? { "@type": "Organization", name: data.experience[0].company }
-                : undefined,
-              address: data.location
-                ? { "@type": "PostalAddress", addressLocality: data.location }
-                : undefined,
-              email: data.email || undefined,
-              telephone: data.phone || undefined,
-              knowsLanguage: data.languages?.map((l) => l.name) || undefined,
-              knowsAbout: data.skills || undefined,
-              description: data.summary || undefined,
-              url: slug ? `${SITE_URL}/r/${slug}` : undefined,
-            }),
-          ).replace(/</g, "\\u003c"),
-        }}
-      />
-      <style jsx global>{`
+	return (
+		<>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(
+						cleanJsonLd({
+							"@context": "https://schema.org",
+							"@type": "Person",
+							name: data.name,
+							jobTitle: data.experience?.[0]?.title || undefined,
+							worksFor: data.experience?.[0]?.company
+								? { "@type": "Organization", name: data.experience[0].company }
+								: undefined,
+							address: data.location
+								? { "@type": "PostalAddress", addressLocality: data.location }
+								: undefined,
+							email: data.email || undefined,
+							telephone: data.phone || undefined,
+							knowsLanguage: data.languages?.map((l) => l.name) || undefined,
+							knowsAbout: data.skills || undefined,
+							description: data.summary || undefined,
+							url: slug ? `${SITE_URL}/r/${slug}` : undefined,
+						}),
+					).replace(/</g, "\\u003c"),
+				}}
+			/>
+			<style jsx global>{`
         /* ═══════════════════════════════════════════
            KAVORA RESUME WEB VIEW
            ═══════════════════════════════════════════ */
         :root {
-          --rw-ink: #1b1b1b;
-          --rw-warm-white: #faf8f5;
-          --rw-cream: #f3efe8;
-          --rw-slate: #4a4a4a;
-          --rw-muted: #7a7a7a;
+          --rw-ink: var(--color-ink, oklch(24% 0.028 250));
+          --rw-warm-white: var(--color-paper, oklch(97.5% 0.006 250));
+          --rw-cream: var(--color-paper-2, oklch(94.5% 0.008 250));
+          --rw-slate: var(--color-ink-2, oklch(42% 0.02 250));
+          --rw-muted: var(--color-ink-2, oklch(42% 0.02 250));
           --rw-accent: ${palette.accent};
           --rw-accent-light: ${palette.accent}cc;
           --rw-accent-glow: ${palette.accent}1f;
@@ -102,7 +102,6 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
             var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
           --rw-body: var(--font-dm-sans), "DM Sans", -apple-system, sans-serif;
           --rw-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-          --rw-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .rw-root {
@@ -115,162 +114,69 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
           overflow-x: hidden;
         }
 
-        /* Noise texture overlay */
-        .rw-root::before {
-          content: "";
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-          pointer-events: none;
-          z-index: 9999;
-        }
-
         /* ═══════════ HERO ═══════════ */
         .rw-hero {
-          min-height: 100vh;
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          align-items: center;
+          justify-content: flex-end;
+          align-items: stretch;
           position: relative;
-          padding: 60px 24px;
-          overflow: hidden;
-        }
-
-        .rw-hero::before {
-          content: "";
-          position: absolute;
-          top: -20%;
-          right: -10%;
-          width: 600px;
-          height: 600px;
-          background: radial-gradient(
-            circle,
-            var(--rw-accent-glow) 0%,
-            transparent 70%
-          );
-          border-radius: 50%;
-          animation: rw-float 8s ease-in-out infinite;
-        }
-
-        .rw-hero::after {
-          content: "";
-          position: absolute;
-          bottom: -15%;
-          left: -5%;
-          width: 400px;
-          height: 400px;
-          background: radial-gradient(
-            circle,
-            ${palette.primary}0a 0%,
-            transparent 70%
-          );
-          border-radius: 50%;
-          animation: rw-float 10s ease-in-out infinite reverse;
-        }
-
-        /* Third floating orb */
-        .rw-orb-3 {
-          position: absolute;
-          top: 40%;
-          left: 15%;
-          width: 300px;
-          height: 300px;
-          background: radial-gradient(
-            circle,
-            ${palette.accent}0f 0%,
-            transparent 70%
-          );
-          border-radius: 50%;
-          animation: rw-float 12s ease-in-out infinite 2s;
-          pointer-events: none;
-        }
-
-        @keyframes rw-float {
-          0%,
-          100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(20px, -30px);
-          }
+          padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 3.5vw, 3rem);
+          border-bottom: 1px solid
+            color-mix(in oklch, var(--rw-ink) 12%, transparent);
         }
 
         .rw-hero-content {
           position: relative;
           z-index: 1;
-          text-align: center;
-          max-width: 720px;
+          text-align: left;
+          max-width: 40rem;
         }
 
         .rw-hero-label {
           font-family: var(--rw-body);
           font-size: 0.7rem;
           font-weight: 600;
-          letter-spacing: 4px;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--rw-accent);
-          margin-bottom: 20px;
-          opacity: 0;
-          transform: translateY(20px);
-          animation: rw-fadeUp 0.8s var(--rw-ease-out) 0.2s forwards;
+          margin-bottom: 1rem;
         }
 
         .rw-hero-name {
           font-family: var(--rw-display);
-          font-size: clamp(3rem, 8vw, 6rem);
-          font-weight: 700;
+          font-size: clamp(2.75rem, 7vw, 5rem);
+          font-weight: 600;
+          font-style: normal;
           line-height: 1.05;
           color: var(--rw-ink);
-          letter-spacing: -1px;
-          opacity: 0;
-          transform: translateY(30px);
-          animation: rw-fadeUp 1s var(--rw-ease-out) 0.4s forwards;
+          letter-spacing: -0.02em;
         }
 
         .rw-hero-line {
           width: 60px;
           height: 2px;
           background: var(--rw-accent);
-          margin: 28px auto;
-          opacity: 0;
-          transform: scaleX(0);
-          animation: rw-lineReveal 0.8s var(--rw-ease-out) 0.8s forwards;
-        }
-
-        @keyframes rw-lineReveal {
-          to {
-            opacity: 1;
-            transform: scaleX(1);
-          }
+          margin: 1.5rem 0;
         }
 
         .rw-hero-tagline {
-          font-family: var(--rw-display);
-          font-size: clamp(1.05rem, 2.5vw, 1.3rem);
-          font-style: italic;
+          font-family: var(--rw-body);
+          font-size: clamp(1rem, 2vw, 1.125rem);
+          font-style: normal;
           color: var(--rw-slate);
           line-height: 1.65;
-          max-width: 560px;
-          margin: 0 auto;
-          opacity: 0;
-          transform: translateY(20px);
-          animation: rw-fadeUp 0.8s var(--rw-ease-out) 1s forwards;
+          max-width: 36rem;
+          margin: 0;
         }
 
         .rw-hero-contact {
           display: flex;
-          justify-content: center;
+          justify-content: flex-start;
           align-items: center;
-          gap: 28px;
-          margin-top: 36px;
+          gap: 1rem 1.5rem;
+          margin-top: 1.75rem;
           flex-wrap: wrap;
-          opacity: 0;
-          transform: translateY(20px);
-          animation: rw-fadeUp 0.8s var(--rw-ease-out) 1.2s forwards;
         }
 
         .rw-hero-contact a,
@@ -278,8 +184,8 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
           font-size: 0.82rem;
           color: var(--rw-muted);
           text-decoration: none;
-          letter-spacing: 0.5px;
-          transition: color 0.3s;
+          letter-spacing: 0.02em;
+          transition: color 0.2s;
         }
 
         .rw-hero-contact a:hover {
@@ -296,53 +202,50 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
         }
 
         .rw-hero-actions {
-          margin-top: 44px;
+          margin-top: 2rem;
           display: flex;
-          gap: 16px;
-          justify-content: center;
+          gap: 0.75rem;
+          justify-content: flex-start;
           flex-wrap: wrap;
-          opacity: 0;
-          transform: translateY(20px);
-          animation: rw-fadeUp 0.8s var(--rw-ease-out) 1.4s forwards;
         }
 
         .rw-share-row {
           display: flex;
           align-items: center;
-          gap: 12px;
-          margin-top: 24px;
-          justify-content: center;
+          gap: 0.75rem;
+          margin-top: 1.5rem;
+          justify-content: flex-start;
           flex-wrap: wrap;
-          opacity: 0;
-          animation: rw-fadeUp 0.8s var(--rw-ease-out) 1.6s forwards;
         }
 
         .rw-share-label {
           font-family: var(--rw-body);
           font-size: 0.65rem;
           font-weight: 500;
-          letter-spacing: 0.15em;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--rw-muted);
         }
 
         .rw-share-kit {
           display: flex;
-          justify-content: center;
+          justify-content: flex-start;
         }
 
         .rw-btn {
           font-family: var(--rw-body);
           font-size: 0.75rem;
           font-weight: 600;
-          letter-spacing: 2px;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
-          padding: 14px 32px;
+          padding: 0.875rem 1.5rem;
           border: none;
-          border-radius: 0;
+          border-radius: 2px;
           cursor: pointer;
           text-decoration: none;
-          transition: all 0.4s var(--rw-ease-out);
+          transition:
+            background-color 0.2s var(--rw-ease-out),
+            color 0.2s var(--rw-ease-out);
           display: inline-block;
         }
 
@@ -353,57 +256,17 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
 
         .rw-btn-primary:hover {
           background: var(--rw-accent);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px ${palette.accent}33;
         }
 
         .rw-btn-outline {
           background: transparent;
           color: var(--rw-navy);
-          border: 1.5px solid var(--rw-navy);
+          border: 1px solid var(--rw-navy);
         }
 
         .rw-btn-outline:hover {
           background: var(--rw-navy);
           color: #fff;
-          transform: translateY(-2px);
-        }
-
-        .rw-scroll-hint {
-          position: absolute;
-          bottom: 36px;
-          left: 50%;
-          transform: translateX(-50%);
-          opacity: 0;
-          animation: rw-fadeUp 0.8s var(--rw-ease-out) 1.8s forwards;
-        }
-
-        .rw-scroll-hint span {
-          display: block;
-          width: 1px;
-          height: 40px;
-          background: linear-gradient(to bottom, var(--rw-accent), transparent);
-          margin: 0 auto;
-          animation: rw-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes rw-pulse {
-          0%,
-          100% {
-            opacity: 0.3;
-            transform: scaleY(1);
-          }
-          50% {
-            opacity: 1;
-            transform: scaleY(1.3);
-          }
-        }
-
-        @keyframes rw-fadeUp {
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
         }
 
         /* ═══════════ MAIN CONTENT ═══════════ */
@@ -744,12 +607,6 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
             min-height: auto;
             padding: 40px 24px;
           }
-          .rw-hero::before,
-          .rw-hero::after,
-          .rw-scroll-hint,
-          .rw-orb-3 {
-            display: none;
-          }
           .rw-hero-actions {
             display: none;
           }
@@ -771,295 +628,290 @@ export default function ResumeWeb({ data, slug, isOwner }: ResumeWebProps) {
         }
       `}</style>
 
-      <div className="rw-root">
-        {/* ═══════════ TOP NAV ═══════════ */}
-        <nav
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 100,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "14px 28px",
-            background: "rgba(250, 248, 245, 0.85)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-            borderBottom: "1px solid rgba(0,0,0,0.04)",
-          }}
-        >
-          <a
-            href="/"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              textDecoration: "none",
-              color: palette.primary,
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              letterSpacing: "0.03em",
-            }}
-          >
-            <img
-              src="/kavora-logo.png"
-              alt=""
-              style={{ width: 22, height: "auto" }}
-            />
-            Kavora Resume Builder
-          </a>
-          {isOwner && (
-            <a
-              href={`/create?edit=${data.slug}`}
-              style={{
-                fontSize: "0.75rem",
-                fontWeight: 500,
-                letterSpacing: "0.05em",
-                textDecoration: "none",
-                color: "#6b6560",
-                transition: "color 0.3s ease",
-              }}
-            >
-              Edit Resume
-            </a>
-          )}
-          <a
-            href="/create"
-            style={{
-              fontSize: "0.75rem",
-              fontWeight: 500,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase" as const,
-              textDecoration: "none",
-              color: palette.accent,
-              padding: "8px 18px",
-              border: `1px solid ${palette.accent}`,
-              borderRadius: 2,
-              transition: "all 0.3s ease",
-            }}
-          >
-            Create Yours
-          </a>
-        </nav>
+			<div className="rw-root">
+				{/* ═══════════ TOP NAV ═══════════ */}
+				<nav
+					style={{
+						position: "fixed",
+						top: 0,
+						left: 0,
+						right: 0,
+						zIndex: 100,
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center",
+						padding: "14px 28px",
+						background: "rgba(250, 248, 245, 0.85)",
+						backdropFilter: "blur(12px)",
+						WebkitBackdropFilter: "blur(12px)",
+						borderBottom: "1px solid rgba(0,0,0,0.04)",
+					}}
+				>
+					<a
+						href="/"
+						style={{
+							display: "flex",
+							alignItems: "center",
+							gap: 8,
+							textDecoration: "none",
+							color: palette.primary,
+							fontSize: "0.8rem",
+							fontWeight: 600,
+							letterSpacing: "0.03em",
+						}}
+					>
+						<img
+							src="/kavora-logo.png"
+							alt=""
+							style={{ width: 22, height: "auto" }}
+						/>
+						Kavora Resume Builder
+					</a>
+					{isOwner && (
+						<a
+							href={`/create?edit=${data.slug}`}
+							style={{
+								fontSize: "0.75rem",
+								fontWeight: 500,
+								letterSpacing: "0.05em",
+								textDecoration: "none",
+								color: "var(--color-ink-2, oklch(42% 0.02 250))",
+								transition: "color 0.3s ease",
+							}}
+						>
+							Edit Resume
+						</a>
+					)}
+					<a
+						href="/create"
+						style={{
+							fontSize: "0.75rem",
+							fontWeight: 500,
+							letterSpacing: "0.08em",
+							textTransform: "uppercase" as const,
+							textDecoration: "none",
+							color: palette.accent,
+							padding: "8px 18px",
+							border: `1px solid ${palette.accent}`,
+							borderRadius: 2,
+							transition: "all 0.3s ease",
+						}}
+					>
+						Create Yours
+					</a>
+				</nav>
 
-        {/* ═══════════ HERO ═══════════ */}
-        <header className="rw-hero">
-          <div className="rw-orb-3" />
-          <div className="rw-hero-content">
-            {data.photo && (
-              <div
-                style={{
-                  width: 120,
-                  height: 120,
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                  border: `3px solid ${palette.accent}`,
-                  marginBottom: 20,
-                  boxShadow: `0 4px 20px ${palette.accent}33`,
-                  display: "inline-block",
-                }}
-              >
-                <img
-                  src={data.photo}
-                  alt={data.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-            )}
-            <div className="rw-hero-label">Resume</div>
-            <h1 className="rw-hero-name">
-              {lastName ? (
-                <>
-                  {firstName}
-                  <br />
-                  {lastName}
-                </>
-              ) : (
-                firstName
-              )}
-            </h1>
-            <div className="rw-hero-line" />
-            {tagline && <p className="rw-hero-tagline">{tagline}</p>}
-            <div className="rw-hero-contact">
-              {data.location && <span>{data.location}</span>}
-              {data.location && data.phone && <span className="rw-dot" />}
-              {data.phone && (
-                <a href={`tel:${data.phone.replace(/[^\d+]/g, "")}`}>
-                  {data.phone}
-                </a>
-              )}
-              {(data.location || data.phone) && data.email && (
-                <span className="rw-dot" />
-              )}
-              {data.email && <a href={`mailto:${data.email}`}>{data.email}</a>}
-            </div>
-            <div className="rw-hero-actions">
-              <button
-                onClick={handlePrint}
-                className="rw-btn rw-btn-primary"
-                type="button"
-              >
-                Download Resume
-              </button>
-              {data.experience.length > 0 && (
-                <a
-                  href="#rw-experience"
-                  className="rw-btn rw-btn-outline"
-                  onClick={scrollToExperience}
-                >
-                  View Experience
-                </a>
-              )}
-            </div>
-            <div className="rw-share-row">
-              <span className="rw-share-label">Share</span>
-              <div className="rw-share-kit">
-                <ShareKit url={shareUrl} name={data.name} compact showQr />
-              </div>
-            </div>
-          </div>
-          <div className="rw-scroll-hint">
-            <span />
-          </div>
-        </header>
+				{/* ═══════════ HERO ═══════════ */}
+				<header className="rw-hero">
+					<div className="rw-hero-content">
+						{data.photo && (
+							<div
+								style={{
+									width: 96,
+									height: 96,
+									borderRadius: 2,
+									overflow: "hidden",
+									border: `1px solid ${palette.accent}`,
+									marginBottom: 20,
+									display: "block",
+								}}
+							>
+								<img
+									src={data.photo}
+									alt={data.name}
+									style={{ width: "100%", height: "100%", objectFit: "cover" }}
+								/>
+							</div>
+						)}
+						<div className="rw-hero-label">Resume</div>
+						<h1 className="rw-hero-name">
+							{lastName ? (
+								<>
+									{firstName}
+									<br />
+									{lastName}
+								</>
+							) : (
+								firstName
+							)}
+						</h1>
+						<div className="rw-hero-line" />
+						{tagline && <p className="rw-hero-tagline">{tagline}</p>}
+						<div className="rw-hero-contact">
+							{data.location && <span>{data.location}</span>}
+							{data.location && data.phone && <span className="rw-dot" />}
+							{data.phone && (
+								<a href={`tel:${data.phone.replace(/[^\d+]/g, "")}`}>
+									{data.phone}
+								</a>
+							)}
+							{(data.location || data.phone) && data.email && (
+								<span className="rw-dot" />
+							)}
+							{data.email && <a href={`mailto:${data.email}`}>{data.email}</a>}
+						</div>
+						<div className="rw-hero-actions">
+							<button
+								onClick={handlePrint}
+								className="rw-btn rw-btn-primary"
+								type="button"
+							>
+								Download Resume
+							</button>
+							{data.experience.length > 0 && (
+								<a
+									href="#rw-experience"
+									className="rw-btn rw-btn-outline"
+									onClick={scrollToExperience}
+								>
+									View Experience
+								</a>
+							)}
+						</div>
+						<div className="rw-share-row">
+							<span className="rw-share-label">Share</span>
+							<div className="rw-share-kit">
+								<ShareKit url={shareUrl} name={data.name} compact showQr />
+							</div>
+						</div>
+					</div>
+				</header>
 
-        {/* ═══════════ CORE COMPETENCIES ═══════════ */}
-        {data.skills.length > 0 && (
-          <section className="rw-competencies" id="rw-competencies">
-            <div className="rw-container">
-              <div className="rw-section-header">
-                <span className="rw-section-number">01</span>
-                <h2 className="rw-section-title">Core Competencies</h2>
-                <div className="rw-section-line" />
-              </div>
-              <div className="rw-skills-grid">
-                {data.skills.map((skill, i) => (
-                  <div key={i} className="rw-skill-chip">
-                    {skill}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+				{/* ═══════════ CORE COMPETENCIES ═══════════ */}
+				{data.skills.length > 0 && (
+					<section className="rw-competencies" id="rw-competencies">
+						<div className="rw-container">
+							<div className="rw-section-header">
+								<span className="rw-section-number">01</span>
+								<h2 className="rw-section-title">Core Competencies</h2>
+								<div className="rw-section-line" />
+							</div>
+							<div className="rw-skills-grid">
+								{data.skills.map((skill, i) => (
+									<div key={i} className="rw-skill-chip">
+										{skill}
+									</div>
+								))}
+							</div>
+						</div>
+					</section>
+				)}
 
-        {/* ═══════════ PROFESSIONAL EXPERIENCE ═══════════ */}
-        {data.experience.length > 0 && (
-          <section className="rw-section" id="rw-experience">
-            <div className="rw-container">
-              <div className="rw-section-header">
-                <span className="rw-section-number">
-                  {data.skills.length > 0 ? "02" : "01"}
-                </span>
-                <h2 className="rw-section-title">Professional Experience</h2>
-                <div className="rw-section-line" />
-              </div>
+				{/* ═══════════ PROFESSIONAL EXPERIENCE ═══════════ */}
+				{data.experience.length > 0 && (
+					<section className="rw-section" id="rw-experience">
+						<div className="rw-container">
+							<div className="rw-section-header">
+								<span className="rw-section-number">
+									{data.skills.length > 0 ? "02" : "01"}
+								</span>
+								<h2 className="rw-section-title">Professional Experience</h2>
+								<div className="rw-section-line" />
+							</div>
 
-              {data.experience.map((exp) => (
-                <div key={exp.id} className="rw-experience-item">
-                  <div className="rw-exp-header">
-                    <span className="rw-exp-title">{exp.title}</span>
-                    <span className="rw-exp-dates">
-                      {exp.startDate}
-                      {exp.endDate ? ` \u2013 ${exp.endDate}` : ""}
-                    </span>
-                  </div>
-                  <div className="rw-exp-company">
-                    {exp.company}
-                    {exp.location ? ` \u2014 ${exp.location}` : ""}
-                  </div>
-                  {exp.bullets.length > 0 && (
-                    <ul className="rw-exp-bullets">
-                      {exp.bullets.map((bullet, j) => (
-                        <li key={j}>{bullet}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+							{data.experience.map((exp) => (
+								<div key={exp.id} className="rw-experience-item">
+									<div className="rw-exp-header">
+										<span className="rw-exp-title">{exp.title}</span>
+										<span className="rw-exp-dates">
+											{exp.startDate}
+											{exp.endDate ? ` \u2013 ${exp.endDate}` : ""}
+										</span>
+									</div>
+									<div className="rw-exp-company">
+										{exp.company}
+										{exp.location ? ` \u2014 ${exp.location}` : ""}
+									</div>
+									{exp.bullets.length > 0 && (
+										<ul className="rw-exp-bullets">
+											{exp.bullets.map((bullet, j) => (
+												<li key={j}>{bullet}</li>
+											))}
+										</ul>
+									)}
+								</div>
+							))}
+						</div>
+					</section>
+				)}
 
-        {/* ═══════════ EDUCATION / VOLUNTEER / LANGUAGES ═══════════ */}
-        {(data.education.length > 0 ||
-          data.volunteer.length > 0 ||
-          data.languages.length > 0) && (
-          <section className="rw-bottom">
-            <div className="rw-container">
-              <div className="rw-bottom-grid">
-                {data.education.length > 0 && (
-                  <div>
-                    <div className="rw-bottom-col-title">Education</div>
-                    {data.education.map((edu) => (
-                      <div key={edu.id} className="rw-edu-entry">
-                        <div className="rw-edu-name">{edu.degree}</div>
-                        <div className="rw-edu-school">
-                          {edu.school}
-                          {edu.location ? ` \u2014 ${edu.location}` : ""}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+				{/* ═══════════ EDUCATION / VOLUNTEER / LANGUAGES ═══════════ */}
+				{(data.education.length > 0 ||
+					data.volunteer.length > 0 ||
+					data.languages.length > 0) && (
+					<section className="rw-bottom">
+						<div className="rw-container">
+							<div className="rw-bottom-grid">
+								{data.education.length > 0 && (
+									<div>
+										<div className="rw-bottom-col-title">Education</div>
+										{data.education.map((edu) => (
+											<div key={edu.id} className="rw-edu-entry">
+												<div className="rw-edu-name">{edu.degree}</div>
+												<div className="rw-edu-school">
+													{edu.school}
+													{edu.location ? ` \u2014 ${edu.location}` : ""}
+												</div>
+											</div>
+										))}
+									</div>
+								)}
 
-                {data.volunteer.length > 0 && (
-                  <div>
-                    <div className="rw-bottom-col-title">Volunteering</div>
-                    {data.volunteer.map((vol, i) => (
-                      <div key={i} className="rw-vol-item">
-                        {vol}
-                      </div>
-                    ))}
-                  </div>
-                )}
+								{data.volunteer.length > 0 && (
+									<div>
+										<div className="rw-bottom-col-title">Volunteering</div>
+										{data.volunteer.map((vol, i) => (
+											<div key={i} className="rw-vol-item">
+												{vol}
+											</div>
+										))}
+									</div>
+								)}
 
-                {data.languages.length > 0 && (
-                  <div>
-                    <div className="rw-bottom-col-title">Languages</div>
-                    {data.languages.map((lang, i) => (
-                      <div key={i} className="rw-lang-item">
-                        {lang.name}{" "}
-                        <span className="rw-lang-level">
-                          &mdash; {lang.level}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-        )}
+								{data.languages.length > 0 && (
+									<div>
+										<div className="rw-bottom-col-title">Languages</div>
+										{data.languages.map((lang, i) => (
+											<div key={i} className="rw-lang-item">
+												{lang.name}{" "}
+												<span className="rw-lang-level">
+													&mdash; {lang.level}
+												</span>
+											</div>
+										))}
+									</div>
+								)}
+							</div>
+						</div>
+					</section>
+				)}
 
-        {/* ═══════════ FOOTER ═══════════ */}
-        <footer className="rw-footer">
-          {!data.isPro && (
-            <>
-              <img
-                src="/kavora-logo-white.png"
-                alt="Kavora Systems"
-                style={{
-                  width: 24,
-                  height: "auto",
-                  opacity: 0.6,
-                  marginBottom: 8,
-                }}
-              />
-              <p>
-                Built with{" "}
-                <a href="/" target="_blank" rel="noopener noreferrer">
-                  Kavora Resume Builder
-                </a>{" "}
-                &mdash; by Kavora Systems
-              </p>
-            </>
-          )}
-          {slug && <ViewCounter slug={slug} />}
-        </footer>
-      </div>
-    </>
-  );
+				{/* ═══════════ FOOTER ═══════════ */}
+				<footer className="rw-footer">
+					{!data.isPro && (
+						<>
+							<img
+								src="/kavora-logo-white.png"
+								alt="Kavora Systems"
+								style={{
+									width: 24,
+									height: "auto",
+									opacity: 0.6,
+									marginBottom: 8,
+								}}
+							/>
+							<p>
+								Built with{" "}
+								<a href="/" target="_blank" rel="noopener noreferrer">
+									Kavora Resume Builder
+								</a>{" "}
+								&mdash; by Kavora Systems
+							</p>
+						</>
+					)}
+					{slug && <ViewCounter slug={slug} />}
+				</footer>
+			</div>
+		</>
+	);
 }

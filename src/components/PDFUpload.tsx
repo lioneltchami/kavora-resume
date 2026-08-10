@@ -66,12 +66,12 @@ export default function PDFUpload({ onExtracted, onError }: PDFUploadProps) {
     <div
       {...getRootProps()}
       style={{
-        border: `2px dashed ${isDragActive ? "#b08d57" : "#d4cfc8"}`,
+        border: `2px dashed ${isDragActive ? "var(--color-accent)" : "var(--color-rule)"}`,
         borderRadius: 8,
         padding: "32px 24px",
         textAlign: "center",
         cursor: processing ? "wait" : "pointer",
-        background: isDragActive ? "#b08d5708" : "#faf8f5",
+        background: isDragActive ? "color-mix(in oklch, var(--color-accent) 5%, transparent)" : "var(--color-paper)",
         transition: "all 0.2s ease",
       }}
     >
@@ -83,8 +83,8 @@ export default function PDFUpload({ onExtracted, onError }: PDFUploadProps) {
               width: 32,
               height: 32,
               margin: "0 auto 12px",
-              border: "3px solid #e8e2da",
-              borderTopColor: "#1e2a3a",
+              border: "2px solid var(--color-rule)",
+              borderTopColor: "var(--color-ink)",
               borderRadius: "50%",
               animation: "spin 0.8s linear infinite",
             }}
@@ -92,13 +92,13 @@ export default function PDFUpload({ onExtracted, onError }: PDFUploadProps) {
           <p
             style={{
               fontSize: "0.85rem",
-              color: "#1b1b1b",
+              color: "var(--color-ink)",
               fontWeight: 500,
             }}
           >
             Extracting resume data from {fileName}...
           </p>
-          <p style={{ fontSize: "0.75rem", color: "#6b6560", marginTop: 4 }}>
+          <p style={{ fontSize: "0.75rem", color: "var(--color-ink-2)", marginTop: 4 }}>
             AI is reading your resume. This takes a few seconds.
           </p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -110,7 +110,7 @@ export default function PDFUpload({ onExtracted, onError }: PDFUploadProps) {
             height="36"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#b08d57"
+            stroke="var(--color-accent)"
             strokeWidth="1.5"
             style={{ margin: "0 auto 12px", display: "block" }}
           >
@@ -123,13 +123,13 @@ export default function PDFUpload({ onExtracted, onError }: PDFUploadProps) {
           <p
             style={{
               fontSize: "0.9rem",
-              color: "#1b1b1b",
+              color: "var(--color-ink)",
               fontWeight: 500,
             }}
           >
             {isDragActive ? "Drop your PDF here" : "Drop your resume PDF here"}
           </p>
-          <p style={{ fontSize: "0.75rem", color: "#6b6560", marginTop: 4 }}>
+          <p style={{ fontSize: "0.75rem", color: "var(--color-ink-2)", marginTop: 4 }}>
             or click to browse. PDF files up to 5MB.
           </p>
         </div>

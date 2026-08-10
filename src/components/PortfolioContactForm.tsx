@@ -155,7 +155,7 @@ export default function PortfolioContactForm({
         type="submit"
         disabled={form.status === "submitting"}
         className="w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-        style={{ backgroundColor: "#1e2a3a" }}
+        style={{ backgroundColor: "var(--color-ink)" }}
       >
         {form.status === "submitting" ? "Sending..." : "Send Message"}
       </button>

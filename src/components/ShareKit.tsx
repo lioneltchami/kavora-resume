@@ -33,7 +33,7 @@ export default function ShareKit({
     QRCode.toDataURL(url, {
       width: compact ? 120 : 160,
       margin: 1,
-      color: { dark: "#1e2a3a", light: "#ffffff" },
+      color: { dark: "var(--color-ink)", light: "#ffffff" },
     })
       .then((dataUrl) => {
         if (!cancelled) setQrDataUrl(dataUrl);
@@ -70,7 +70,7 @@ export default function ShareKit({
   }
 
   const iconBtn =
-    "flex h-10 w-10 items-center justify-center rounded-full border border-[#e8e2da] bg-white text-[#6b6560] transition-all hover:border-[#b08d57] hover:text-[#b08d57] hover:shadow-sm active:scale-95";
+    "flex h-10 w-10 items-center justify-center rounded-full border border-rule bg-paper text-ink-2 transition-all hover:border-accent hover:text-accent hover:shadow-sm active:scale-95";
 
   return (
     <div className={compact ? "space-y-3" : "space-y-4"}>
@@ -175,14 +175,14 @@ export default function ShareKit({
           <img
             src={qrDataUrl}
             alt="QR code for resume link"
-            className="rounded-sm border border-[#e8e2da] bg-white p-2"
+            className="rounded-sm border border-rule bg-paper p-2"
             width={compact ? 120 : 160}
             height={compact ? 120 : 160}
           />
           <button
             type="button"
             onClick={downloadQr}
-            className="text-[0.75rem] font-medium text-[#b08d57] hover:text-[#9a7a4a]"
+            className="text-[0.75rem] font-medium text-accent hover:text-accent"
           >
             Download QR
           </button>

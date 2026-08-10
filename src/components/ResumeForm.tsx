@@ -161,7 +161,7 @@ function SuggestButton({
 				type="button"
 				disabled={isDisabled}
 				onClick={onClick}
-				className="inline-flex items-center gap-1.5 rounded border border-[#b08d57] px-2.5 py-1 text-xs font-medium text-[#b08d57] transition-colors hover:bg-[#b08d57]/10 disabled:opacity-60 disabled:cursor-not-allowed font-sans"
+				className="inline-flex items-center gap-1.5 rounded border border-accent px-2.5 py-1 text-xs font-medium text-accent transition-colors hover:bg-accent/10 disabled:opacity-60 disabled:cursor-not-allowed font-sans"
 				style={{
 					fontSize: "0.75rem",
 					padding: "4px 10px",
@@ -183,7 +183,7 @@ function SuggestButton({
 				)}
 			</button>
 			{!isPro && remaining !== undefined && remaining > 0 && (
-				<span className="text-[0.65rem] text-[#9a9590] font-sans">
+				<span className="text-[0.65rem] text-ink-2 font-sans">
 					{remaining} left
 				</span>
 			)}
@@ -196,15 +196,15 @@ function SuggestButton({
 /* ------------------------------------------------------------------ */
 
 const inputClass =
-	"w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 font-sans outline-none transition-shadow duration-200 focus:border-[#b08d57] focus:ring-2 focus:ring-[#b08d57]/25";
+	"w-full rounded-[2px] border border-rule bg-paper px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-2 font-sans outline-none transition-shadow duration-200 focus:border-accent focus:ring-2 focus:ring-accent/25";
 
 const labelClass = "block text-xs font-medium text-gray-500 mb-1.5 font-sans";
 
 const addButtonClass =
-	"inline-flex items-center gap-1.5 rounded-lg border border-dashed border-[#b08d57]/40 bg-[#b08d57]/5 px-4 py-2 text-sm font-medium text-[#b08d57] transition-colors hover:bg-[#b08d57]/10 hover:border-[#b08d57]/60 font-sans";
+	"inline-flex items-center gap-1.5 rounded-[2px] border border-dashed border-accent/40 bg-accent/5 px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/10 hover:border-accent/60 font-sans";
 
 const removeButtonClass =
-	"inline-flex items-center justify-center rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500";
+	"inline-flex items-center justify-center rounded-[2px] p-2 text-ink-2 transition-colors hover:bg-red-50 hover:text-red-500";
 
 /* ------------------------------------------------------------------ */
 /*  Section wrapper with collapsible header                           */
@@ -222,16 +222,16 @@ function Section({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="rounded-xl border border-gray-100 bg-[#faf8f5] overflow-hidden">
+		<div className="rounded-[2px] border border-rule bg-paper overflow-hidden">
 			<button
 				type="button"
 				onClick={onToggle}
-				className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-[#f5f2ed]"
+				className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-paper-2"
 			>
-				<h2 className="text-base font-semibold text-[#1e2a3a] font-sans">
+				<h2 className="text-base font-semibold text-ink font-sans">
 					{title}
 				</h2>
-				<span className="text-[#b08d57]">
+				<span className="text-accent">
 					<ChevronIcon open={open} />
 				</span>
 			</button>
@@ -256,9 +256,9 @@ function Section({
 function LayoutMiniPreview({ layoutId }: { layoutId: string }) {
 	const w = 48,
 		h = 62;
-	const bg = "#f5f0ea",
-		line = "#1e2a3a",
-		accent = "#b08d57";
+	const bg = "var(--color-paper-2)",
+		line = "var(--color-ink)",
+		accent = "var(--color-accent)";
 
 	if (layoutId === "classic") {
 		return (
@@ -267,16 +267,16 @@ function LayoutMiniPreview({ layoutId }: { layoutId: string }) {
 				<rect x={14} y={4} width={20} height={3} fill={line} rx={1} />
 				<rect x={4} y={11} width={40} height={1} fill={accent} />
 				<rect x={4} y={15} width={30} height={2} fill={line} rx={0.5} />
-				<rect x={4} y={19} width={40} height={1} fill="#ccc" />
-				<rect x={4} y={22} width={38} height={1} fill="#ccc" />
+				<rect x={4} y={19} width={40} height={1} fill="var(--color-rule)" />
+				<rect x={4} y={22} width={38} height={1} fill="var(--color-rule)" />
 				<rect x={4} y={27} width={25} height={2} fill={line} rx={0.5} />
-				<rect x={4} y={31} width={40} height={1} fill="#ccc" />
-				<rect x={4} y={34} width={36} height={1} fill="#ccc" />
-				<rect x={4} y={37} width={40} height={1} fill="#ccc" />
+				<rect x={4} y={31} width={40} height={1} fill="var(--color-rule)" />
+				<rect x={4} y={34} width={36} height={1} fill="var(--color-rule)" />
+				<rect x={4} y={37} width={40} height={1} fill="var(--color-rule)" />
 				<rect x={4} y={42} width={25} height={2} fill={line} rx={0.5} />
-				<rect x={4} y={46} width={38} height={1} fill="#ccc" />
-				<rect x={4} y={49} width={40} height={1} fill="#ccc" />
-				<rect x={4} y={52} width={34} height={1} fill="#ccc" />
+				<rect x={4} y={46} width={38} height={1} fill="var(--color-rule)" />
+				<rect x={4} y={49} width={40} height={1} fill="var(--color-rule)" />
+				<rect x={4} y={52} width={34} height={1} fill="var(--color-rule)" />
 			</svg>
 		);
 	}
@@ -294,15 +294,15 @@ function LayoutMiniPreview({ layoutId }: { layoutId: string }) {
 				<rect x={3} y={27} width={8} height={1} fill="rgba(255,255,255,0.4)" />
 				<rect x={3} y={30} width={10} height={1} fill="rgba(255,255,255,0.4)" />
 				<rect x={20} y={5} width={20} height={2} fill={line} rx={0.5} />
-				<rect x={20} y={10} width={24} height={1} fill="#ccc" />
-				<rect x={20} y={13} width={22} height={1} fill="#ccc" />
+				<rect x={20} y={10} width={24} height={1} fill="var(--color-rule)" />
+				<rect x={20} y={13} width={22} height={1} fill="var(--color-rule)" />
 				<rect x={20} y={19} width={18} height={2} fill={line} rx={0.5} />
-				<rect x={20} y={23} width={24} height={1} fill="#ccc" />
-				<rect x={20} y={26} width={20} height={1} fill="#ccc" />
-				<rect x={20} y={29} width={24} height={1} fill="#ccc" />
+				<rect x={20} y={23} width={24} height={1} fill="var(--color-rule)" />
+				<rect x={20} y={26} width={20} height={1} fill="var(--color-rule)" />
+				<rect x={20} y={29} width={24} height={1} fill="var(--color-rule)" />
 				<rect x={20} y={35} width={18} height={2} fill={line} rx={0.5} />
-				<rect x={20} y={39} width={24} height={1} fill="#ccc" />
-				<rect x={20} y={42} width={22} height={1} fill="#ccc" />
+				<rect x={20} y={39} width={24} height={1} fill="var(--color-rule)" />
+				<rect x={20} y={42} width={22} height={1} fill="var(--color-rule)" />
 			</svg>
 		);
 	}
@@ -314,19 +314,19 @@ function LayoutMiniPreview({ layoutId }: { layoutId: string }) {
 				<rect x={14} y={3} width={20} height={3} fill={line} rx={1} />
 				<rect x={4} y={9} width={40} height={1} fill={accent} />
 				<rect x={4} y={13} width={18} height={1.5} fill={line} rx={0.5} />
-				<rect x={4} y={16} width={18} height={1} fill="#ccc" />
-				<rect x={4} y={19} width={16} height={1} fill="#ccc" />
-				<rect x={4} y={22} width={18} height={1} fill="#ccc" />
+				<rect x={4} y={16} width={18} height={1} fill="var(--color-rule)" />
+				<rect x={4} y={19} width={16} height={1} fill="var(--color-rule)" />
+				<rect x={4} y={22} width={18} height={1} fill="var(--color-rule)" />
 				<rect x={26} y={13} width={18} height={1.5} fill={line} rx={0.5} />
-				<rect x={26} y={16} width={18} height={1} fill="#ccc" />
-				<rect x={26} y={19} width={16} height={1} fill="#ccc" />
-				<rect x={26} y={22} width={18} height={1} fill="#ccc" />
+				<rect x={26} y={16} width={18} height={1} fill="var(--color-rule)" />
+				<rect x={26} y={19} width={16} height={1} fill="var(--color-rule)" />
+				<rect x={26} y={22} width={18} height={1} fill="var(--color-rule)" />
 				<rect x={4} y={27} width={18} height={1.5} fill={line} rx={0.5} />
-				<rect x={4} y={30} width={18} height={1} fill="#ccc" />
-				<rect x={4} y={33} width={16} height={1} fill="#ccc" />
+				<rect x={4} y={30} width={18} height={1} fill="var(--color-rule)" />
+				<rect x={4} y={33} width={16} height={1} fill="var(--color-rule)" />
 				<rect x={26} y={27} width={18} height={1.5} fill={line} rx={0.5} />
-				<rect x={26} y={30} width={18} height={1} fill="#ccc" />
-				<rect x={26} y={33} width={16} height={1} fill="#ccc" />
+				<rect x={26} y={30} width={18} height={1} fill="var(--color-rule)" />
+				<rect x={26} y={33} width={16} height={1} fill="var(--color-rule)" />
 			</svg>
 		);
 	}
@@ -339,15 +339,15 @@ function LayoutMiniPreview({ layoutId }: { layoutId: string }) {
 			<rect x={10} y={4} width={28} height={3} fill="white" rx={1} />
 			<rect x={14} y={9} width={20} height={1} fill={accent} />
 			<rect x={4} y={18} width={25} height={2} fill={line} rx={0.5} />
-			<rect x={4} y={22} width={40} height={1} fill="#ccc" />
-			<rect x={4} y={25} width={38} height={1} fill="#ccc" />
-			<rect x={4} y={28} width={40} height={1} fill="#ccc" />
+			<rect x={4} y={22} width={40} height={1} fill="var(--color-rule)" />
+			<rect x={4} y={25} width={38} height={1} fill="var(--color-rule)" />
+			<rect x={4} y={28} width={40} height={1} fill="var(--color-rule)" />
 			<rect x={4} y={33} width={25} height={2} fill={line} rx={0.5} />
-			<rect x={4} y={37} width={40} height={1} fill="#ccc" />
-			<rect x={4} y={40} width={36} height={1} fill="#ccc" />
-			<rect x={4} y={43} width={40} height={1} fill="#ccc" />
+			<rect x={4} y={37} width={40} height={1} fill="var(--color-rule)" />
+			<rect x={4} y={40} width={36} height={1} fill="var(--color-rule)" />
+			<rect x={4} y={43} width={40} height={1} fill="var(--color-rule)" />
 			<rect x={4} y={48} width={25} height={2} fill={line} rx={0.5} />
-			<rect x={4} y={52} width={38} height={1} fill="#ccc" />
+			<rect x={4} y={52} width={38} height={1} fill="var(--color-rule)" />
 		</svg>
 	);
 }
@@ -739,14 +739,14 @@ export default function ResumeForm({
 		<div className="space-y-4 font-sans">
 			{/* Inline upgrade prompt for exhausted suggestions */}
 			{showSuggestUpgrade && (
-				<div className="rounded-lg border border-gold/30 bg-gold/5 px-4 py-3">
+				<div className="rounded-[2px] border border-gold/30 bg-gold/5 px-4 py-3">
 					<div className="flex items-start gap-3">
 						<span className="mt-0.5 text-gold text-sm">✦</span>
 						<div className="flex-1">
-							<p className="text-sm font-medium text-[#1e2a3a]">
+							<p className="text-sm font-medium text-ink">
 								AI suggestions limit reached
 							</p>
-							<p className="mt-0.5 text-xs text-[#6b6560]">
+							<p className="mt-0.5 text-xs text-ink-2">
 								Free accounts get 3 AI suggestions. Upgrade to Pro for
 								unlimited.
 							</p>
@@ -760,7 +760,7 @@ export default function ResumeForm({
 						<button
 							type="button"
 							onClick={() => setShowSuggestUpgrade(false)}
-							className="text-[#9a9590] hover:text-[#6b6560]"
+							className="text-ink-2 hover:text-ink-2"
 						>
 							<XIcon />
 						</button>
@@ -774,7 +774,7 @@ export default function ResumeForm({
 					style={{
 						fontSize: "0.85rem",
 						fontWeight: 700,
-						color: "#1e2a3a",
+						color: "var(--color-ink)",
 						marginBottom: 12,
 						letterSpacing: "0.05em",
 						textTransform: "uppercase",
@@ -797,13 +797,13 @@ export default function ResumeForm({
 									data.paletteId === p.id ||
 									(!data.paletteId && p.id === "classic-navy")
 										? `2px solid ${p.primary}`
-										: "2px solid #e8e2da",
+										: "1px solid var(--color-rule)",
 								borderRadius: 4,
 								background:
 									data.paletteId === p.id ||
 									(!data.paletteId && p.id === "classic-navy")
 										? `${p.primary}08`
-										: "white",
+										: "var(--color-paper)",
 								cursor: "pointer",
 								transition: "all 0.2s ease",
 							}}
@@ -830,7 +830,7 @@ export default function ResumeForm({
 								style={{
 									fontSize: "0.75rem",
 									fontWeight: 500,
-									color: "#1b1b1b",
+									color: "var(--color-ink)",
 								}}
 							>
 								{p.name}
@@ -846,7 +846,7 @@ export default function ResumeForm({
 					style={{
 						fontSize: "0.85rem",
 						fontWeight: 700,
-						color: "#1e2a3a",
+						color: "var(--color-ink)",
 						marginBottom: 12,
 						letterSpacing: "0.05em",
 						textTransform: "uppercase",
@@ -870,10 +870,10 @@ export default function ResumeForm({
 									gap: 6,
 									padding: "10px 16px",
 									border: isSelected
-										? "2px solid #1e2a3a"
-										: "2px solid #e8e2da",
+										? "2px solid var(--color-ink)"
+										: "1px solid var(--color-rule)",
 									borderRadius: 4,
-									background: isSelected ? "#1e2a3a08" : "white",
+									background: isSelected ? "color-mix(in oklch, var(--color-ink) 5%, transparent)" : "var(--color-paper)",
 									cursor: "pointer",
 									transition: "all 0.2s ease",
 									minWidth: 90,
@@ -884,7 +884,7 @@ export default function ResumeForm({
 									style={{
 										fontSize: "0.7rem",
 										fontWeight: 500,
-										color: "#1b1b1b",
+										color: "var(--color-ink)",
 									}}
 								>
 									{l.name}
@@ -901,7 +901,7 @@ export default function ResumeForm({
 					style={{
 						fontSize: "0.85rem",
 						fontWeight: 700,
-						color: "#1e2a3a",
+						color: "var(--color-ink)",
 						marginBottom: 12,
 						letterSpacing: "0.05em",
 						textTransform: "uppercase",
@@ -920,10 +920,10 @@ export default function ResumeForm({
 							padding: "8px 16px",
 							border:
 								data.isPublic !== false
-									? "2px solid #1e2a3a"
-									: "2px solid #e8e2da",
+									? "2px solid var(--color-ink)"
+									: "1px solid var(--color-rule)",
 							borderRadius: 4,
-							background: data.isPublic !== false ? "#1e2a3a08" : "white",
+							background: data.isPublic !== false ? "color-mix(in oklch, var(--color-ink) 5%, transparent)" : "var(--color-paper)",
 							cursor: "pointer",
 							transition: "all 0.2s ease",
 						}}
@@ -947,12 +947,12 @@ export default function ResumeForm({
 								style={{
 									fontSize: "0.75rem",
 									fontWeight: 600,
-									color: "#1b1b1b",
+									color: "var(--color-ink)",
 								}}
 							>
 								Public
 							</div>
-							<div style={{ fontSize: "0.65rem", color: "#6b6560" }}>
+							<div style={{ fontSize: "0.65rem", color: "var(--color-ink-2)" }}>
 								Anyone with the link can view
 							</div>
 						</div>
@@ -967,10 +967,10 @@ export default function ResumeForm({
 							padding: "8px 16px",
 							border:
 								data.isPublic === false
-									? "2px solid #1e2a3a"
-									: "2px solid #e8e2da",
+									? "2px solid var(--color-ink)"
+									: "1px solid var(--color-rule)",
 							borderRadius: 4,
-							background: data.isPublic === false ? "#1e2a3a08" : "white",
+							background: data.isPublic === false ? "color-mix(in oklch, var(--color-ink) 5%, transparent)" : "var(--color-paper)",
 							cursor: "pointer",
 							transition: "all 0.2s ease",
 						}}
@@ -993,12 +993,12 @@ export default function ResumeForm({
 								style={{
 									fontSize: "0.75rem",
 									fontWeight: 600,
-									color: "#1b1b1b",
+									color: "var(--color-ink)",
 								}}
 							>
 								Private
 							</div>
-							<div style={{ fontSize: "0.65rem", color: "#6b6560" }}>
+							<div style={{ fontSize: "0.65rem", color: "var(--color-ink-2)" }}>
 								Only you can view
 							</div>
 						</div>
@@ -1025,12 +1025,12 @@ export default function ResumeForm({
 							width: 72,
 							height: 72,
 							borderRadius: "50%",
-							border: data.photo ? "none" : "2px dashed #d4cfc8",
+							border: data.photo ? "none" : "2px dashed var(--color-rule)",
 							overflow: "hidden",
 							display: "flex",
 							alignItems: "center",
 							justifyContent: "center",
-							backgroundColor: "#f5f0ea",
+							backgroundColor: "var(--color-paper-2)",
 							cursor: "pointer",
 							flexShrink: 0,
 							position: "relative",
@@ -1049,7 +1049,7 @@ export default function ResumeForm({
 								height="24"
 								viewBox="0 0 24 24"
 								fill="none"
-								stroke="#9a9590"
+								stroke="var(--color-ink-2)"
 								strokeWidth="1.5"
 							>
 								<path
@@ -1067,9 +1067,9 @@ export default function ResumeForm({
 							style={{
 								fontSize: "0.8rem",
 								fontWeight: 500,
-								color: "#b08d57",
+								color: "var(--color-accent)",
 								background: "none",
-								border: "1px solid #b08d57",
+								border: "1px solid var(--color-accent)",
 								padding: "6px 14px",
 								borderRadius: 4,
 								cursor: "pointer",
@@ -1083,7 +1083,7 @@ export default function ResumeForm({
 								onClick={() => onChange({ ...data, photo: undefined })}
 								style={{
 									fontSize: "0.75rem",
-									color: "#9a9590",
+									color: "var(--color-ink-2)",
 									background: "none",
 									border: "none",
 									marginLeft: 8,
@@ -1094,7 +1094,7 @@ export default function ResumeForm({
 								Remove
 							</button>
 						)}
-						<p style={{ fontSize: "0.7rem", color: "#9a9590", marginTop: 4 }}>
+						<p style={{ fontSize: "0.7rem", color: "var(--color-ink-2)", marginTop: 4 }}>
 							Optional. JPG or PNG, max 2MB.
 						</p>
 					</div>
@@ -1181,13 +1181,13 @@ export default function ResumeForm({
 						{data.skills.map((skill) => (
 							<span
 								key={skill}
-								className="inline-flex items-center gap-1.5 rounded-full bg-[#b08d57]/10 px-3 py-1 text-sm font-medium text-[#8a6d3b] font-sans"
+								className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 text-sm font-medium text-accent font-sans"
 							>
 								{skill}
 								<button
 									type="button"
 									onClick={() => removeSkill(skill)}
-									className="rounded-full p-0.5 transition-colors hover:bg-[#b08d57]/20"
+									className="rounded-full p-0.5 transition-colors hover:bg-accent/20"
 									aria-label={`Remove ${skill}`}
 								>
 									<XIcon />
@@ -1207,7 +1207,7 @@ export default function ResumeForm({
 					<button
 						type="button"
 						onClick={() => addSkill(skillInput)}
-						className="shrink-0 rounded-lg bg-[#b08d57] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#9a7a4a] font-sans"
+						className="shrink-0 rounded-[2px] bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent font-sans"
 					>
 						Add
 					</button>
@@ -1224,7 +1224,7 @@ export default function ResumeForm({
 					{data.experience.map((exp, expIdx) => (
 						<div
 							key={exp.id}
-							className="relative rounded-lg border border-gray-200 bg-white p-5"
+							className="relative rounded-[2px] border border-rule bg-paper p-5"
 						>
 							{/* Remove experience button */}
 							<button
@@ -1236,7 +1236,7 @@ export default function ResumeForm({
 								<TrashIcon />
 							</button>
 
-							<p className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-400 font-sans">
+							<p className="mb-4 text-xs font-semibold uppercase tracking-wider text-ink-2 font-sans">
 								Experience {expIdx + 1}
 							</p>
 
@@ -1346,7 +1346,7 @@ export default function ResumeForm({
 								<button
 									type="button"
 									onClick={() => addBullet(exp.id)}
-									className="mt-2 inline-flex items-center gap-1 text-sm text-[#b08d57] transition-colors hover:text-[#9a7a4a] font-sans"
+									className="mt-2 inline-flex items-center gap-1 text-sm text-accent transition-colors hover:text-accent font-sans"
 								>
 									<PlusIcon /> Add bullet
 								</button>
@@ -1374,7 +1374,7 @@ export default function ResumeForm({
 					{data.education.map((edu, eduIdx) => (
 						<div
 							key={edu.id}
-							className="relative rounded-lg border border-gray-200 bg-white p-5"
+							className="relative rounded-[2px] border border-rule bg-paper p-5"
 						>
 							<button
 								type="button"
@@ -1385,7 +1385,7 @@ export default function ResumeForm({
 								<TrashIcon />
 							</button>
 
-							<p className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-400 font-sans">
+							<p className="mb-4 text-xs font-semibold uppercase tracking-wider text-ink-2 font-sans">
 								Education {eduIdx + 1}
 							</p>
 

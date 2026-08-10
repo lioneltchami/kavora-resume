@@ -39,11 +39,11 @@ export default function TestimonialEditor({
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 rounded-xl border border-[#e8e2da] bg-white p-5"
+      className="space-y-4 rounded-[2px] border border-rule bg-paper p-5"
     >
       {/* Name */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Name <span className="text-red-400">*</span>
         </label>
         <input
@@ -52,13 +52,13 @@ export default function TestimonialEditor({
           onChange={(e) => updateField("name", e.target.value)}
           placeholder="Jane Doe"
           required
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
 
       {/* Role */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Role
         </label>
         <input
@@ -66,13 +66,13 @@ export default function TestimonialEditor({
           value={draft.role}
           onChange={(e) => updateField("role", e.target.value)}
           placeholder="Product Manager"
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
 
       {/* Company */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Company
         </label>
         <input
@@ -80,27 +80,27 @@ export default function TestimonialEditor({
           value={draft.company}
           onChange={(e) => updateField("company", e.target.value)}
           placeholder="Acme Inc."
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
 
       {/* Avatar URL */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
-          Avatar URL <span className="text-[#b5b0a8]">(optional)</span>
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
+          Avatar URL <span className="text-ink-2">(optional)</span>
         </label>
         <input
           type="url"
           value={draft.avatar_url ?? ""}
           onChange={(e) => updateField("avatar_url", e.target.value || null)}
           placeholder="https://example.com/avatar.jpg"
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
 
       {/* Testimonial Text */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Testimonial <span className="text-red-400">*</span>
         </label>
         <textarea
@@ -109,7 +109,7 @@ export default function TestimonialEditor({
           placeholder="What did they say about working with you?"
           rows={4}
           required
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57] resize-none"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-none"
         />
       </div>
 
@@ -118,14 +118,14 @@ export default function TestimonialEditor({
         <button
           type="submit"
           disabled={!draft.name.trim() || !draft.text.trim()}
-          className="rounded-lg bg-[#1e2a3a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2d3f54] disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-[2px] bg-ink px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-50"
         >
           Save Testimonial
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg px-4 py-2 text-sm font-medium text-[#6b6560] transition-colors hover:bg-[#f5f0ea] hover:text-[#1b1b1b]"
+          className="rounded-[2px] px-4 py-2 text-sm font-medium text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
         >
           Cancel
         </button>

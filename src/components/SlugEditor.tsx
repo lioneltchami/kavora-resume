@@ -128,17 +128,17 @@ export default function SlugEditor({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-lg rounded-sm bg-white p-6 shadow-2xl">
-        <h3 className="mb-1 text-base font-semibold text-[#1e2a3a]">
+      <div className="w-full max-w-lg rounded-sm bg-paper p-6 shadow-2xl">
+        <h3 className="mb-1 text-base font-semibold text-ink">
           Customize your URL
         </h3>
-        <p className="mb-4 text-xs text-[#6b6560]">
+        <p className="mb-4 text-xs text-ink-2">
           Choose a memorable slug for your resume link.
         </p>
 
         {/* URL input */}
-        <div className="mb-3 flex items-center gap-0 rounded-lg border border-[#e8e2da] bg-[#faf8f5] overflow-hidden">
-          <span className="shrink-0 bg-[#e8e2da] px-3 py-2.5 text-xs text-[#6b6560] select-none">
+        <div className="mb-3 flex items-center gap-0 rounded-[2px] border border-rule bg-paper overflow-hidden">
+          <span className="shrink-0 bg-rule px-3 py-2.5 text-xs text-ink-2 select-none">
             {SITE_DOMAIN}/r/
           </span>
           <input
@@ -148,7 +148,7 @@ export default function SlugEditor({
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             maxLength={80}
-            className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm text-[#1e2a3a] outline-none placeholder:text-[#c0b8b0]"
+            className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm text-ink outline-none placeholder:text-ink-2"
             placeholder="your-custom-slug"
           />
         </div>
@@ -156,7 +156,7 @@ export default function SlugEditor({
         {/* Availability indicator */}
         <div className="mb-4 h-5">
           {status === "checking" && (
-            <span className="text-xs text-[#6b6560]">Checking...</span>
+            <span className="text-xs text-ink-2">Checking...</span>
           )}
           {status === "available" && (
             <span className="text-xs text-green-600">&#10003; Available</span>
@@ -170,7 +170,7 @@ export default function SlugEditor({
             </span>
           )}
           {status === "idle" && slug === currentSlug && (
-            <span className="text-xs text-[#9a9590]">Current URL</span>
+            <span className="text-xs text-ink-2">Current URL</span>
           )}
         </div>
 
@@ -178,14 +178,14 @@ export default function SlugEditor({
         <div className="flex items-center justify-end gap-2">
           <button
             onClick={onClose}
-            className="rounded-lg px-4 py-2 text-sm font-medium text-[#4a4540] transition-colors hover:bg-[#f5f0ea]"
+            className="rounded-[2px] px-4 py-2 text-sm font-medium text-ink-2 transition-colors hover:bg-paper-2"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={!canSave}
-            className="rounded-lg bg-[#b08d57] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#9a7a4a] disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-[2px] bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
           >
             {saving ? "Saving..." : "Save"}
           </button>

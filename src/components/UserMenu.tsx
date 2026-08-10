@@ -34,7 +34,7 @@ export default function UserMenu() {
             width: 28,
             height: 28,
             borderRadius: "50%",
-            border: "1px solid #e8e2da",
+            border: "1px solid var(--color-rule)",
           }}
         />
       ) : (
@@ -43,7 +43,7 @@ export default function UserMenu() {
             width: 28,
             height: 28,
             borderRadius: "50%",
-            background: "#1e2a3a",
+            background: "var(--color-ink)",
             color: "white",
             display: "flex",
             alignItems: "center",
@@ -60,7 +60,7 @@ export default function UserMenu() {
           href="/my-resumes"
           style={{
             fontSize: "0.7rem",
-            color: "#6b6560",
+            color: "var(--color-ink-2)",
             textDecoration: "none",
           }}
         >
@@ -70,7 +70,7 @@ export default function UserMenu() {
           href="/create/portfolio"
           style={{
             fontSize: "0.7rem",
-            color: "#b08d57",
+            color: "var(--color-accent)",
             textDecoration: "none",
           }}
         >
@@ -86,7 +86,7 @@ export default function UserMenu() {
           }}
           style={{
             fontSize: "0.7rem",
-            color: "#6b6560",
+            color: "var(--color-ink-2)",
             background: "none",
             border: "none",
             cursor: "pointer",

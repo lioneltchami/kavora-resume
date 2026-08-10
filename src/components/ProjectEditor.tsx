@@ -98,11 +98,11 @@ export default function ProjectEditor({
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 rounded-xl border border-[#e8e2da] bg-white p-5"
+      className="space-y-4 rounded-[2px] border border-rule bg-paper p-5"
     >
       {/* Title */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Title <span className="text-red-400">*</span>
         </label>
         <input
@@ -111,13 +111,13 @@ export default function ProjectEditor({
           onChange={(e) => updateField("title", e.target.value)}
           placeholder="My awesome project"
           required
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
 
       {/* Description */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Description
         </label>
         <textarea
@@ -125,13 +125,13 @@ export default function ProjectEditor({
           onChange={(e) => updateField("description", e.target.value)}
           placeholder="Brief description of the project..."
           rows={3}
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57] resize-none"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-none"
         />
       </div>
 
       {/* Category */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Category
         </label>
         <select
@@ -139,7 +139,7 @@ export default function ProjectEditor({
           onChange={(e) =>
             updateField("category", e.target.value as ProjectCategory)
           }
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] bg-white focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink bg-paper focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         >
           {PROJECT_CATEGORIES.map((cat) => (
             <option key={cat.value} value={cat.value}>
@@ -151,7 +151,7 @@ export default function ProjectEditor({
 
       {/* Image Upload */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Project Image
         </label>
 
@@ -160,7 +160,7 @@ export default function ProjectEditor({
             <img
               src={draft.image_url}
               alt="Project thumbnail"
-              className="h-24 w-auto rounded-lg border border-[#e8e2da] object-cover"
+              className="h-24 w-auto rounded-[2px] border border-rule object-cover"
             />
             <button
               type="button"
@@ -192,21 +192,21 @@ export default function ProjectEditor({
           }}
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
-          className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed px-4 py-6 transition-colors ${
+          className={`flex cursor-pointer flex-col items-center justify-center rounded-[2px] border-2 border-dashed px-4 py-6 transition-colors ${
             dragOver
-              ? "border-[#b08d57] bg-[#b08d57]/5"
-              : "border-[#d4cfc8] hover:border-[#b08d57]/50"
+              ? "border-accent bg-accent/5"
+              : "border-rule hover:border-accent/50"
           }`}
         >
           {uploading ? (
-            <div className="flex items-center gap-2 text-sm text-[#6b6560]">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-[#b08d57]" />
+            <div className="flex items-center gap-2 text-sm text-ink-2">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-rule border-t-accent" />
               Uploading...
             </div>
           ) : (
             <>
               <svg
-                className="mb-2 h-8 w-8 text-[#b5b0a8]"
+                className="mb-2 h-8 w-8 text-ink-2"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
@@ -223,10 +223,10 @@ export default function ProjectEditor({
                   d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"
                 />
               </svg>
-              <p className="text-sm text-[#6b6560]">
+              <p className="text-sm text-ink-2">
                 Drop image here or click to upload
               </p>
-              <p className="mt-1 text-xs text-[#b5b0a8]">
+              <p className="mt-1 text-xs text-ink-2">
                 JPEG, PNG, or WebP up to 5MB
               </p>
             </>
@@ -248,7 +248,7 @@ export default function ProjectEditor({
 
       {/* Live URL */}
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
           Live URL
         </label>
         <input
@@ -256,7 +256,7 @@ export default function ProjectEditor({
           value={draft.live_url ?? ""}
           onChange={(e) => updateField("live_url", e.target.value || null)}
           placeholder="https://..."
-          className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+          className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
 
@@ -265,14 +265,14 @@ export default function ProjectEditor({
         <button
           type="submit"
           disabled={!draft.title.trim()}
-          className="rounded-lg bg-[#1e2a3a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2d3f54] disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-[2px] bg-ink px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-50"
         >
           Save Project
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg px-4 py-2 text-sm font-medium text-[#6b6560] transition-colors hover:bg-[#f5f0ea] hover:text-[#1b1b1b]"
+          className="rounded-[2px] px-4 py-2 text-sm font-medium text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
         >
           Cancel
         </button>

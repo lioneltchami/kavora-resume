@@ -133,22 +133,22 @@ export default function LinkedInImport({
     >
       <div
         ref={modalRef}
-        className="flex w-full max-w-lg flex-col rounded-sm bg-white shadow-2xl"
+        className="flex w-full max-w-lg flex-col rounded-sm bg-paper shadow-2xl"
         style={{ maxHeight: "85vh" }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#e8e2da] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-rule px-6 py-4">
           <div>
-            <h2 className="text-lg font-semibold text-[#1b1b1b]">
+            <h2 className="text-lg font-semibold text-ink">
               Upload / Import
             </h2>
-            <p className="mt-0.5 text-xs text-[#9a9590]">
+            <p className="mt-0.5 text-xs text-ink-2">
               Auto-fill your resume from a PDF or LinkedIn profile
             </p>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1 text-[#9a9590] transition-colors hover:bg-[#f5f0ea] hover:text-[#6b6560]"
+            className="rounded-[2px] p-1 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink-2"
           >
             <svg
               className="h-5 w-5"
@@ -169,13 +169,13 @@ export default function LinkedInImport({
         {stage === "input" && (
           <>
             {/* Tabs */}
-            <div className="flex border-b border-[#e8e2da]">
+            <div className="flex border-b border-rule">
               <button
                 onClick={() => setTab("paste")}
                 className={`flex-1 py-2.5 text-center text-sm font-medium transition-colors ${
                   tab === "paste"
-                    ? "border-b-2 border-[#b08d57] text-[#1b1b1b]"
-                    : "text-[#9a9590] hover:text-[#6b6560]"
+                    ? "border-b-2 border-accent text-ink"
+                    : "text-ink-2 hover:text-ink-2"
                 }`}
               >
                 Paste Text
@@ -184,8 +184,8 @@ export default function LinkedInImport({
                 onClick={() => setTab("upload")}
                 className={`flex-1 py-2.5 text-center text-sm font-medium transition-colors ${
                   tab === "upload"
-                    ? "border-b-2 border-[#b08d57] text-[#1b1b1b]"
-                    : "text-[#9a9590] hover:text-[#6b6560]"
+                    ? "border-b-2 border-accent text-ink"
+                    : "text-ink-2 hover:text-ink-2"
                 }`}
               >
                 LinkedIn PDF
@@ -194,8 +194,8 @@ export default function LinkedInImport({
                 onClick={() => setTab("pdf")}
                 className={`flex-1 py-2.5 text-center text-sm font-medium transition-colors ${
                   tab === "pdf"
-                    ? "border-b-2 border-[#b08d57] text-[#1b1b1b]"
-                    : "text-[#9a9590] hover:text-[#6b6560]"
+                    ? "border-b-2 border-accent text-ink"
+                    : "text-ink-2 hover:text-ink-2"
                 }`}
               >
                 Upload PDF
@@ -206,22 +206,22 @@ export default function LinkedInImport({
             <div className="flex-1 overflow-y-auto px-6 py-4">
               {tab === "paste" && (
                 <div className="space-y-3">
-                  <div className="rounded-lg bg-[#faf8f5] p-3">
-                    <p className="text-xs leading-relaxed text-[#6b6560]">
+                  <div className="rounded-[2px] bg-paper p-3">
+                    <p className="text-xs leading-relaxed text-ink-2">
                       Go to your LinkedIn profile, select all text (
-                      <kbd className="rounded border border-[#d4cfc8] bg-white px-1 py-0.5 font-mono text-[10px]">
+                      <kbd className="rounded border border-rule bg-paper px-1 py-0.5 font-mono text-[10px]">
                         Ctrl+A
                       </kbd>{" "}
                       /{" "}
-                      <kbd className="rounded border border-[#d4cfc8] bg-white px-1 py-0.5 font-mono text-[10px]">
+                      <kbd className="rounded border border-rule bg-paper px-1 py-0.5 font-mono text-[10px]">
                         Cmd+A
                       </kbd>
                       ), copy (
-                      <kbd className="rounded border border-[#d4cfc8] bg-white px-1 py-0.5 font-mono text-[10px]">
+                      <kbd className="rounded border border-rule bg-paper px-1 py-0.5 font-mono text-[10px]">
                         Ctrl+C
                       </kbd>{" "}
                       /{" "}
-                      <kbd className="rounded border border-[#d4cfc8] bg-white px-1 py-0.5 font-mono text-[10px]">
+                      <kbd className="rounded border border-rule bg-paper px-1 py-0.5 font-mono text-[10px]">
                         Cmd+C
                       </kbd>
                       ), and paste below.
@@ -235,15 +235,15 @@ export default function LinkedInImport({
                     }}
                     placeholder="Paste your LinkedIn profile text here..."
                     rows={10}
-                    className="w-full resize-none rounded-lg border border-[#d4cfc8] bg-white p-3 text-sm text-[#1b1b1b] placeholder-[#c4bfb8] outline-none transition-colors focus:border-[#b08d57] focus:ring-1 focus:ring-[#b08d57]/30"
+                    className="w-full resize-none rounded-[2px] border border-rule bg-paper p-3 text-sm text-ink placeholder:text-ink-2/50 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/30"
                   />
                 </div>
               )}
 
               {tab === "upload" && (
                 <div className="space-y-4">
-                  <div className="rounded-lg bg-[#faf8f5] p-3">
-                    <p className="text-xs leading-relaxed text-[#6b6560]">
+                  <div className="rounded-[2px] bg-paper p-3">
+                    <p className="text-xs leading-relaxed text-ink-2">
                       Go to LinkedIn &rarr; Your Profile &rarr; More &rarr; Save
                       to PDF, then upload it here.
                     </p>
@@ -251,10 +251,10 @@ export default function LinkedInImport({
 
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-[#d4cfc8] bg-[#faf8f5] p-8 transition-colors hover:border-[#b08d57] hover:bg-[#f5f0ea]"
+                    className="flex cursor-pointer flex-col items-center justify-center rounded-[2px] border-2 border-dashed border-rule bg-paper p-8 transition-colors hover:border-accent hover:bg-paper-2"
                   >
                     <svg
-                      className="mb-2 h-8 w-8 text-[#9a9590]"
+                      className="mb-2 h-8 w-8 text-ink-2"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
@@ -266,10 +266,10 @@ export default function LinkedInImport({
                         d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
                       />
                     </svg>
-                    <p className="text-sm font-medium text-[#4a4540]">
+                    <p className="text-sm font-medium text-ink-2">
                       Click to upload PDF
                     </p>
-                    <p className="mt-1 text-xs text-[#9a9590]">
+                    <p className="mt-1 text-xs text-ink-2">
                       or drag and drop
                     </p>
                     <input
@@ -281,9 +281,9 @@ export default function LinkedInImport({
                     />
                   </div>
 
-                  <div className="rounded-lg border border-[#e8e2da] bg-[#faf8f5] p-3">
-                    <p className="text-xs leading-relaxed text-[#6b6560]">
-                      <strong className="text-[#4a4540]">Tip:</strong> PDF text
+                  <div className="rounded-[2px] border border-rule bg-paper p-3">
+                    <p className="text-xs leading-relaxed text-ink-2">
+                      <strong className="text-ink-2">Tip:</strong> PDF text
                       extraction can be unreliable. For best results, open the
                       PDF, select all text (Ctrl+A / Cmd+A), copy it, and use
                       the &ldquo;Paste Text&rdquo; tab.
@@ -294,8 +294,8 @@ export default function LinkedInImport({
 
               {tab === "pdf" && (
                 <div className="space-y-4">
-                  <div className="rounded-lg bg-[#faf8f5] p-3">
-                    <p className="text-xs leading-relaxed text-[#6b6560]">
+                  <div className="rounded-[2px] bg-paper p-3">
+                    <p className="text-xs leading-relaxed text-ink-2">
                       Upload any resume PDF and AI will extract your data
                       automatically. Works with any format.
                     </p>
@@ -311,17 +311,17 @@ export default function LinkedInImport({
               )}
 
               {error && (
-                <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3">
+                <div className="mt-3 rounded-[2px] border border-red-200 bg-red-50 p-3">
                   <p className="text-xs text-red-600">{error}</p>
                 </div>
               )}
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-end gap-3 border-t border-[#e8e2da] px-6 py-4">
+            <div className="flex items-center justify-end gap-3 border-t border-rule px-6 py-4">
               <button
                 onClick={onClose}
-                className="rounded-lg px-4 py-2 text-sm font-medium text-[#4a4540] transition-colors hover:bg-[#f5f0ea]"
+                className="rounded-[2px] px-4 py-2 text-sm font-medium text-ink-2 transition-colors hover:bg-paper-2"
               >
                 Cancel
               </button>
@@ -329,7 +329,7 @@ export default function LinkedInImport({
                 <button
                   onClick={handleParse}
                   disabled={!text.trim()}
-                  className="rounded-lg bg-[#1e2a3a] px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#2d3f54] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-[2px] bg-ink px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Import
                 </button>
@@ -342,7 +342,7 @@ export default function LinkedInImport({
           <>
             {/* Preview content */}
             <div className="flex-1 overflow-y-auto px-6 py-4">
-              <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-3">
+              <div className="mb-4 rounded-[2px] border border-green-200 bg-green-50 p-3">
                 <p className="text-sm font-medium text-green-800">
                   Successfully extracted data
                 </p>
@@ -418,7 +418,7 @@ export default function LinkedInImport({
                 )}
               </div>
 
-              <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3">
+              <div className="mt-4 rounded-[2px] border border-amber-200 bg-amber-50 p-3">
                 <p className="text-xs text-amber-700">
                   This will merge with your current resume data. Existing
                   palette and layout settings will be preserved.
@@ -427,10 +427,10 @@ export default function LinkedInImport({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between border-t border-[#e8e2da] px-6 py-4">
+            <div className="flex items-center justify-between border-t border-rule px-6 py-4">
               <button
                 onClick={handleBack}
-                className="inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-[#4a4540] transition-colors hover:bg-[#f5f0ea]"
+                className="inline-flex items-center gap-1 rounded-[2px] px-4 py-2 text-sm font-medium text-ink-2 transition-colors hover:bg-paper-2"
               >
                 <svg
                   className="h-4 w-4"
@@ -449,7 +449,7 @@ export default function LinkedInImport({
               </button>
               <button
                 onClick={handleApply}
-                className="rounded-lg bg-[#1e2a3a] px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#2d3f54]"
+                className="rounded-[2px] bg-ink px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-navy-light"
               >
                 Apply to Resume
               </button>
@@ -463,11 +463,11 @@ export default function LinkedInImport({
 
 function PreviewSection({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-[#e8e2da] bg-[#faf8f5] p-3">
-      <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[#9a9590]">
+    <div className="rounded-[2px] border border-rule bg-paper p-3">
+      <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-2">
         {label}
       </p>
-      <p className="text-sm text-[#4a4540]">{value}</p>
+      <p className="text-sm text-ink-2">{value}</p>
     </div>
   );
 }

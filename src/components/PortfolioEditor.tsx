@@ -410,25 +410,25 @@ export default function PortfolioEditor({
   return (
     <div className="mx-auto max-w-2xl">
       {/* Tab bar */}
-      <div className="mb-6 flex border-b border-[#e8e2da]">
+      <div className="mb-6 flex border-b border-rule">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
             className={`relative px-4 py-2.5 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? "border-b-2 border-[#1e2a3a] text-[#1b1b1b]"
-                : "text-[#6b6560] hover:text-[#4a4540]"
+                ? "border-b-2 border-ink text-ink"
+                : "text-ink-2 hover:text-ink-2"
             }`}
           >
             {tab.label}
             {tab.proBadge && (
-              <span className="ml-1.5 rounded-sm bg-[#b08d57]/15 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-[#b08d57]">
+              <span className="ml-1.5 rounded-sm bg-accent/15 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-accent">
                 Pro
               </span>
             )}
             {!tab.proBadge && Boolean(tab.count) && (
-              <span className="ml-1.5 inline-flex min-w-[1.15rem] items-center justify-center rounded-full bg-[#1e2a3a] px-1.5 py-0.5 text-[0.6rem] font-bold text-white">
+              <span className="ml-1.5 inline-flex min-w-[1.15rem] items-center justify-center rounded-full bg-ink px-1.5 py-0.5 text-[0.6rem] font-bold text-white">
                 {tab.count}
               </span>
             )}
@@ -441,10 +441,10 @@ export default function PortfolioEditor({
         <div className="space-y-6">
           {/* Bio */}
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
               Your bio
             </label>
-            <p className="mb-2 text-xs text-[#b5b0a8]">
+            <p className="mb-2 text-xs text-ink-2">
               Appears at the top of your portfolio
             </p>
             <textarea
@@ -452,13 +452,13 @@ export default function PortfolioEditor({
               onChange={(e) => updateSettings({ bio: e.target.value })}
               rows={4}
               placeholder="Tell visitors about yourself..."
-              className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57] resize-none"
+              className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-none"
             />
           </div>
 
           {/* Avatar URL */}
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
               Avatar image URL
             </label>
             <input
@@ -468,13 +468,13 @@ export default function PortfolioEditor({
                 updateSettings({ avatar_url: e.target.value || null })
               }
               placeholder="https://example.com/avatar.jpg"
-              className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+              className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
             />
           </div>
 
           {/* Theme Color */}
           <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-ink-2">
               Theme Color
             </label>
             <div className="flex flex-wrap gap-3">
@@ -491,12 +491,12 @@ export default function PortfolioEditor({
                     <div
                       className={`h-9 w-9 rounded-full transition-all ${
                         isSelected
-                          ? "ring-2 ring-[#b08d57] ring-offset-2"
-                          : "ring-1 ring-[#e8e2da] group-hover:ring-[#b08d57]/50"
+                          ? "ring-2 ring-accent ring-offset-2"
+                          : "ring-1 ring-rule group-hover:ring-accent/50"
                       }`}
                       style={{ backgroundColor: palette.primary }}
                     />
-                    <span className="text-[0.6rem] text-[#6b6560]">
+                    <span className="text-[0.6rem] text-ink-2">
                       {palette.name}
                     </span>
                   </button>
@@ -507,7 +507,7 @@ export default function PortfolioEditor({
 
           {/* Social Links */}
           <div>
-            <label className="mb-3 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+            <label className="mb-3 block text-xs font-semibold uppercase tracking-wide text-ink-2">
               Social Links
             </label>
             <div className="space-y-3">
@@ -536,7 +536,7 @@ export default function PortfolioEditor({
                 ] as const
               ).map(({ key, label, placeholder }) => (
                 <div key={key}>
-                  <label className="mb-1 block text-xs text-[#6b6560]">
+                  <label className="mb-1 block text-xs text-ink-2">
                     {label}
                   </label>
                   <input
@@ -544,7 +544,7 @@ export default function PortfolioEditor({
                     value={settings.social_links[key] ?? ""}
                     onChange={(e) => updateSocialLink(key, e.target.value)}
                     placeholder={placeholder}
-                    className="w-full border border-[#d4cfc8] rounded-lg px-3 py-2 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+                    className="w-full border border-rule rounded-[2px] px-3 py-2 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>
               ))}
@@ -553,7 +553,7 @@ export default function PortfolioEditor({
 
           {/* Toggles */}
           <div className="space-y-3">
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
               Display Options
             </label>
 
@@ -565,9 +565,9 @@ export default function PortfolioEditor({
                 onChange={(e) =>
                   updateSettings({ show_contact_form: e.target.checked })
                 }
-                className="h-4 w-4 rounded border-[#d4cfc8] text-[#1e2a3a] focus:ring-[#b08d57]"
+                className="h-4 w-4 rounded border-rule text-ink focus:ring-accent"
               />
-              <span className="text-sm text-[#1b1b1b]">Show contact form</span>
+              <span className="text-sm text-ink">Show contact form</span>
             </label>
 
             {/* Show testimonials */}
@@ -587,12 +587,12 @@ export default function PortfolioEditor({
                   }
                   updateSettings({ show_testimonials: e.target.checked });
                 }}
-                className="h-4 w-4 rounded border-[#d4cfc8] text-[#1e2a3a] focus:ring-[#b08d57]"
+                className="h-4 w-4 rounded border-rule text-ink focus:ring-accent"
               />
-              <span className="text-sm text-[#1b1b1b]">
+              <span className="text-sm text-ink">
                 Show testimonials
                 {!isPro && (
-                  <span className="ml-1.5 rounded-sm bg-[#b08d57]/15 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-[#b08d57]">
+                  <span className="ml-1.5 rounded-sm bg-accent/15 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-accent">
                     Pro
                   </span>
                 )}
@@ -602,21 +602,21 @@ export default function PortfolioEditor({
 
           {/* Portfolio URL */}
           {settings.slug && (
-            <div className="rounded-lg border border-[#e8e2da] bg-[#faf8f5] px-4 py-3">
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+            <div className="rounded-[2px] border border-rule bg-paper px-4 py-3">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-2">
                 Portfolio URL
               </label>
               <a
                 href={`/p/${settings.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-[#b08d57] underline hover:text-[#9a7a4a]"
+                className="text-sm text-accent underline hover:text-accent"
               >
                 {typeof window !== "undefined"
                   ? `${window.location.origin}/p/${settings.slug}`
                   : `/p/${settings.slug}`}
               </a>
-              <p className="mt-1 text-xs text-[#b5b0a8]">
+              <p className="mt-1 text-xs text-ink-2">
                 Matches your resume URL
               </p>
             </div>
@@ -629,7 +629,7 @@ export default function PortfolioEditor({
         <div className="space-y-4">
           {/* Project count / limit */}
           <div className="flex items-center justify-between">
-            <p className="text-sm text-[#6b6560]">
+            <p className="text-sm text-ink-2">
               {isPro ? (
                 "Unlimited projects"
               ) : (
@@ -644,7 +644,7 @@ export default function PortfolioEditor({
                             "Free plans are limited to 3 projects. Upgrade for unlimited portfolio projects.",
                         })
                       }
-                      className="ml-2 text-[#b08d57] underline hover:text-[#9a7a4a]"
+                      className="ml-2 text-accent underline hover:text-accent"
                     >
                       Upgrade
                     </button>
@@ -654,7 +654,7 @@ export default function PortfolioEditor({
             </p>
             <button
               onClick={handleAddProject}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#1e2a3a] px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2d3f54]"
+              className="inline-flex items-center gap-1.5 rounded-[2px] bg-ink px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-light"
             >
               <svg
                 className="h-4 w-4"
@@ -684,16 +684,16 @@ export default function PortfolioEditor({
           )}
 
           {projectSaving && (
-            <div className="flex items-center gap-2 text-sm text-[#6b6560]">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-[#1e2a3a]" />
+            <div className="flex items-center gap-2 text-sm text-ink-2">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-rule border-t-ink" />
               Saving project...
             </div>
           )}
 
           {/* Project list */}
           {projects.length === 0 && !editingProject && (
-            <div className="rounded-lg border border-dashed border-[#d4cfc8] py-12 text-center">
-              <p className="text-sm text-[#6b6560]">
+            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+              <p className="text-sm text-ink-2">
                 No projects yet. Add your first project to get started.
               </p>
             </div>
@@ -702,29 +702,29 @@ export default function PortfolioEditor({
           {projects.map((project) => (
             <div
               key={project.id}
-              className="flex items-start gap-4 rounded-xl border border-[#e8e2da] bg-white p-4"
+              className="flex items-start gap-4 rounded-[2px] border border-rule bg-paper p-4"
             >
               {/* Thumbnail */}
               {project.image_url && (
                 <img
                   src={project.image_url}
                   alt={project.title}
-                  className="h-16 w-20 shrink-0 rounded-lg border border-[#e8e2da] object-cover"
+                  className="h-16 w-20 shrink-0 rounded-[2px] border border-rule object-cover"
                 />
               )}
 
               {/* Info */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="truncate text-sm font-semibold text-[#1b1b1b]">
+                  <h3 className="truncate text-sm font-semibold text-ink">
                     {project.title}
                   </h3>
-                  <span className="shrink-0 rounded-full bg-[#f5f0ea] px-2 py-0.5 text-[0.65rem] font-medium text-[#6b6560]">
+                  <span className="shrink-0 rounded-full bg-paper-2 px-2 py-0.5 text-[0.65rem] font-medium text-ink-2">
                     {categoryLabel(project.category)}
                   </span>
                 </div>
                 {project.description && (
-                  <p className="mt-1 line-clamp-2 text-xs text-[#6b6560]">
+                  <p className="mt-1 line-clamp-2 text-xs text-ink-2">
                     {project.description}
                   </p>
                 )}
@@ -734,7 +734,7 @@ export default function PortfolioEditor({
               <div className="flex shrink-0 items-center gap-1">
                 <button
                   onClick={() => handleEditProject(project)}
-                  className="rounded-lg p-1.5 text-[#6b6560] transition-colors hover:bg-[#f5f0ea] hover:text-[#1b1b1b]"
+                  className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
                   title="Edit"
                 >
                   <svg
@@ -753,7 +753,7 @@ export default function PortfolioEditor({
                 </button>
                 <button
                   onClick={() => handleDeleteProject(project.id)}
-                  className="rounded-lg p-1.5 text-[#6b6560] transition-colors hover:bg-red-50 hover:text-red-500"
+                  className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-red-50 hover:text-red-500"
                   title="Delete"
                 >
                   <svg
@@ -775,7 +775,7 @@ export default function PortfolioEditor({
           ))}
 
           {projects.length > 1 && (
-            <p className="text-center text-xs text-[#b5b0a8]">
+            <p className="text-center text-xs text-ink-2">
               Tip: Projects display in the order shown
             </p>
           )}
@@ -786,13 +786,13 @@ export default function PortfolioEditor({
       {activeTab === "testimonials" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-[#6b6560]">
+            <p className="text-sm text-ink-2">
               {testimonials.length} testimonial
               {testimonials.length !== 1 ? "s" : ""}
             </p>
             <button
               onClick={handleAddTestimonial}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#1e2a3a] px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2d3f54]"
+              className="inline-flex items-center gap-1.5 rounded-[2px] bg-ink px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-navy-light"
             >
               <svg
                 className="h-4 w-4"
@@ -820,15 +820,15 @@ export default function PortfolioEditor({
           )}
 
           {testimonialSaving && (
-            <div className="flex items-center gap-2 text-sm text-[#6b6560]">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-[#1e2a3a]" />
+            <div className="flex items-center gap-2 text-sm text-ink-2">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-rule border-t-ink" />
               Saving testimonial...
             </div>
           )}
 
           {testimonials.length === 0 && !editingTestimonial && (
-            <div className="rounded-lg border border-dashed border-[#d4cfc8] py-12 text-center">
-              <p className="text-sm text-[#6b6560]">
+            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+              <p className="text-sm text-ink-2">
                 No testimonials yet. Add testimonials from clients or
                 colleagues.
               </p>
@@ -838,7 +838,7 @@ export default function PortfolioEditor({
           {testimonials.map((t) => (
             <div
               key={t.id}
-              className="rounded-xl border border-[#e8e2da] bg-white p-4"
+              className="rounded-[2px] border border-rule bg-paper p-4"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -846,19 +846,19 @@ export default function PortfolioEditor({
                     <img
                       src={t.avatar_url}
                       alt={t.name}
-                      className="h-10 w-10 rounded-full border border-[#e8e2da] object-cover"
+                      className="h-10 w-10 rounded-full border border-rule object-cover"
                     />
                   ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1e2a3a] text-sm font-semibold text-white">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white">
                       {t.name.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-semibold text-[#1b1b1b]">
+                    <p className="text-sm font-semibold text-ink">
                       {t.name}
                     </p>
                     {(t.role || t.company) && (
-                      <p className="text-xs text-[#6b6560]">
+                      <p className="text-xs text-ink-2">
                         {[t.role, t.company].filter(Boolean).join(" at ")}
                       </p>
                     )}
@@ -867,7 +867,7 @@ export default function PortfolioEditor({
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => handleEditTestimonial(t)}
-                    className="rounded-lg p-1.5 text-[#6b6560] transition-colors hover:bg-[#f5f0ea] hover:text-[#1b1b1b]"
+                    className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
                     title="Edit"
                   >
                     <svg
@@ -886,7 +886,7 @@ export default function PortfolioEditor({
                   </button>
                   <button
                     onClick={() => handleDeleteTestimonial(t.id)}
-                    className="rounded-lg p-1.5 text-[#6b6560] transition-colors hover:bg-red-50 hover:text-red-500"
+                    className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-red-50 hover:text-red-500"
                     title="Delete"
                   >
                     <svg
@@ -905,7 +905,7 @@ export default function PortfolioEditor({
                   </button>
                 </div>
               </div>
-              <p className="mt-3 text-sm italic text-[#4a4540] leading-relaxed">
+              <p className="mt-3 text-sm italic text-ink-2 leading-relaxed">
                 &ldquo;{t.text}&rdquo;
               </p>
             </div>
@@ -918,10 +918,10 @@ export default function PortfolioEditor({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-[#1b1b1b]">
+              <p className="text-sm font-semibold text-ink">
                 Contact messages
               </p>
-              <p className="mt-0.5 text-xs text-[#6b6560]">
+              <p className="mt-0.5 text-xs text-ink-2">
                 {settings.show_contact_form
                   ? "Messages visitors send through your portfolio contact form."
                   : "Your contact form is off — turn it on in Settings to receive messages."}
@@ -931,25 +931,25 @@ export default function PortfolioEditor({
               type="button"
               onClick={() => void loadMessages()}
               disabled={messagesLoading || !settings.slug}
-              className="rounded-lg border border-[#d4cfc8] bg-white px-3 py-1.5 text-xs font-medium text-[#4a4540] transition-colors hover:border-[#b08d57] hover:text-[#b08d57] disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-[2px] border border-rule bg-paper px-3 py-1.5 text-xs font-medium text-ink-2 transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
             >
               Refresh
             </button>
           </div>
 
           {!settings.slug ? (
-            <div className="rounded-lg border border-dashed border-[#d4cfc8] py-12 text-center">
-              <p className="text-sm text-[#6b6560]">
+            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+              <p className="text-sm text-ink-2">
                 Publish your portfolio to start receiving messages.
               </p>
             </div>
           ) : messagesLoading && messages === null ? (
             <div className="flex items-center justify-center py-12">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-[#1e2a3a]" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-rule border-t-ink" />
             </div>
           ) : messages && messages.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-[#d4cfc8] py-12 text-center">
-              <p className="text-sm text-[#6b6560]">
+            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+              <p className="text-sm text-ink-2">
                 No messages yet. They&apos;ll show up here as soon as someone
                 reaches out.
               </p>
@@ -958,20 +958,20 @@ export default function PortfolioEditor({
             messages?.map((message) => (
               <div
                 key={message.id}
-                className={`rounded-xl border bg-white p-4 ${
+                className={`rounded-[2px] border bg-paper p-4 ${
                   message.is_read
-                    ? "border-[#e8e2da]"
-                    : "border-[#b08d57]/50 bg-[#b08d57]/[0.03]"
+                    ? "border-rule"
+                    : "border-accent/50 bg-accent/[0.03]"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="truncate text-sm font-semibold text-[#1b1b1b]">
+                      <p className="truncate text-sm font-semibold text-ink">
                         {message.sender_name}
                       </p>
                       {!message.is_read && (
-                        <span className="rounded-sm bg-[#b08d57]/15 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-[#b08d57]">
+                        <span className="rounded-sm bg-accent/15 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-accent">
                           New
                         </span>
                       )}
@@ -980,7 +980,7 @@ export default function PortfolioEditor({
                       href={`mailto:${message.sender_email}?subject=${encodeURIComponent(
                         "Re: your message via my Kavora portfolio",
                       )}`}
-                      className="text-xs text-[#b08d57] underline hover:text-[#9a7a4a]"
+                      className="text-xs text-accent underline hover:text-accent"
                     >
                       {message.sender_email}
                     </a>
@@ -989,7 +989,7 @@ export default function PortfolioEditor({
                     <button
                       type="button"
                       onClick={() => void handleToggleRead(message)}
-                      className="rounded-lg p-1.5 text-[#6b6560] transition-colors hover:bg-[#f5f0ea] hover:text-[#1b1b1b]"
+                      className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
                       title={
                         message.is_read ? "Mark as unread" : "Mark as read"
                       }
@@ -1019,7 +1019,7 @@ export default function PortfolioEditor({
                     <button
                       type="button"
                       onClick={() => void handleDeleteMessage(message.id)}
-                      className="rounded-lg p-1.5 text-[#6b6560] transition-colors hover:bg-red-50 hover:text-red-500"
+                      className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-red-50 hover:text-red-500"
                       title="Delete"
                     >
                       <svg
@@ -1039,10 +1039,10 @@ export default function PortfolioEditor({
                   </div>
                 </div>
 
-                <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[#4a4540]">
+                <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-ink-2">
                   {message.message}
                 </p>
-                <p className="mt-3 text-[0.7rem] text-[#b5b0a8]">
+                <p className="mt-3 text-[0.7rem] text-ink-2">
                   {formatMessageDate(message.created_at)}
                 </p>
               </div>
@@ -1055,38 +1055,38 @@ export default function PortfolioEditor({
       {activeTab === "analytics" && (
         <div className="space-y-4">
           {!settings.slug ? (
-            <div className="rounded-lg border border-dashed border-[#d4cfc8] py-12 text-center">
-              <p className="text-sm text-[#6b6560]">
+            <div className="rounded-[2px] border border-dashed border-rule py-12 text-center">
+              <p className="text-sm text-ink-2">
                 Publish your portfolio to start seeing analytics.
               </p>
             </div>
           ) : viewsLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-[#1e2a3a]" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-rule border-t-ink" />
             </div>
           ) : viewsData ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="rounded-xl border border-[#e8e2da] bg-white p-5 text-center">
-                <p className="text-3xl font-bold text-[#1b1b1b]">
+              <div className="rounded-[2px] border border-rule bg-paper p-5 text-center">
+                <p className="text-3xl font-bold text-ink">
                   {viewsData.views}
                 </p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-ink-2">
                   Total Views
                 </p>
               </div>
-              <div className="rounded-xl border border-[#e8e2da] bg-white p-5 text-center">
-                <p className="text-3xl font-bold text-[#1b1b1b]">
+              <div className="rounded-[2px] border border-rule bg-paper p-5 text-center">
+                <p className="text-3xl font-bold text-ink">
                   {viewsData.last7}
                 </p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-ink-2">
                   Views This Week
                 </p>
               </div>
-              <div className="rounded-xl border border-[#e8e2da] bg-white p-5 text-center">
-                <p className="text-3xl font-bold text-[#1b1b1b]">
+              <div className="rounded-[2px] border border-rule bg-paper p-5 text-center">
+                <p className="text-3xl font-bold text-ink">
                   {viewsData.last30}
                 </p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-[#6b6560]">
+                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-ink-2">
                   Views This Month
                 </p>
               </div>

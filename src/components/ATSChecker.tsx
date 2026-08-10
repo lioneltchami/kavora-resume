@@ -281,7 +281,7 @@ function ScoreRing({ score }: { score: number }) {
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#e8e2da"
+          stroke="var(--color-rule)"
           strokeWidth={strokeWidth}
         />
         {/* Progress arc */}
@@ -306,7 +306,7 @@ function ScoreRing({ score }: { score: number }) {
         <span className="text-3xl font-bold" style={{ color }}>
           {score}%
         </span>
-        <span className="text-[0.7rem] font-medium text-[#6b6560]">
+        <span className="text-[0.7rem] font-medium text-ink-2">
           ATS Score
         </span>
       </div>
@@ -346,15 +346,15 @@ export default function ATSChecker({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="relative flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl bg-white shadow-2xl">
+      <div className="relative flex max-h-[90vh] w-full max-w-lg flex-col rounded-[2px] bg-paper shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#e8e2da] px-6 py-4">
-          <h2 className="text-lg font-semibold text-[#1e2a3a]">
+        <div className="flex items-center justify-between border-b border-rule px-6 py-4">
+          <h2 className="text-lg font-semibold text-ink">
             ATS Compatibility Check
           </h2>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#9a9590] transition-colors hover:bg-[#f5f0ea] hover:text-[#6b6560]"
+            className="rounded-[2px] p-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink-2"
           >
             <svg
               className="h-5 w-5"
@@ -373,16 +373,16 @@ export default function ATSChecker({
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-[#e8e2da] px-6">
+        <div className="flex border-b border-rule px-6">
           <button
             onClick={() => setActiveTab("keyword")}
-            className={`py-3 px-1 mr-6 text-sm font-medium border-b-2 transition-colors ${activeTab === "keyword" ? "border-[#1e2a3a] text-[#1e2a3a]" : "border-transparent text-[#9a9590] hover:text-[#4a4540]"}`}
+            className={`py-3 px-1 mr-6 text-sm font-medium border-b-2 transition-colors ${activeTab === "keyword" ? "border-ink text-ink" : "border-transparent text-ink-2 hover:text-ink-2"}`}
           >
             Keyword Match
           </button>
           <button
             onClick={() => setActiveTab("ats-preview")}
-            className={`py-3 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === "ats-preview" ? "border-[#1e2a3a] text-[#1e2a3a]" : "border-transparent text-[#9a9590] hover:text-[#4a4540]"}`}
+            className={`py-3 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === "ats-preview" ? "border-ink text-ink" : "border-transparent text-ink-2 hover:text-ink-2"}`}
           >
             How ATS Reads This
           </button>
@@ -393,7 +393,7 @@ export default function ATSChecker({
           {activeTab === "keyword" ? (
             <>
               {/* Job description input */}
-              <label className="mb-1.5 block text-sm font-medium text-[#4a4540]">
+              <label className="mb-1.5 block text-sm font-medium text-ink-2">
                 Paste the job description
               </label>
               <textarea
@@ -401,12 +401,12 @@ export default function ATSChecker({
                 onChange={(e) => setJobDescription(e.target.value)}
                 rows={4}
                 placeholder="Paste the full job description here..."
-                className="w-full rounded-lg border border-[#d4cfc8] bg-[#faf8f5] px-3 py-2.5 text-sm text-[#1b1b1b] placeholder:text-[#b5b0a8] focus:border-[#b08d57] focus:outline-none focus:ring-1 focus:ring-[#b08d57]"
+                className="w-full rounded-[2px] border border-rule bg-paper px-3 py-2.5 text-sm text-ink placeholder:text-ink-2 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
               <button
                 onClick={handleAnalyze}
                 disabled={!jobDescription.trim()}
-                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#1e2a3a] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#2d3f54] disabled:cursor-not-allowed disabled:opacity-40"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-ink px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <svg
                   className="h-4 w-4"
@@ -434,7 +434,7 @@ export default function ATSChecker({
                     </div>
                   </div>
 
-                  <p className="text-center text-sm text-[#6b6560]">
+                  <p className="text-center text-sm text-ink-2">
                     {result.matched.length} of {result.totalKeywords} keywords
                     matched
                   </p>
@@ -442,7 +442,7 @@ export default function ATSChecker({
                   {/* Matched keywords */}
                   {result.matched.length > 0 && (
                     <div>
-                      <h3 className="mb-2 text-sm font-semibold text-[#4a4540]">
+                      <h3 className="mb-2 text-sm font-semibold text-ink-2">
                         Matched Keywords
                       </h3>
                       <div className="flex flex-wrap gap-1.5">
@@ -474,7 +474,7 @@ export default function ATSChecker({
                   {/* Missing keywords */}
                   {result.missing.length > 0 && (
                     <div>
-                      <h3 className="mb-2 text-sm font-semibold text-[#4a4540]">
+                      <h3 className="mb-2 text-sm font-semibold text-ink-2">
                         Missing Keywords
                       </h3>
                       <div className="flex flex-wrap gap-1.5">
@@ -504,14 +504,14 @@ export default function ATSChecker({
                   )}
 
                   {/* Tips */}
-                  <div className="rounded-lg border border-[#e8e2da] bg-[#faf8f5] p-4">
-                    <h3 className="mb-2 text-sm font-semibold text-[#1e2a3a]">
+                  <div className="rounded-[2px] border border-rule bg-paper p-4">
+                    <h3 className="mb-2 text-sm font-semibold text-ink">
                       Tips for Improvement
                     </h3>
-                    <ul className="space-y-1.5 text-xs text-[#6b6560]">
+                    <ul className="space-y-1.5 text-xs text-ink-2">
                       {result.missing.length > 0 && (
                         <li className="flex gap-2">
-                          <span className="mt-0.5 text-[#b08d57]">
+                          <span className="mt-0.5 text-accent">
                             &#x2022;
                           </span>
                           Consider adding the missing keywords naturally into
@@ -519,18 +519,18 @@ export default function ATSChecker({
                         </li>
                       )}
                       <li className="flex gap-2">
-                        <span className="mt-0.5 text-[#b08d57]">&#x2022;</span>
+                        <span className="mt-0.5 text-accent">&#x2022;</span>
                         Mirror the exact phrasing from the job description where
                         it genuinely applies to your experience.
                       </li>
                       <li className="flex gap-2">
-                        <span className="mt-0.5 text-[#b08d57]">&#x2022;</span>
+                        <span className="mt-0.5 text-accent">&#x2022;</span>
                         Use standard section headings (Experience, Education,
                         Skills) so ATS parsers can read your resume correctly.
                       </li>
                       {result.score < 40 && (
                         <li className="flex gap-2">
-                          <span className="mt-0.5 text-[#b08d57]">
+                          <span className="mt-0.5 text-accent">
                             &#x2022;
                           </span>
                           Your score is quite low. Focus on tailoring your
@@ -539,7 +539,7 @@ export default function ATSChecker({
                       )}
                       {result.score >= 70 && (
                         <li className="flex gap-2">
-                          <span className="mt-0.5 text-[#b08d57]">
+                          <span className="mt-0.5 text-accent">
                             &#x2022;
                           </span>
                           Great match! Double-check that all information is
@@ -559,7 +559,7 @@ export default function ATSChecker({
                 return (
                   <div className="space-y-4">
                     {preview.hasWarning && (
-                      <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                      <div className="rounded-[2px] border border-amber-200 bg-amber-50 p-4">
                         <div className="flex gap-2">
                           <svg
                             className="h-5 w-5 shrink-0 text-amber-600 mt-0.5"
@@ -592,19 +592,19 @@ export default function ATSChecker({
                         </div>
                       </div>
                     )}
-                    <p className="text-xs text-[#9a9590]">
+                    <p className="text-xs text-ink-2">
                       This shows the order an ATS parser would extract your
                       resume text, based on your current layout template.
                     </p>
                     {preview.sections.map((section, i) => (
                       <div key={i}>
                         <h3
-                          className={`mb-2 text-xs font-semibold uppercase tracking-wider ${section.isWarning ? "text-amber-700" : "text-[#4a4540]"}`}
+                          className={`mb-2 text-xs font-semibold uppercase tracking-wider ${section.isWarning ? "text-amber-700" : "text-ink-2"}`}
                         >
                           {section.title}
                         </h3>
                         <pre
-                          className={`rounded-lg p-3 text-xs leading-relaxed whitespace-pre-wrap font-mono ${section.isWarning ? "bg-amber-50 text-amber-900 border border-amber-200" : "bg-[#f5f0ea] text-[#2a2520]"}`}
+                          className={`rounded-[2px] p-3 text-xs leading-relaxed whitespace-pre-wrap font-mono ${section.isWarning ? "bg-amber-50 text-amber-900 border border-amber-200" : "bg-paper-2 text-ink"}`}
                         >
                           {section.content}
                         </pre>
