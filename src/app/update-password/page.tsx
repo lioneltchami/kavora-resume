@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import AuthProof from "@/components/AuthProof";
 import { createClient } from "@/lib/supabase/server";
 import { updatePassword } from "../login/actions";
 
@@ -35,85 +36,88 @@ export default async function UpdatePasswordPage({
       </nav>
 
       <section className="px-[clamp(1rem,3.5vw,3rem)] py-12 md:py-16">
-        <div className="max-w-md">
-          <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">
-            Set a new password
-          </h1>
-          <p className="mt-3 text-sm leading-relaxed text-ink-2">
-            Choose a password at least 8 characters long, then you&apos;ll be
-            signed in.
-          </p>
+        <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16 xl:grid-cols-[minmax(0,24rem)_minmax(0,20rem)]">
+          <div className="max-w-md">
+            <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">
+              Set a new password
+            </h1>
+            <p className="mt-3 text-sm leading-relaxed text-ink-2">
+              Choose a password at least 8 characters long, then you&apos;ll be
+              signed in.
+            </p>
 
-          {error === "short" && (
-            <div className={alertError}>
-              Password must be at least 8 characters.
-            </div>
-          )}
-          {error === "mismatch" && (
-            <div className={alertError}>
-              Passwords do not match. Please try again.
-            </div>
-          )}
-          {error === "update" && (
-            <div className={alertError}>
-              Could not update your password. Please request a new reset link.
-            </div>
-          )}
+            {error === "short" && (
+              <div className={alertError}>
+                Password must be at least 8 characters.
+              </div>
+            )}
+            {error === "mismatch" && (
+              <div className={alertError}>
+                Passwords do not match. Please try again.
+              </div>
+            )}
+            {error === "update" && (
+              <div className={alertError}>
+                Could not update your password. Please request a new reset link.
+              </div>
+            )}
 
-          <form className="mt-8 space-y-4">
-            <div>
-              <label
-                htmlFor="password"
-                className="mb-1.5 block text-xs font-medium text-ink-2"
+            <form className="mt-8 space-y-4">
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-1.5 block text-xs font-medium text-ink-2"
+                >
+                  New password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  minLength={8}
+                  placeholder="At least 8 characters"
+                  className={fieldClass}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="confirm"
+                  className="mb-1.5 block text-xs font-medium text-ink-2"
+                >
+                  Confirm password
+                </label>
+                <input
+                  id="confirm"
+                  name="confirm"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  minLength={8}
+                  placeholder="Repeat your password"
+                  className={fieldClass}
+                />
+              </div>
+              <button
+                formAction={updatePassword}
+                type="submit"
+                className="btn-primary w-full"
               >
-                New password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                minLength={8}
-                placeholder="At least 8 characters"
-                className={fieldClass}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="confirm"
-                className="mb-1.5 block text-xs font-medium text-ink-2"
-              >
-                Confirm password
-              </label>
-              <input
-                id="confirm"
-                name="confirm"
-                type="password"
-                autoComplete="new-password"
-                required
-                minLength={8}
-                placeholder="Repeat your password"
-                className={fieldClass}
-              />
-            </div>
-            <button
-              formAction={updatePassword}
-              type="submit"
-              className="btn-primary w-full"
-            >
-              Save password
-            </button>
-          </form>
+                Save password
+              </button>
+            </form>
 
-          <p className="mt-10">
-            <Link
-              href="/login"
-              className="text-sm text-ink-2 transition-colors hover:text-accent"
-            >
-              ← Back to sign in
-            </Link>
-          </p>
+            <p className="mt-10">
+              <Link
+                href="/login"
+                className="text-sm text-ink-2 transition-colors hover:text-accent"
+              >
+                ← Back to sign in
+              </Link>
+            </p>
+          </div>
+          <AuthProof />
         </div>
       </section>
     </main>

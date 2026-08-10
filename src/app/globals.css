@@ -176,7 +176,7 @@ body {
 
 .marquee-line {
   margin: 0;
-  max-width: 22ch;
+  max-width: 28ch;
   font-family: var(--font-body);
   font-size: clamp(1.125rem, 2.2vw, 1.5rem);
   font-weight: 500;

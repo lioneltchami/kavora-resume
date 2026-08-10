@@ -116,6 +116,33 @@ export default function PricingPage() {
             — free with 3 projects, unlimited with Pro.
           </p>
 
+          {/* Honest proof — real commitments only, no invented metrics */}
+          <ul className="mt-10 flex flex-col gap-3 border-t border-rule pt-8 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-3">
+            <li className="text-sm text-ink">
+              <span className="font-mono text-xs text-accent">$19</span>
+              <span className="text-ink-2"> · one-time, no subscription</span>
+            </li>
+            <li className="text-sm text-ink">
+              <span className="font-mono text-xs text-accent">7 days</span>
+              <span className="text-ink-2"> · full refund on request</span>
+            </li>
+            <li className="text-sm text-ink">
+              <span className="font-mono text-xs text-accent">Stripe</span>
+              <span className="text-ink-2">
+                {" "}
+                · pay once, unlocks on your account
+              </span>
+            </li>
+            <li className="text-sm">
+              <Link
+                href="/r/reena"
+                className="text-ink underline-offset-2 hover:text-accent hover:underline"
+              >
+                See a live resume example →
+              </Link>
+            </li>
+          </ul>
+
           <div className="mt-16 grid gap-0 border-t border-rule md:grid-cols-2">
             {/* Free */}
             <div className="border-b border-rule py-10 pr-0 md:border-b-0 md:border-r md:pr-10">

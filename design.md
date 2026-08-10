@@ -10,7 +10,11 @@ modern-minimal
 
 ## Macrostructure family
 
-- Marketing pages: Marquee Hero (fold = brand statement only; CTA + proof below a thick rule). Feature sections as typographic lists, never equal icon-card grids.
+- Marketing pages: Marquee Hero (fold = brand as primary type + one short product
+  line; CTA + proof below a thick rule). Feature sections as typographic lists,
+  never equal icon-card grids.
+- Auth util pages: left-bias form + optional quiet right proof panel (Tier-A type
+  frame). Never a centred full-viewport card.
 - App pages: Workbench (dense tool chrome, hairline rules, left-bias headers, no marketing enrichment).
 - Content pages: Long Document (privacy, terms).
 
